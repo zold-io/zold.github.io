@@ -1,0 +1,23 @@
+docker:
+  image: yegor256/blog
+assets:
+  id_rsa: "zerocracy/home#assets/blog/id_rsa"
+  id_rsa.pub: "zerocracy/home#assets/blog/id_rsa.pub"
+install: |
+  gem install sass
+deploy:
+  script: |
+    mkdir ~/.ssh
+    mv ../id_rsa ../id_rsa.pub ~/.ssh
+    chmod -R 600 ~/.ssh/*
+    echo -e "Host *\n  StrictHostKeyChecking no\n  UserKnownHostsFile=/dev/null" > ~/.ssh/config
+    git config --global user.email "rultor@yegor256.com"
+    git config --global user.name "Rultor"
+    target=$(mktemp -d)
+    ./build.sh ${target}
+    git checkout gh-pages
+    cp -R ${target}/* .
+    git add .
+    git commit -am 'new web front'
+    git push origin gh-pages
+
