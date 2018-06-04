@@ -40,6 +40,7 @@ function refresh(host, map) {
       'Version: ' + data['version'] + '<br/>' +
       'Host: ' + data['score']['host'] + ':' + data['score']['port'] + '<br/>' +
       'Score: ' + data['score']['value'] + '<br/>' +
+      'Remote nodes: ' + data['remotes'] + '<br/>' +
       'Wallets: ' + data['wallets']
     );
     refresh_list(host, map);
