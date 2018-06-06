@@ -2,3 +2,5 @@
 rdoc/
 .sass-cache/
 target/
+node_modules/
+build/

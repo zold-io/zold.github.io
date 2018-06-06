@@ -1,13 +1,13 @@
-language: ruby
-rvm:
-  - 2.3.3
-cache: bundler
+language: node_js
+
+node_js:
+  - "9.11.1"
+
 branches:
   only:
     - master
+
 install:
-  - travis_retry bundle update
-script:
-  - rake
-after_success:
-  - "bash <(curl -s https://codecov.io/bash)"
+  - npm install
+
+before_script: npm start
