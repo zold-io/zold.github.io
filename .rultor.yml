@@ -4,7 +4,7 @@ assets:
   id_rsa: "zerocracy/home#assets/blog/id_rsa"
   id_rsa.pub: "zerocracy/home#assets/blog/id_rsa.pub"
 install: |
-  sudo gem install sass
+  npm install
 deploy:
   script: |
     mkdir ~/.ssh
@@ -14,7 +14,7 @@ deploy:
     git config --global user.email "rultor@yegor256.com"
     git config --global user.name "Rultor"
     target=$(mktemp -d)
-    ./build.sh ${target}
+    npm start
     git checkout gh-pages
     cp -R ${target}/* .
     git add .

@@ -3,6 +3,30 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
+    replace: {
+      dist: {
+        options: {
+          patterns: [
+            {
+              match: 'VERSION',
+              replacement: '<%= pkg.version %>'
+            }
+          ]
+        },
+        files: [
+          {
+            expand: true,
+            cwd: 'html',
+            src: [
+              '**/*'
+            ],
+            dest: 'build',
+            filter: 'isFile'
+          }
+        ]
+      }
+    },
+
     uglify: {
       options: {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
@@ -34,36 +58,31 @@ module.exports = function(grunt) {
           outputStyle: 'compressed',
           sourceMap: false
         },
-        files: [{
-          expand: true,
-          cwd: 'sass',
-          src: ['**/*.{scss,sass}'],
-          dest: 'build/<%= pkg.version %>/css',
-          ext: '.min.css'
-        }
-      ]}
+        files: [
+          {
+            expand: true,
+            cwd: 'sass',
+            src: ['**/*.{scss,sass}'],
+            dest: 'build/<%= pkg.version %>/css',
+            ext: '.min.css'
+          }
+        ]
+      }
     },
 
     copy: {
       dist: {
-        files: [{
-          expand: true,
-          cwd: 'images',
-          src: [
-            '*'
-          ],
-          dest: 'build/images',
-          filter: 'isFile'
-        },
-        {
-          expand: true,
-          cwd: 'html',
-          src: [
-            '*'
-          ],
-          dest: 'build/',
-          filter: 'isFile'
-        }]
+        files: [
+          {
+            expand: true,
+            cwd: 'images',
+            src: [
+              '*'
+            ],
+            dest: 'build/images',
+            filter: 'isFile'
+          }
+        ]
       }
     }
   });
@@ -72,7 +91,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-sass');
+  grunt.loadNpmTasks('grunt-replace');
 
-  grunt.registerTask('default', ['copy', 'uglify', 'sass']);
-  grunt.registerTask('build', ['copy', 'uglify', 'sass']);
+  grunt.registerTask('default', ['copy', 'replace', 'uglify', 'sass']);
+  grunt.registerTask('build',   ['copy', 'replace', 'uglify', 'sass']);
 };

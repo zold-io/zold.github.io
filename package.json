@@ -1,6 +1,6 @@
 {
   "name": "zold",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,7 @@
     "grunt-contrib-uglify": "^3.3.0",
     "grunt-contrib-watch": "1.0.0",
     "grunt-open": "0.2.3",
+    "grunt-replace": "^1.0.1",
     "grunt-sass": "2.0.0",
     "grunt-sass-lint": "0.2.2"
   }
