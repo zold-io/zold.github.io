@@ -1,5 +1,8 @@
 module.exports = function(grunt) {
 
+  var buildDir = grunt.option('buildDir') ? grunt.option('buildDir') : 'build';
+  console.log("[INFO] BUILDIR ======> " + buildDir);
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
@@ -20,7 +23,7 @@ module.exports = function(grunt) {
             src: [
               '**/*'
             ],
-            dest: 'build',
+            dest: buildDir,
             filter: 'isFile'
           }
         ]
@@ -35,7 +38,7 @@ module.exports = function(grunt) {
         src: [
           'js/map.js'
         ],
-        dest: 'build/<%= pkg.version %>/<%= pkg.name %>.min.js'
+        dest: buildDir + '/<%= pkg.version %>/<%= pkg.name %>.min.js'
       }
     },
 
@@ -63,7 +66,7 @@ module.exports = function(grunt) {
             expand: true,
             cwd: 'sass',
             src: ['**/*.{scss,sass}'],
-            dest: 'build/<%= pkg.version %>/css',
+            dest: buildDir + '/<%= pkg.version %>/css',
             ext: '.min.css'
           }
         ]
@@ -79,7 +82,7 @@ module.exports = function(grunt) {
             src: [
               '*'
             ],
-            dest: 'build/images',
+            dest: buildDir + '/images',
             filter: 'isFile'
           }
         ]
