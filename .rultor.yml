@@ -13,9 +13,10 @@ deploy:
     echo -e "Host *\n  StrictHostKeyChecking no\n  UserKnownHostsFile=/dev/null" > ~/.ssh/config
     git config --global user.email "rultor@yegor256.com"
     git config --global user.name "Rultor"
-    TARGET=$(mktemp -d) npm start
+    TEMPDIR=$(mktemp -d)
+    TARGET=$(TEMPDIR) npm start
     git checkout gh-pages
-    cp -R ${TARGET}/* .
+    cp -R ${TEMPDIR}/* .
     git add .
     git commit -am 'new web front'
     git push origin gh-pages
