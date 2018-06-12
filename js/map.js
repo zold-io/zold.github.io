@@ -60,19 +60,28 @@ function put_markers(map, remotes) {
   $.each(remotes, function (i, r) {
     var host = r['host'], port = r['port'];
     var coords = host + ':' + port;
-    var items = $('#remotes li[data-coords="' + coords + '"]');
+    var items = $('#remotes-table tr[data-coords="' + coords + '"]');
+
     if (items.length) {
-      var li = items.first();
+      var item = items.first();
+
       $.getJSON('http://' + coords + '/', function(json) {
-        li.html(coords + ': ' + json['score']['value'] + '/' + json['wallets'] + ' (' + json['version'] + ')');
+        item.html('<td>' + coords + '</td><td>' + json['score']['value'] + '</td><td>' + json['wallets'] + '</td><td>' + json['version'] + '</td>');
+
         if (host.match(/^[0-9\.]+$/)) {
           put_marker_by_ip(map, host + ':' + port, host, port);
         } else {
           put_marker_by_host(map, host + ':' + port, host, port);
         }
-      }).done(function() { li.css('color', 'darkgreen'); }).fail(function() { li.css('color', 'red'); });
+
+      }).done(function() { 
+        item.css('color', 'darkgreen'); 
+      }).fail(function() { 
+        item.css('color', 'red'); 
+      });
+
     } else {
-      $('#remotes').append('<li data-coords="' + coords + '">' + coords + '</li>')
+      $('#remotes-table').append('<tr data-coords="' + coords + '"><td>' + coords + '</td> <td colspan=3>&nbsp;</td> </tr>')
     }
   });
 }
