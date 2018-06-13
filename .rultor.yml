@@ -25,8 +25,9 @@ release:
     temp=$(mktemp -d)
     ./node_modules/grunt/bin/grunt --no-color build --buildDir=${temp}
     git checkout gh-pages
+    git clean -fd
     cp -R ${temp} .
     git add .
-    git commit -am "New web front, version #{tag}"
+    git commit -am "New web front, version ${tag}"
     git push origin gh-pages
 
