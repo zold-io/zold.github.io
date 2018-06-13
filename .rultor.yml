@@ -4,20 +4,29 @@ assets:
   id_rsa: "zerocracy/home#assets/blog/id_rsa"
   id_rsa.pub: "zerocracy/home#assets/blog/id_rsa.pub"
 install: |
+  sudo gem install pdd
   npm install
-deploy:
+merge:
   script: |
+    pdd -f /dev/null -v
+    grunt build
+release:
+  script: |
+    [[ "${tag}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit -1
+    sed -i "s/0\.0\.0/${tag}/g" package.json
+    git add package.json
+    git commit -m "version set to ${tag}"
     mkdir ~/.ssh
     mv ../id_rsa ../id_rsa.pub ~/.ssh
     chmod -R 600 ~/.ssh/*
     echo -e "Host *\n  StrictHostKeyChecking no\n  UserKnownHostsFile=/dev/null" > ~/.ssh/config
-    git config --global user.email "rultor@yegor256.com"
+    git config --global user.email "rultor@zold.io"
     git config --global user.name "Rultor"
-    TEMPDIR=$(mktemp -d)
-    TARGET=$(TEMPDIR) npm start
+    temp=$(mktemp -d)
+    grunt build --buildDir=${temp}
     git checkout gh-pages
-    cp -R ${TEMPDIR}/* .
+    cp -R ${temp} .
     git add .
-    git commit -am 'new web front'
+    git commit -am "New web front, version #{tag}"
     git push origin gh-pages
 

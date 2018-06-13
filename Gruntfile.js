@@ -1,11 +1,7 @@
 module.exports = function(grunt) {
-
   var buildDir = grunt.option('buildDir') ? grunt.option('buildDir') : 'build';
-  console.log("[INFO] BUILDIR ======> " + buildDir);
-
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-
     replace: {
       dist: {
         options: {
@@ -29,7 +25,6 @@ module.exports = function(grunt) {
         ]
       }
     },
-
     uglify: {
       options: {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
@@ -41,14 +36,12 @@ module.exports = function(grunt) {
         dest: buildDir + '/<%= pkg.version %>/<%= pkg.name %>.min.js'
       }
     },
-
     watch: {
       test : {
         files: ['js/**/*.js', 'sass/**/*.sass'],
         tasks: 'build'
       }
     },
-
     sass: {
       options: {
         outputStyle: 'expanded',
@@ -72,7 +65,6 @@ module.exports = function(grunt) {
         ]
       }
     },
-
     copy: {
       dist: {
         files: [
@@ -89,13 +81,11 @@ module.exports = function(grunt) {
       }
     }
   });
-
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-replace');
-
   grunt.registerTask('default', ['copy', 'replace', 'uglify', 'sass']);
   grunt.registerTask('build',   ['copy', 'replace', 'uglify', 'sass']);
 };
