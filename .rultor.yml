@@ -5,11 +5,11 @@ assets:
   id_rsa.pub: "zerocracy/home#assets/blog/id_rsa.pub"
 install: |
   sudo gem install pdd
-  npm install
+  npm --no-color install
 merge:
   script: |
     pdd -f /dev/null -v
-    grunt build
+    ./node_modules/grunt/bin/grunt --no-color build
 release:
   script: |
     [[ "${tag}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit -1
@@ -23,7 +23,7 @@ release:
     git config --global user.email "rultor@zold.io"
     git config --global user.name "Rultor"
     temp=$(mktemp -d)
-    grunt build --buildDir=${temp}
+    ./node_modules/grunt/bin/grunt --no-color build --buildDir=${temp}
     git checkout gh-pages
     cp -R ${temp} .
     git add .
