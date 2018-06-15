@@ -66,7 +66,10 @@ function put_markers(map, remotes) {
       var item = items.first();
 
       $.getJSON('http://' + coords + '/', function(json) {
-        item.html('<td>' + coords + '</td><td>' + json['score']['value'] + '</td><td>' + json['wallets'] + '</td><td>' + json['version'] + '</td>');
+        item.html('<td>' + makeALink(coords) + '</td><td>' + json['score']['value'] + '</td><td>' + json['wallets'] + '</td><td>' + json['version'] + '</td>');
+
+        item.addClass('blink');
+        setTimeout(function(item){ item.removeClass('blink'); }, 3000, item);
 
         if (host.match(/^[0-9\.]+$/)) {
           put_marker_by_ip(map, host + ':' + port, host, port);
@@ -75,15 +78,21 @@ function put_markers(map, remotes) {
         }
 
       }).done(function() {
-        item.css('color', 'darkgreen');
+        item.removeClass('node-down');
+        item.addClass('node-up');
       }).fail(function() {
-        item.css('color', 'red');
+        item.removeClass('node-up');
+        item.addClass('node-down');
       });
 
     } else {
-      $('#remotes-table').append('<tr data-coords="' + coords + '"><td>' + coords + '</td> <td colspan=3>&nbsp;</td> </tr>')
+      $('#remotes-table').append('<tr data-coords="' + coords + '"><td>' + makeALink(coords) + '</td> <td colspan=3>&nbsp;</td> </tr>')
     }
   });
+}
+
+function makeALink(coords) {
+  return '<a target="_blank" href="http://' + coords + '">' + coords + '</a>';
 }
 
 function put_marker_by_host(map, coords, host, port) {

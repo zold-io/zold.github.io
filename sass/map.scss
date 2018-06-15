@@ -25,6 +25,8 @@
 
 $BACKGROUND: #f5f5f5;
 $TBACKGROUND: #8a8a8a;
+$GREEN: darkgreen;
+$RED: red;
 
 * {
   box-sizing: border-box;
@@ -83,5 +85,36 @@ body {
     &:hover {
       background: lightyellow;
     }
+  }
+}
+
+.node {
+  &-up {
+    color: $GREEN;
+    a {
+      color: $GREEN;
+    }
+  }
+  &-down {
+    color: $RED;
+    a {
+      color: $RED;
+    }
+  }
+}
+
+
+.blink {
+  animation: blink-animation 1s steps(5, start) infinite;
+  -webkit-animation: blink-animation 1s steps(5, start) infinite;
+}
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+@-webkit-keyframes blink-animation {
+  to {
+    visibility: hidden;
   }
 }
