@@ -4,6 +4,7 @@
   "description": "Zold web site",
   "main": "index.js",
   "scripts": {
+    "start": "./node_modules/grunt/bin/grunt --buildDir=build",
     "build": "./node_modules/grunt/bin/grunt --buildDir=build"
   },
   "author": "Yegor Bugayenko",
