@@ -28,7 +28,7 @@ function init() {
     {
       center: new google.maps.LatLng(55.751244, 37.618423),
       mapTypeId: google.maps.MapTypeId.ROADMAP,
-      zoom: 3
+      zoom: 2
     }
   );
   refresh('b2.zold.io:4096', map);
@@ -74,10 +74,10 @@ function put_markers(map, remotes) {
           put_marker_by_host(map, host + ':' + port, host, port);
         }
 
-      }).done(function() { 
-        item.css('color', 'darkgreen'); 
-      }).fail(function() { 
-        item.css('color', 'red'); 
+      }).done(function() {
+        item.css('color', 'darkgreen');
+      }).fail(function() {
+        item.css('color', 'red');
       });
 
     } else {
