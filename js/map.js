@@ -31,29 +31,73 @@ function init() {
       zoom: 2
     }
   );
-  refresh('b2.zold.io:4096', map);
+
+  var mainHost = 'b2.zold.io:4096';
+  var firstHitCache = true;
+
+  makeHeader(null, mainHost);
+  refresh(mainHost, map, firstHitCache);
+  refresh_list(mainHost, map, firstHitCache);
 };
 
-function refresh(host, map) {
-  $.getJSON('http://' + host + '/', function(data) {
-    $('#header').html(
-      'Version: ' + data['version'] + '<br/>' +
-      'Host: ' + data['score']['host'] + ':' + data['score']['port'] + '<br/>' +
-      'Score: ' + data['score']['value'] + '<br/>' +
-      'Remote nodes: ' + data['remotes'] + '<br/>' +
-      'Wallets: ' + data['wallets']
-    );
-    refresh_list(host, map);
-    window.setTimeout(function () { refresh(host, map); }, 10000);
-  });
+function makeHeader(data, host) {
+
+  if (!data) {
+    var cachedResult = localStorage.getItem('http://' + host + '/');
+
+    if (cachedResult) {
+      data = JSON.parse(cachedResult);
+    } else {
+      data = {
+        version: '',
+        score: {
+          host: '',
+          port: '',
+          value: ''
+        },
+        remotes: '',
+        wallets: ''
+      };
+    }
+  }
+
+  $('#header').html(
+    'Version: ' + data['version'] + '<br/>' +
+    'Host: ' + data['score']['host'] + ':' + data['score']['port'] + '<br/>' +
+    'Score: ' + data['score']['value'] + '<br/>' +
+    'Remote nodes: ' + data['remotes'] + '<br/>' +
+    'Wallets: ' + data['wallets']
+  );
 }
 
-function refresh_list(host, map) {
-  $.getJSON('http://' + host + '/remotes', function(data) {
+function cachedGet(host, cb, hitCache) {
+  var cachedResult = localStorage.getItem(host);
+
+  if(hitCache && cachedResult) {
+    console.info('cache hitted');
+    cb(JSON.parse(cachedResult));
+  } else {
+    $.getJSON(host, function(data) {
+      cb(data);
+      localStorage.setItem(host, JSON.stringify(data));
+    });
+  }
+}
+
+function refresh(host, map, hitCache) {
+  cachedGet('http://' + host + '/', function(data) {
+    makeHeader(data);
+    refresh_list(host, map, false);
+    window.setTimeout(function () { refresh(host, map, false); }, 10000);
+  }, hitCache);
+}
+
+function refresh_list(host, map, hitCache) {
+  cachedGet('http://' + host + '/remotes', function(data) {
     var remotes = data['all'];
     console.log(remotes.length + ' remote nodes found at ' + host);
     put_markers(map, remotes);
-  });
+  }, hitCache);
 }
 
 function put_markers(map, remotes) {
