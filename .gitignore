@@ -4,3 +4,4 @@ rdoc/
 target/
 node_modules/
 build/
+*.sh

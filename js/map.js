@@ -67,7 +67,6 @@ function put_markers(map, remotes) {
 
       $.getJSON('http://' + coords + '/', function(json) {
         item.html('<td>' + makeALink(coords) + '</td><td>' + json['score']['value'] + '</td><td>' + json['wallets'] + '</td><td>' + json['version'] + '</td>');
-
         item.addClass('blink');
         setTimeout(function(item){ item.removeClass('blink'); }, 3000, item);
 
@@ -115,4 +114,3 @@ function put_marker_by_ip(map, coords, ip, port) {
     console.log('Marker set for ' + coords + ' at ' + lat + '/' + lon);
   }).fail(function() { console.log('Failed to find geo-location for ' + ip) });
 }
-
