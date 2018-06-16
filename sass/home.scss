@@ -22,14 +22,16 @@
 // SOFTWARE.
 //
 
+$gray: #808080;
+
 section {
-  width: 30em;
   padding: 1em;
+  width: 30em;
 }
 
 header {
-  margin-top: 6em;
   margin-bottom: 6em;
+  margin-top: 6em;
 }
 
 h2 {
@@ -38,7 +40,7 @@ h2 {
 }
 
 footer {
-  margin-top: 3em;
+  color: $gray;
   font-size: .8em;
-  color: gray;
+  margin-top: 3em;
 }

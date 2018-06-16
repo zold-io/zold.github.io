@@ -72,6 +72,12 @@ module.exports = function(grunt) {
         ]
       }
     },
+    sasslint: {
+      options: {
+        configFile: '.sass-lint.yml'
+      },
+      target: ['sass/**/*.scss']
+    },
     copy: {
       dist: {
         files: [
@@ -93,7 +99,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-sass');
+  grunt.loadNpmTasks('grunt-sass-lint');
   grunt.loadNpmTasks('grunt-replace');
-  grunt.registerTask('default', ['copy', 'replace', 'uglify', 'sass']);
-  grunt.registerTask('build',   ['copy', 'replace', 'uglify', 'sass']);
+
+  grunt.registerTask('default', ['copy', 'replace', 'uglify', 'sasslint', 'sass']);
+  grunt.registerTask('build',   ['copy', 'replace', 'uglify', 'sasslint', 'sass']);
 };
