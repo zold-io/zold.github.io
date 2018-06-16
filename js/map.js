@@ -23,6 +23,7 @@ SOFTWARE.
 */
 
 function init() {
+  startLoader();
   var map = new google.maps.Map(
     document.getElementById("map"),
     {
@@ -34,8 +35,14 @@ function init() {
   refresh('b2.zold.io:4096', map);
 }
 
+function startLoader() {
+  $('#header').html('Loading...');
+  $('#remotes-table').html('<tr rel="loader"><td colspan="4">Loading...</td></tr>');
+}
+
 function refresh(host, map) {
   $.getJSON('http://' + host + '/', function(data) {
+    $('#remotes-table tr[rel="loader"]').hide();
     $('#header').html(
       'Version: ' + data.version + '<br/>' +
       'Host: ' + data.score.host + ':' + data.score.port + '<br/>' +
