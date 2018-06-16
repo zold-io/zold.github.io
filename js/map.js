@@ -32,16 +32,16 @@ function init() {
     }
   );
   refresh('b2.zold.io:4096', map);
-};
+}
 
 function refresh(host, map) {
   $.getJSON('http://' + host + '/', function(data) {
     $('#header').html(
-      'Version: ' + data['version'] + '<br/>' +
-      'Host: ' + data['score']['host'] + ':' + data['score']['port'] + '<br/>' +
-      'Score: ' + data['score']['value'] + '<br/>' +
-      'Remote nodes: ' + data['remotes'] + '<br/>' +
-      'Wallets: ' + data['wallets']
+      'Version: ' + data.version + '<br/>' +
+      'Host: ' + data.score.host + ':' + data.score.port + '<br/>' +
+      'Score: ' + data.score.value + '<br/>' +
+      'Remote nodes: ' + data.remotes + '<br/>' +
+      'Wallets: ' + data.wallets
     );
     refresh_list(host, map);
     window.setTimeout(function () { refresh(host, map); }, 10000);
@@ -50,7 +50,7 @@ function refresh(host, map) {
 
 function refresh_list(host, map) {
   $.getJSON('http://' + host + '/remotes', function(data) {
-    var remotes = data['all'];
+    var remotes = data.all;
     console.log(remotes.length + ' remote nodes found at ' + host);
     put_markers(map, remotes);
   });
@@ -58,7 +58,7 @@ function refresh_list(host, map) {
 
 function put_markers(map, remotes) {
   $.each(remotes, function (i, r) {
-    var host = r['host'], port = r['port'];
+    var host = r.host, port = r.port;
     var coords = host + ':' + port;
     var items = $('#remotes-table tr[data-coords="' + coords + '"]');
 
@@ -66,8 +66,8 @@ function put_markers(map, remotes) {
       var item = items.first();
 
       $.getJSON('http://' + coords + '/', function(json) {
-        item.html('<td>' + coords + '</td><td>' + json['score']['value'] + '</td><td>' + json['wallets'] + '</td><td>' + json['version'] + '</td>');
-        
+        item.html('<td>' + makeALink(coords) + '</td><td>' + json['score']['value'] + '</td><td>' + json['wallets'] + '</td><td>' + json['version'] + '</td>');
+
         item.addClass('blink');
         setTimeout(function(item){ item.removeClass('blink'); }, 3000, item);
 
@@ -78,28 +78,34 @@ function put_markers(map, remotes) {
         }
 
       }).done(function() {
-        item.css('color', 'darkgreen');
+        item.removeClass('node-down');
+        item.addClass('node-up');
       }).fail(function() {
-        item.css('color', 'red');
+        item.removeClass('node-up');
+        item.addClass('node-down');
       });
 
     } else {
-      $('#remotes-table').append('<tr data-coords="' + coords + '"><td>' + coords + '</td> <td colspan=3>&nbsp;</td> </tr>')
+      $('#remotes-table').append('<tr data-coords="' + coords + '"><td>' + makeALink(coords) + '</td> <td colspan=3>&nbsp;</td> </tr>')
     }
   });
 }
 
+function makeALink(coords) {
+  return '<a href="http://' + coords + '">' + coords + '</a>';
+}
+
 function put_marker_by_host(map, coords, host, port) {
   $.getJSON('https://api.exana.io/dns/' + host + '/a', function(json) {
-    ip = $.grep(json['answer'], function (a, i) { return a['type'] == 'A'; })[0]['rdata'];
+    ip = $.grep(json.answer, function (a, i) { return a.type == 'A'; })[0].rdata;
     console.log('Host ' + host + ' resolved to ' + ip);
     put_marker_by_ip(map, coords, ip, port);
-  }).fail(function() { console.log('Failed to find IP for ' + host) });
+  }).fail(function() { console.log('Failed to find IP for ' + host); });
 }
 
 function put_marker_by_ip(map, coords, ip, port) {
   $.getJSON('http://www.geoplugin.net/json.gp?ip=' + ip, function(json) {
-    var lat = parseFloat(json['geoplugin_latitude']), lon = parseFloat(json['geoplugin_longitude']);
+    var lat = parseFloat(json.geoplugin_latitude), lon = parseFloat(json.geoplugin_longitude);
     console.log(ip + ' located at ' + lat + '/' + lon);
     new google.maps.Marker({
       position: { lat: lat, lng: lon },
@@ -107,5 +113,5 @@ function put_marker_by_ip(map, coords, ip, port) {
       title: coords
     });
     console.log('Marker set for ' + coords + ' at ' + lat + '/' + lon);
-  }).fail(function() { console.log('Failed to find geo-location for ' + ip) });
+  }).fail(function() { console.log('Failed to find geo-location for ' + ip); });
 }

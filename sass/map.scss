@@ -25,6 +25,8 @@
 
 $background: #f5f5f5;
 $tbackground: #8a8a8a;
+$green: darkgreen;
+$red: red;
 
 * {
   box-sizing: border-box;
@@ -86,6 +88,20 @@ body {
   }
 }
 
+.node {
+  &-up {
+    color: $green;
+    a {
+      color: $green;
+    }
+  }
+  &-down {
+    color: $red;
+    a {
+      color: $red;
+    }
+  }
+}
 
 .blink {
   animation: blink-animation 1s steps(5, start) infinite;
