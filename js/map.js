@@ -99,7 +99,7 @@ function put_markers(map, remotes) {
 }
 
 function makeALink(coords) {
-  return '<a href="http://' + coords + '">' + coords + '</a>';
+  return '<a href="http://' + coords + '/">' + coords + '</a>';
 }
 
 function put_marker_by_host(map, coords, host, port) {
