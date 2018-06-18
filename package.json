@@ -9,7 +9,7 @@
   "author": "Yegor Bugayenko",
   "license": "MIT",
   "devDependencies": {
-    "browser-sync": "2.23.3",
+    "browser-sync": "2.24.4",
     "grunt": "1.0.1",
     "grunt-cli": "1.2.0",
     "grunt-contrib-clean": "1.0.0",
@@ -21,7 +21,7 @@
     "grunt-contrib-watch": "1.0.0",
     "grunt-open": "0.2.3",
     "grunt-replace": "^1.0.1",
-    "grunt-sass": "2.0.0",
+    "grunt-sass": "2.1.0",
     "grunt-sass-lint": "0.2.2"
   },
   "dependencies": {
