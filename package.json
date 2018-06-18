@@ -1,7 +1,7 @@
 {
   "name": "zold",
   "version": "0.0.0",
-  "description": "Zold web site",
+  "description": "Zold web site html and js",
   "main": "index.js",
   "scripts": {
     "build": "./node_modules/grunt/bin/grunt --buildDir=build"
