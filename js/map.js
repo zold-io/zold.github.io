@@ -37,7 +37,7 @@ function init() {
 
 function startLoader() {
   $('#header').html('Loading...');
-  $('#remotes-table').html('<tr rel="loader"><td colspan="4">Loading...</td></tr>');
+  $('#remotes-table').append('<tr rel="loader"><td colspan="4">Loading...</td></tr>');
 }
 
 function refresh(host, map) {

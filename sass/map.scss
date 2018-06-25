@@ -50,15 +50,18 @@ body {
 #map {
   display: inline-block;
   height: 100%;
-  width: 70%;
+  width: 100%;
 }
 
 #nodes {
   background-color: $background;
-  float: right;
-  height: 100%;
+  height: 600px;
   padding: 1em;
-  width: 30%;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 300px;
+  z-index: 10;
 }
 
 #logo {
@@ -74,21 +77,27 @@ body {
   border-spacing: 0;
   font-size: 12px;
   margin-top: 30px;
-  width: 100%;
-
-  & thead {
-    tr {
-      td {
-        background: $tbackground;
-        color: $white;
-        padding: 4px;
-      }
-    }
-  }
-
+  width: 250px;
 
   & tbody {
+    display: block;
+    height: 400px;
+    overflow: auto;
+    width: 250px;
+
+    .table-head {
+      background: $tbackground;
+      color: $white;
+      padding: 4px;
+    }
+
     tr {
+      width: 250px;
+
+      &:nth(3) {
+        margin-top: 30px;
+      }
+
       td {
         padding: 4px;
 
@@ -97,6 +106,24 @@ body {
         }
       }
     }
+  }
+
+  .loader {
+    height: 100px;
+  }
+}
+
+@media only screen
+  and (min-device-width: 320px)
+  and (max-device-width: 480px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+
+  #map {
+    display: none;
+  }
+  #nodes {
+    width: 100%;
+    height: 100%;
   }
 }
 
