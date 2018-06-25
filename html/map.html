@@ -43,27 +43,25 @@ SOFTWARE.
     </script>
   </head>
   <body onload="init();">
+    <div id="nodes">
+      <div id="header">
+        <!-- Empty on start -->
+      </div>
+      <table class="condensed-table">
+        <tbody id="remotes-table">
+          <tr class="table-head">
+            <td>address</td>
+            <td>score</td>
+            <td>wallets</td>
+            <td>version</td>
+          </tr>
+          <!-- Empty on start -->
+        </tbody>
+      </table>
+    </div>
     <div id="container">
       <div id="map">
         <!-- Empty on start -->
-      </div>
-      <div id="nodes">
-        <div id="header">
-          <!-- Empty on start -->
-        </div>
-        <table class="condensed-table">
-          <thead>
-            <tr>
-              <td>address</td>
-              <td>score</td>
-              <td>wallets</td>
-              <td>version</td>
-            </tr>
-          </thead>
-          <tbody id="remotes-table">
-            <!-- Empty on start -->
-          </tbody>
-        </table>
       </div>
       <img id="logo" src="https://www.zold.io/logo.svg"/>
     </div>
