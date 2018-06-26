@@ -21,6 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+var $messageContainer = $('.messages-container');
 
 function init() {
   startLoader();
@@ -52,6 +53,8 @@ function refresh(host, map) {
     );
     refresh_list(host, map);
     window.setTimeout(function () { refresh(host, map); }, 10000);
+  }).fail(function(){
+    $messageContainer.append('<div class=""message-warning">main node retrieve fail, try to refresh page</div>');
   });
 }
 
@@ -60,6 +63,8 @@ function refresh_list(host, map) {
     var remotes = data.all;
     console.log(remotes.length + ' remote nodes found at ' + host);
     put_markers(map, remotes);
+  }).fail(function(){
+    $messageContainer.append('<div class=""message-warning">remote list retrieve fail, try to refresh page</div>');
   });
 }
 
@@ -107,7 +112,10 @@ function put_marker_by_host(map, coords, host, port) {
     ip = $.grep(json.answer, function (a, i) { return a.type == 'A'; })[0].rdata;
     console.log('Host ' + host + ' resolved to ' + ip);
     put_marker_by_ip(map, coords, ip, port);
-  }).fail(function() { console.log('Failed to find IP for ' + host); });
+  }).fail(function() {
+    console.log('Failed to find IP for ' + host);
+    $messageContainer.append('<div class=""message-warning">Failed to find IP for ' + host + '</div>');
+  });
 }
 
 function put_marker_by_ip(map, coords, ip, port) {
@@ -120,5 +128,8 @@ function put_marker_by_ip(map, coords, ip, port) {
       title: coords
     });
     console.log('Marker set for ' + coords + ' at ' + lat + '/' + lon);
-  }).fail(function() { console.log('Failed to find geo-location for ' + ip); });
+  }).fail(function() {
+    console.log('Failed to find geo-location for ' + ip);
+    $messageContainer.append('<div class=""message-warning">Failed to find geo-location for ' + ip + '</div>');
+  });
 }

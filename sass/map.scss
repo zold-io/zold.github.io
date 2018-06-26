@@ -153,3 +153,10 @@ body {
     visibility: hidden;
   }
 }
+
+.message-warning {
+  border: 1px $red dotted;
+  color: $red;
+  margin: 8px;
+  padding: 4px;
+}
