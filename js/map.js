@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+var currentHashing = {};
+
 function init() {
   startLoader();
   var map = new google.maps.Map(
@@ -59,6 +61,19 @@ function refresh_list(host, map) {
   $.getJSON('http://' + host + '/remotes', function(data) {
     var remotes = data.all;
     console.log(remotes.length + ' remote nodes found at ' + host);
+
+    currentHashing = new Date().getTime()
+    $.each(remotes, function (i, r) {
+      var host = r.host, port = r.port;
+      var coords = host + ':' + port;
+      var items = $('#remotes-table tr[data-coords="' + coords + '"]');
+      var item = items.first();
+
+      item.attr('data-check', currentHashing);
+    });
+
+    $('#remotes-table .zold-node:not([data-check='+currentHashing+'])').remove();
+
     put_markers(map, remotes);
   });
 }
@@ -93,7 +108,7 @@ function put_markers(map, remotes) {
       });
 
     } else {
-      $('#remotes-table').append('<tr data-coords="' + coords + '"><td>' + makeALink(coords) + '</td> <td colspan=3>&nbsp;</td> </tr>')
+      $('#remotes-table').append('<tr class="zold-node" data-coords="' + coords + '"><td>' + makeALink(coords) + '</td> <td colspan=3>&nbsp;</td> </tr>')
     }
   });
 }
