@@ -29,7 +29,7 @@ function init() {
     {
       center: new google.maps.LatLng(55.751244, 37.618423),
       mapTypeId: google.maps.MapTypeId.ROADMAP,
-      zoom: 2
+      zoom: 4
     }
   );
   refresh('b2.zold.io:4096', map);
