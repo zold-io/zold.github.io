@@ -24,13 +24,16 @@ SOFTWARE.
 
 function init() {
   startLoader();
-  function handle() {
-    var proj = map.getProjection();
-    var bounds = map.getBounds();
-    var sLat = map.getBounds().getSouthWest().lat();
-    var nLat = map.getBounds().getNorthEast().lat();
-    if (sLat < -85 || nLat > 85) {
-      map.setOptions({ zoom: 2, center: new google.maps.LatLng(0,0) });
+  function moveToCenterOfMap() {
+    var offset = 85;
+    if (
+      map.getBounds().getSouthWest().lat() < (-1 * offset) ||
+      map.getBounds().getNorthEast().lat() > offset
+    ) {
+      map.setOptions({
+        zoom: 2,
+        center: new google.maps.LatLng(0,0)
+      });
     }
   }
   var map = new google.maps.Map(
@@ -41,7 +44,7 @@ function init() {
       zoom: 2
     }
   );
-  map.addListener('drag', function(){ handle(); });
+  map.addListener('drag', function(){ moveToCenterOfMap(); });
   refresh('b2.zold.io:4096', map);
 }
 
