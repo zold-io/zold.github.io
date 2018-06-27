@@ -145,17 +145,17 @@ function put_marker_by_ip(map, coords, ip, port) {
 
 function createMessage(message) {
   messagesRepository.push(message);
-	printMessages(messagesRepository.reverse());
+  messagesRepository = messagesRepository.reverse().slice(0,8);
+  printMessages(messagesRepository);
 }
 
 function printMessages(messages) {
-	var $messageContainer = $('.messages-container');
+  var $messageContainer = $('.messages-container');
   $messageContainer.html('');
-	messages.slice(0,8)
-    .forEach(function(message) {
-      console.log(message);
-    	$messageContainer.append('<div class="message-warning">' + message + '</div>');
-    });
+  messages.forEach(function(message) {
+    console.log(message);
+    $messageContainer.append('<div class="message-warning">' + message + '</div>');
+  });
 }
 
 function makeALink(node) {
