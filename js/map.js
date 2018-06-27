@@ -22,8 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-var currentTimestamp = new Date().getTime();
-
 function init() {
   startLoader();
   var map = new google.maps.Map(
@@ -59,9 +57,9 @@ function refresh(host, map) {
 
 function refresh_list(host, map) {
   $.getJSON('http://' + host + '/remotes', function(data) {
-    var remotes = data.all;
+    var remotes = data.all,
+      currentTimestamp = new Date().getTime();
     console.log(remotes.length + ' remote nodes found at ' + host);
-    currentTimestamp = new Date().getTime();
     $.each(remotes, function (i, r) {
       $('#remotes-table tr[data-coords="' + r.host + ':' + r.port + '"]')
         .first()
