@@ -63,11 +63,9 @@ function refresh_list(host, map) {
     console.log(remotes.length + ' remote nodes found at ' + host);
     currentTimestamp = new Date().getTime();
     $.each(remotes, function (i, r) {
-      var host = r.host, port = r.port;
-      var coords = host + ':' + port;
-      var items = $('#remotes-table tr[data-coords="' + coords + '"]');
-      var item = items.first();
-      item.attr('data-check', currentTimestamp);
+      $('#remotes-table tr[data-coords="' + r.host + ':' + r.port + '"]')
+        .first()
+        .attr('data-check', currentTimestamp);
     });
     $('#remotes-table .zold-node:not([data-check='+currentTimestamp+'])').remove();
     put_markers(map, remotes);
