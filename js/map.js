@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-var currentHashing = new Date();
+var currentTimestamp = new Date().getTime();
 
 function init() {
   startLoader();
@@ -61,19 +61,15 @@ function refresh_list(host, map) {
   $.getJSON('http://' + host + '/remotes', function(data) {
     var remotes = data.all;
     console.log(remotes.length + ' remote nodes found at ' + host);
-
-    currentHashing = new Date().getTime();
+    currentTimestamp = new Date().getTime();
     $.each(remotes, function (i, r) {
       var host = r.host, port = r.port;
       var coords = host + ':' + port;
       var items = $('#remotes-table tr[data-coords="' + coords + '"]');
       var item = items.first();
-
-      item.attr('data-check', currentHashing);
+      item.attr('data-check', currentTimestamp);
     });
-
-    $('#remotes-table .zold-node:not([data-check='+currentHashing+'])').remove();
-
+    $('#remotes-table .zold-node:not([data-check='+currentTimestamp+'])').remove();
     put_markers(map, remotes);
   });
 }
@@ -83,22 +79,17 @@ function put_markers(map, remotes) {
     var host = r.host, port = r.port;
     var coords = host + ':' + port;
     var items = $('#remotes-table tr[data-coords="' + coords + '"]');
-
     if (items.length) {
       var item = items.first();
-
       $.getJSON('http://' + coords + '/', function(json) {
         item.html('<td>' + makeALink(coords) + '</td><td>' + json.score.value + '</td><td>' + json.wallets + '</td><td>' + json.version + '</td>');
-
         item.addClass('blink');
         setTimeout(function(item){ item.removeClass('blink'); }, 3000, item);
-
         if (host.match(/^[0-9\.]+$/)) {
           put_marker_by_ip(map, host + ':' + port, host, port);
         } else {
           put_marker_by_host(map, host + ':' + port, host, port);
         }
-
       }).done(function() {
         item.removeClass('node-down');
         item.addClass('node-up');
@@ -106,7 +97,6 @@ function put_markers(map, remotes) {
         item.removeClass('node-up');
         item.addClass('node-down');
       });
-
     } else {
       $('#remotes-table').append('<tr class="zold-node" data-coords="' + coords + '"><td>' + makeALink(coords) + '</td> <td colspan=3>&nbsp;</td> </tr>');
     }
