@@ -26,6 +26,18 @@ var messagesRepository = [];
 
 function init() {
   startLoader();
+  function moveToCenterOfMap() {
+    var offset = 85;
+    if (
+      map.getBounds().getSouthWest().lat() < (-1 * offset) ||
+      map.getBounds().getNorthEast().lat() > offset
+    ) {
+      map.setOptions({
+        zoom: 2,
+        center: new google.maps.LatLng(0,0)
+      });
+    }
+  }
   var map = new google.maps.Map(
     document.getElementById("map"), {
       center: new google.maps.LatLng(55.751244, 37.618423),
@@ -33,6 +45,7 @@ function init() {
       zoom: 2
     }
   );
+  map.addListener('drag', function(){ moveToCenterOfMap(); });
   refresh('b2.zold.io:4096', map);
 }
 
