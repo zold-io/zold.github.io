@@ -21,13 +21,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-var $messageContainer = $('.messages-container');
+
+var messagesRepository = [];
 
 function init() {
   startLoader();
   var map = new google.maps.Map(
-    document.getElementById("map"),
-    {
+    document.getElementById("map"), {
       center: new google.maps.LatLng(55.751244, 37.618423),
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       zoom: 2
@@ -54,7 +54,7 @@ function refresh(host, map) {
     refresh_list(host, map);
     window.setTimeout(function () { refresh(host, map); }, 10000);
   }).fail(function(){
-    $messageContainer.append('<div class=""message-warning">main node retrieve fail, try to refresh page</div>');
+    createMessage('Main node retrieve fail, try to refresh page');
   });
 }
 
@@ -71,7 +71,7 @@ function refresh_list(host, map) {
     $('#remotes-table .zold-node:not([data-check='+currentTimestamp+'])').remove();
     put_markers(map, remotes);
   }).fail(function(){
-    $messageContainer.append('<div class=""message-warning">remote list retrieve fail, try to refresh page</div>');
+    createMessage('Remote list retrieve fail, try to refresh page');
   });
 }
 
@@ -104,24 +104,20 @@ function put_markers(map, remotes) {
   });
 }
 
-function makeALink(coords) {
-  return '<a href="http://' + coords + '/">' + coords + '</a>';
-}
-
 function put_marker_by_host(map, coords, host, port) {
   $.getJSON('https://api.exana.io/dns/' + host + '/a', function(json) {
     ip = $.grep(json.answer, function (a, i) { return a.type == 'A'; })[0].rdata;
     console.log('Host ' + host + ' resolved to ' + ip);
     put_marker_by_ip(map, coords, ip, port);
   }).fail(function() {
-    console.log('Failed to find IP for ' + host);
-    $messageContainer.append('<div class=""message-warning">Failed to find IP for ' + host + '</div>');
+    createMessage('Failed to find IP for ' + host);
   });
 }
 
 function put_marker_by_ip(map, coords, ip, port) {
   $.getJSON('http://www.geoplugin.net/json.gp?ip=' + ip, function(json) {
-    var lat = parseFloat(json.geoplugin_latitude), lon = parseFloat(json.geoplugin_longitude);
+    var lat = parseFloat(json.geoplugin_latitude),
+      lon = parseFloat(json.geoplugin_longitude);
     console.log(ip + ' located at ' + lat + '/' + lon);
     new google.maps.Marker({
       position: { lat: lat, lng: lon },
@@ -130,7 +126,25 @@ function put_marker_by_ip(map, coords, ip, port) {
     });
     console.log('Marker set for ' + coords + ' at ' + lat + '/' + lon);
   }).fail(function() {
-    console.log('Failed to find geo-location for ' + ip);
-    $messageContainer.append('<div class=""message-warning">Failed to find geo-location for ' + ip + '</div>');
+    createMessage('Failed to find geo-location for ' + ip);
   });
+}
+
+function createMessage(message) {
+  messagesRepository.push(message);
+	printMessages(messagesRepository.reverse());
+}
+
+function printMessages(messages) {
+	var $messageContainer = $('.messages-container');
+  $messageContainer.html('');
+	messages.slice(0,8)
+    .forEach(function(message) {
+      console.log(message);
+    	$messageContainer.append('<div class="message-warning">' + message + '</div>');
+    });
+}
+
+function makeALink(node) {
+  return '<a href="http://' + node + '/">' + node + '</a>';
 }
