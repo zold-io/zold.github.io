@@ -24,14 +24,24 @@ SOFTWARE.
 
 function init() {
   startLoader();
+  function handle(){
+		var proj = map.getProjection();
+		var bounds = map.getBounds();
+		var sLat = map.getBounds().getSouthWest().lat();
+		var nLat = map.getBounds().getNorthEast().lat();
+		if (sLat < -85 || nLat > 85) {
+			map.setOptions({ zoom: 2, center: new google.maps.LatLng(0,0) });
+		}
+  }
   var map = new google.maps.Map(
     document.getElementById("map"),
     {
       center: new google.maps.LatLng(55.751244, 37.618423),
       mapTypeId: google.maps.MapTypeId.ROADMAP,
-      zoom: 4
+      zoom: 2
     }
   );
+  map.addListener('drag', function(){ handle(); });
   refresh('b2.zold.io:4096', map);
 }
 
@@ -73,7 +83,7 @@ function put_markers(map, remotes) {
       var item = items.first();
 
       $.getJSON('http://' + coords + '/', function(json) {
-        item.html('<td>' + makeALink(coords) + '</td><td>' + json['score']['value'] + '</td><td>' + json['wallets'] + '</td><td>' + json['version'] + '</td>');
+        item.html('<td>' + makeALink(coords) + '</td><td>' + json.score.value + '</td><td>' + json.wallets + '</td><td>' + json.version + '</td>');
 
         item.addClass('blink');
         setTimeout(function(item){ item.removeClass('blink'); }, 3000, item);
@@ -93,7 +103,7 @@ function put_markers(map, remotes) {
       });
 
     } else {
-      $('#remotes-table').append('<tr data-coords="' + coords + '"><td>' + makeALink(coords) + '</td> <td colspan=3>&nbsp;</td> </tr>')
+      $('#remotes-table').append('<tr data-coords="' + coords + '"><td>' + makeALink(coords) + '</td> <td colspan=3>&nbsp;</td> </tr>');
     }
   });
 }
