@@ -4,7 +4,8 @@
   "description": "Zold web site html and js",
   "main": "index.js",
   "scripts": {
-    "build": "./node_modules/grunt/bin/grunt --buildDir=build"
+    "build": "./node_modules/grunt/bin/grunt --buildDir=build",
+    "test": "./node_modules/grunt/bin/grunt karma"
   },
   "author": "Yegor Bugayenko",
   "license": "MIT",
@@ -22,7 +23,13 @@
     "grunt-open": "0.2.3",
     "grunt-replace": "^1.0.1",
     "grunt-sass": "2.1.0",
-    "grunt-sass-lint": "0.2.2"
+    "grunt-sass-lint": "0.2.2",
+    "grunt-karma": "1.0.0",
+    "jasmine-core": "^2.7.0",
+    "karma": "0.13.21",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "0.3.8",
+    "karma-mocha-reporter": "~1.1.1"
   },
   "dependencies": {
     "npm": "^6.1.0"
