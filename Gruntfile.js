@@ -25,6 +25,11 @@ module.exports = function(grunt) {
         ]
       }
     },
+    karma: {
+      unit: {
+        configFile: "karma.conf.js"
+      }
+    },
     jshint: {
       code: {
         options: {
@@ -101,7 +106,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-sass-lint');
   grunt.loadNpmTasks('grunt-replace');
+  grunt.loadNpmTasks('grunt-karma');
 
-  grunt.registerTask('default', ['copy', 'replace', 'uglify', 'sasslint', 'sass']);
-  grunt.registerTask('build',   ['copy', 'replace', 'uglify', 'sasslint', 'sass']);
+  grunt.registerTask('default', ['jshint', 'copy', 'replace', 'uglify', 'sasslint', 'sass']);
+  grunt.registerTask('build',   ['jshint', 'copy', 'replace', 'uglify', 'sasslint', 'sass']);
 };
