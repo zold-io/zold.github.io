@@ -30,13 +30,18 @@ function health_init() {
     return;
   }
   root = 'b1.zold.io';
+  $('#head').html('Wait a second, we are loading the list of nodes from ' + root + '...');
   $.getJSON('http://' + root + '/remotes', function(data) {
+    $('#head').html('The node <a href="http://' + root + '">' + root +
+      '</a> currently sees <strong>' + data.all.length +
+      ' nodes</strong> (refresh the page to update):');
     $.each(data.all, function (i, r) {
       var addr = r.host + ':' + r.port;
       $('#health tbody').append(
         '<tr data-addr="' + addr + '">' +
           '<td class="host"><a href="http://' + addr + '/">' + r.host + '</a></td>' +
           '<td class="port">' + r.port + '</td>' +
+          '<td class="ping"></td>' +
           '<td class="cpus"></td>' +
           '<td class="score"></td>' +
           '<td class="wallets"></td>' +
@@ -56,8 +61,17 @@ function health_init() {
 
 function health_node(addr) {
   var $tr = $('#health tr[data-addr="' + addr + '"]');
+  var start = new Date();
   $tr.find('td.port').addClass('gray');
   $.getJSON('http://' + addr + '/', function(json) {
+    var msec = new Date() - start;
+    var $ping = $tr.find('td.ping');
+    $ping.text(msec);
+    if (msec > 200) {
+      $ping.removeClass('green').addClass('red');
+    } else {
+      $ping.removeClass('red').addClass('green');
+    }
     $tr.find('td.cpus').text(json.cpus);
     var $score = $tr.find('td.score');
     $score.text(json.score.value);
