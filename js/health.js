@@ -25,6 +25,10 @@ SOFTWARE.
 var delay = 2000;
 
 function health_init() {
+  if (window.location.protocol.startsWith('https')) {
+    $(location).attr('href', 'http://www.zold.io/health.html');
+    return;
+  }
   root = 'b1.zold.io';
   $.getJSON('http://' + root + '/remotes', function(data) {
     $.each(data.all, function (i, r) {
@@ -39,6 +43,8 @@ function health_init() {
           '<td class="version"></td>' +
           '<td class="nscore"></td>' +
           '<td class="remotes"></td>' +
+          '<td class="history"></td>' +
+          '<td class="queue"></td>' +
           '<td class="age"></td>' +
           '<td class="issues"></td>' +
           '</tr>'
@@ -68,6 +74,8 @@ function health_node(addr) {
     $tr.find('td.version').text(json.version + '/' + json.protocol);
     $tr.find('td.nscore').text(json.nscore);
     $tr.find('td.age').text(parseFloat(Math.round(json.hours_alive)));
+    $tr.find('td.history').text((json.entrance.history.match(/ /g) || []).length);
+    $tr.find('td.queue').text(json.entrance.queue);
     $tr.find('td.issues').text(issues(json).join('; '));
     $tr.find('td.port').removeClass('gray');
     window.setTimeout(function () { health_node(addr); }, delay);
@@ -77,11 +85,13 @@ function health_node(addr) {
 function issues(json) {
   var issues = [];
   if (json.network != 'zold') {
-    issues.push('Network name is wrong: "' + json.network + '"');
+    issues.push('Network name is wrong!');
   }
-  var history = (json.entrance.history.match(/ /g) || []).length;
-  if (history < 8) {
-    issues.push('History is too short: ' + history);
+  if ((json.entrance.history.match(/ /g) || []).length < 8) {
+    issues.push('History is too short!');
+  }
+  if (json.entrance.queue > 16) {
+    issues.push('Queue is too long!');
   }
   return issues;
 }

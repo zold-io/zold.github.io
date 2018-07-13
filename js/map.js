@@ -25,6 +25,10 @@ SOFTWARE.
 var messagesRepository = [];
 
 function init() {
+  if (window.location.protocol.startsWith('https')) {
+    $(location).attr('href', 'http://www.zold.io/map.html');
+    return;
+  }
   startLoader();
   function moveToCenterOfMap() {
     var offset = 85;
