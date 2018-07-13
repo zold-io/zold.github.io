@@ -38,14 +38,14 @@ module.exports = function(grunt) {
       },
       build: {
         src: [
-          'js/map.js'
+          'js/**/*.js'
         ],
-        dest: buildDir + '/<%= pkg.version %>/<%= pkg.name %>.min.js'
+        dest: buildDir + '/<%= pkg.version %>/js/<%= pkg.name %>.min.js'
       }
     },
     watch: {
       test : {
-        files: ['js/**/*.js', 'sass/**/*.sass'],
+        files: ['js/**/*.js', 'sass/**/*.scss', 'html/**/*.html'],
         tasks: 'build'
       }
     },
@@ -89,6 +89,13 @@ module.exports = function(grunt) {
             ],
             dest: buildDir + '/images',
             filter: 'isFile'
+          },
+          {
+            expand: true,
+            cwd: 'js',
+            src: [ '*' ],
+            dest: buildDir + '/<%= pkg.version %>/js',
+            filter: 'isFile'
           }
         ]
       }
@@ -101,7 +108,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-sass-lint');
   grunt.loadNpmTasks('grunt-replace');
-
   grunt.registerTask('default', ['copy', 'replace', 'uglify', 'sasslint', 'sass']);
-  grunt.registerTask('build',   ['copy', 'replace', 'uglify', 'sasslint', 'sass']);
+  grunt.registerTask('build', ['copy', 'replace', 'uglify', 'sasslint', 'sass']);
 };
