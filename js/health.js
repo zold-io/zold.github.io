@@ -66,23 +66,10 @@ function health_node(addr) {
   $.getJSON('http://' + addr + '/', function(json) {
     var msec = new Date() - start;
     var $ping = $tr.find('td.ping');
-    $ping.text(msec);
-    if (msec > 200) {
-      $ping.removeClass('green').addClass('red');
-    } else {
-      $ping.removeClass('red').addClass('green');
-    }
+    $ping.text(msec).colorize({ 200: 'red', 0: 'green' });
     $tr.find('td.cpus').text(json.cpus);
     var $score = $tr.find('td.score');
-    $score.text(json.score.value);
-    $score.removeClass('green orange red');
-    if (json.score.value > 15) {
-      $score.addClass('green');
-    } else if (json.score.value > 3) {
-      $score.addClass('orange');
-    } else {
-      $score.addClass('red');
-    }
+    $score.text(json.score.value).colorize({ 16: 'green', 4: 'orange', 0: 'red'});
     $tr.find('td.wallets').text(json.wallets);
     $tr.find('td.remotes').text(json.remotes);
     $tr.find('td.version').text(json.version + '/' + json.protocol);
