@@ -45,6 +45,10 @@ SOFTWARE.
   </head>
   <body onload="health_init();">
     <p id="head"></p>
+    <p>
+      <input type="text" size="20" maxlength="16" placeholder="Wallet ID..." id="wallet" autofocus="true" tabindex="1"/>
+      <input type="submit" value="Check" tabindex="2" onclick="health_check();"/>
+    </p>
     <table id="health">
       <thead>
         <tr>
@@ -61,6 +65,7 @@ SOFTWARE.
           <th class="queue">Queue</th>
           <th class="age">Age</th>
           <th class="issues">Issues</th>
+          <th class="wallet">Check</th>
         </tr>
       </thead>
       <tbody>

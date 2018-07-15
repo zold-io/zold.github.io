@@ -52,11 +52,27 @@ function health_init() {
           '<td class="queue"></td>' +
           '<td class="age"></td>' +
           '<td class="issues"></td>' +
+          '<td class="wallet"></td>' +
           '</tr>'
       )
       window.setTimeout(function () { health_node(addr); }, delay);
     });
   }).fail(function() { console.log('Failed to load the list of remotes from ' + root); });
+}
+
+function health_check() {
+var wallet = $('#wallet').val();
+  $('#health tr[data-addr]').each(function () {
+    var addr = $(this).data('addr');
+    var $td = $(this).find('td.wallet');
+    var url = 'http://' + addr + '/wallet/' + wallet + '/balance';
+    $td.text('checking...');
+    $td.attr('title', url);
+    $.getJSON(url, function(data) {
+      $td.text(Math.round(parseInt(data) / Math.pow(2, 32), 2) + 'ZLD').removeClass('red');
+    })
+    .fail(function(jqXHR, status, error) { $td.text(jqXHR.status).addClass('red'); });
+  });
 }
 
 function health_node(addr) {
