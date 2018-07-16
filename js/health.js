@@ -68,10 +68,11 @@ var wallet = $('#wallet').val();
     var addr = $(this).data('addr');
     var $td = $(this).find('td.wallet');
     var url = 'http://' + addr + '/wallet/' + wallet + '/balance';
-    $td.text('checking...');
+    $td.text('checking...').addClass('gray').removeClass('green');
     $td.attr('title', url);
     $.getJSON(url, function(data) {
-      $td.text(Math.round(parseInt(data) / Math.pow(2, 32), 2) + 'ZLD').removeClass('red');
+      $td.text(Math.round(parseInt(data) / Math.pow(2, 32), 2) + 'ZLD')
+        .removeClass('gray red').addClass('green');
     })
     .fail(function(jqXHR, status, error) { $td.text(jqXHR.status).addClass('red'); });
   });
@@ -97,6 +98,7 @@ function health_node(addr) {
     $tr.find('td.queue').text(json.entrance.queue).colorize({ 32: 'red', 8: 'orange', 0: 'green'});
     $tr.find('td.qage').text(Math.round(json.entrance.queue_age)).colorize({ 180: 'red', 60: 'orange', 0: 'green'});
     $tr.find('td.speed').text(Math.round(json.entrance.speed)).colorize({ 32: 'red', 16: 'orange', 0: 'green'});
-    window.setTimeout(function () { health_node(addr); }, delay);
-  });
+  })
+  .always(function() { window.setTimeout(function () { health_node(addr); }, delay); })
+  .fail(function(jqXHR, status, error) { $tr.find('td.ping').text('#' + jqXHR.status).addClass('red'); });
 }
