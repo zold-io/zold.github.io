@@ -35,7 +35,7 @@ function health_init() {
     $('#head').html('The node <a href="http://' + root + '">' + root +
       '</a> currently sees <strong>' + data.all.length +
       ' nodes</strong> (refresh the page to update):');
-    $.each(data.all, function (i, r) {
+    $.each(data.all.sort(function (r) { return r.host; }), function (i, r) {
       var addr = r.host + ':' + r.port;
       $('#health tbody').append(
         '<tr data-addr="' + addr + '">' +
@@ -51,6 +51,7 @@ function health_init() {
           '<td class="remotes data"></td>' +
           '<td class="history data"></td>' +
           '<td class="queue data"></td>' +
+          '<td class="qage data"></td>' +
           '<td class="speed data"></td>' +
           '<td class="age data"></td>' +
           '<td class="wallet"></td>' +
@@ -94,6 +95,7 @@ function health_node(addr) {
     $tr.find('td.age').text(parseFloat(Math.round(json.hours_alive)));
     $tr.find('td.history').text(json.entrance.history_size).colorize({ 8: 'green', 0: 'red'});
     $tr.find('td.queue').text(json.entrance.queue).colorize({ 32: 'red', 8: 'orange', 0: 'green'});
+    $tr.find('td.qage').text(Math.round(json.entrance.queue_age)).colorize({ 180: 'red', 60: 'orange', 0: 'green'});
     $tr.find('td.speed').text(Math.round(json.entrance.speed)).colorize({ 32: 'red', 16: 'orange', 0: 'green'});
     window.setTimeout(function () { health_node(addr); }, delay);
   });

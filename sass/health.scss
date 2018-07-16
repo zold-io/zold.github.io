@@ -28,6 +28,8 @@ section {
 }
 
 #health {
+  font-size: 90%;
+
   @media all and (max-width: 1024px) {
     display: none;
   }
@@ -61,6 +63,7 @@ section {
       &.age,
       &.history,
       &.queue,
+      &.qage,
       &.speed,
       &.port {
         text-align: right;
