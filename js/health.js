@@ -54,7 +54,7 @@ function health_init() {
           '<td class="wallet"></td>' +
           '</tr>'
       )
-      window.setTimeout(function () { health_node(addr); }, delay);
+      window.setTimeout(function () { health_node(addr); }, 0);
     });
   }).fail(function() { console.log('Failed to load the list of remotes from ' + root); });
 }
@@ -77,9 +77,8 @@ var wallet = $('#wallet').val();
 function health_node(addr) {
   var $tr = $('#health tr[data-addr="' + addr + '"]');
   var start = new Date();
-  $tr.find('td.data').addClass('gray');
+  $tr.find('td.ping').html('<div class="spinner">&nbsp;</div>');
   $.getJSON('http://' + addr + '/', function(json) {
-    $tr.find('td.data').removeClass('gray');
     var msec = new Date() - start;
     var $ping = $tr.find('td.ping');
     $ping.text(msec).colorize({ 200: 'red', 0: 'green' });
