@@ -61,6 +61,7 @@ section {
       &.age,
       &.history,
       &.queue,
+      &.speed,
       &.port {
         text-align: right;
       }
@@ -97,6 +98,16 @@ section {
 
 .gray {
   color: gray !important;
+}
+
+.logo {
+  width: 64px;
+  height: 64px;
+}
+
+.footnotes {
+  font-size: 80%;
+  line-height: 1.3em;
 }
 
 .spinner {
