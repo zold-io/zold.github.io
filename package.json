@@ -1,6 +1,6 @@
 {
   "name": "zold",
-  "version": "0.0.0",
+  "version": "0.4.6",
   "description": "Zold web site html and js",
   "main": "index.js",
   "scripts": {
