@@ -43,6 +43,7 @@ function health_init() {
           '<td class="port">' + r.port + '</td>' +
           '<td class="ping data"></td>' +
           '<td class="cpus data"></td>' +
+          '<td class="threads data"></td>' +
           '<td class="score data"></td>' +
           '<td class="wallets data"></td>' +
           '<td class="version data"></td>' +
@@ -83,8 +84,8 @@ function health_node(addr) {
     var $ping = $tr.find('td.ping');
     $ping.text(msec).colorize({ 200: 'red', 0: 'green' });
     $tr.find('td.cpus').text(json.cpus);
-    var $score = $tr.find('td.score');
-    $score.text(json.score.value).colorize({ 16: 'green', 4: 'orange', 0: 'red'});
+    $tr.find('td.threads').text(json.threads);
+    $tr.find('td.score').text(json.score.value).colorize({ 16: 'green', 4: 'orange', 0: 'red'});
     $tr.find('td.wallets').text(json.wallets);
     $tr.find('td.remotes').text(json.remotes);
     $tr.find('td.version').text(json.version + '/' + json.protocol);
