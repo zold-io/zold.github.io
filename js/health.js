@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-var delay = 2000;
+var delay = 5000;
 
 function health_init() {
   if (window.location.protocol.startsWith('https')) {
@@ -41,17 +41,16 @@ function health_init() {
         '<tr data-addr="' + addr + '">' +
           '<td class="host"><a href="http://' + addr + '/">' + r.host + '</a></td>' +
           '<td class="port">' + r.port + '</td>' +
-          '<td class="ping"></td>' +
-          '<td class="cpus"></td>' +
-          '<td class="score"></td>' +
-          '<td class="wallets"></td>' +
-          '<td class="version"></td>' +
-          '<td class="nscore"></td>' +
-          '<td class="remotes"></td>' +
-          '<td class="history"></td>' +
-          '<td class="queue"></td>' +
-          '<td class="age"></td>' +
-          '<td class="issues"></td>' +
+          '<td class="ping data"></td>' +
+          '<td class="cpus data"></td>' +
+          '<td class="score data"></td>' +
+          '<td class="wallets data"></td>' +
+          '<td class="version data"></td>' +
+          '<td class="nscore data"></td>' +
+          '<td class="remotes data"></td>' +
+          '<td class="history data"></td>' +
+          '<td class="queue data"></td>' +
+          '<td class="age data"></td>' +
           '<td class="wallet"></td>' +
           '</tr>'
       )
@@ -78,8 +77,9 @@ var wallet = $('#wallet').val();
 function health_node(addr) {
   var $tr = $('#health tr[data-addr="' + addr + '"]');
   var start = new Date();
-  $tr.find('td.port').addClass('gray');
+  $tr.find('td.data').addClass('gray');
   $.getJSON('http://' + addr + '/', function(json) {
+    $tr.find('td.data').removeClass('gray');
     var msec = new Date() - start;
     var $ping = $tr.find('td.ping');
     $ping.text(msec).colorize({ 200: 'red', 0: 'green' });
@@ -91,24 +91,8 @@ function health_node(addr) {
     $tr.find('td.version').text(json.version + '/' + json.protocol);
     $tr.find('td.nscore').text(json.nscore);
     $tr.find('td.age').text(parseFloat(Math.round(json.hours_alive)));
-    $tr.find('td.history').text((json.entrance.history.match(/ /g) || []).length);
-    $tr.find('td.queue').text(json.entrance.queue);
-    $tr.find('td.issues').text(issues(json).join('; '));
-    $tr.find('td.port').removeClass('gray');
+    $tr.find('td.history').text(json.entrance.history_size).colorize({ 8: 'green', 0: 'red'});
+    $tr.find('td.queue').text(json.entrance.queue).colorize({ 32: 'red', 0: 'green'});
     window.setTimeout(function () { health_node(addr); }, delay);
   });
-}
-
-function issues(json) {
-  var issues = [];
-  if (json.network != 'zold') {
-    issues.push('Network name is wrong!');
-  }
-  if ((json.entrance.history.match(/ /g) || []).length < 8) {
-    issues.push('History is too short!');
-  }
-  if (json.entrance.queue > 16) {
-    issues.push('Queue is too long!');
-  }
-  return issues;
 }
