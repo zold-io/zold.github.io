@@ -108,6 +108,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-sass-lint');
   grunt.loadNpmTasks('grunt-replace');
-  grunt.registerTask('default', ['copy', 'replace', 'uglify', 'sasslint', 'sass']);
-  grunt.registerTask('build', ['copy', 'replace', 'uglify', 'sasslint', 'sass']);
+  grunt.registerTask('default', ['sasslint', 'copy', 'replace', 'uglify', 'sass']);
+  grunt.registerTask('build', ['sasslint', 'copy', 'replace', 'uglify', 'sass']);
 };
