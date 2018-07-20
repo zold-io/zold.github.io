@@ -24,6 +24,8 @@ SOFTWARE.
 
 var delay = 5000;
 
+var seen_nodes = new Set([]);
+
 function health_init() {
   if (window.location.protocol.startsWith('https')) {
     $(location).attr('href', 'http://www.zold.io/health.html');
@@ -96,8 +98,19 @@ function health_node(addr) {
     $tr.find('td.age').text(parseFloat(Math.round(json.hours_alive)));
     $tr.find('td.history').text(json.entrance.history_size).colorize({ 8: 'green', 0: 'red'});
     $tr.find('td.queue').text(json.entrance.queue).colorize({ 32: 'red', 8: 'orange', 0: 'green'});
-    $tr.find('td.qage').text(Math.round(json.entrance.queue_age)).colorize({ 180: 'red', 60: 'orange', 0: 'green'});
+    if (json.entrance.queue_age == 0) {
+      $tr.find('td.qage').html('&mdash;');
+    } else {
+      $tr.find('td.qage').text(Math.round(json.entrance.queue_age)).colorize({ 180: 'red', 60: 'orange', 0: 'green'});
+    }
     $tr.find('td.speed').text(Math.round(json.entrance.speed)).colorize({ 32: 'red', 16: 'orange', 0: 'green'});
+    $.getJSON('http://' + addr + '/remotes', function(json) {
+      seen_nodes.add(addr);
+      $.each(json.all, function (i, r) {
+        seen_nodes.add(r.host + ':' + r.port);
+      });
+      $('#total_nodes').text(seen_nodes.size);
+    });
   })
   .always(function() { window.setTimeout(function () { health_node(addr); }, delay); })
   .fail(function(jqXHR, status, error) { $tr.find('td.ping').text('#' + jqXHR.status).addClass('red'); });

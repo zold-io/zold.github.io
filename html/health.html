@@ -48,11 +48,15 @@ SOFTWARE.
       <p>
         <img class="logo" src="https://www.zold.io/logo.svg"/>
       </p>
-      <p id="head"></p>
+      <p>
+        Total nodes:
+        <span id="total_nodes">?</span>
+      </p>
       <p>
         <input type="text" size="20" maxlength="16" placeholder="Wallet ID..." id="wallet" autofocus="true" tabindex="1"/>
         <input type="submit" value="Check" tabindex="2" onclick="health_check();"/>
       </p>
+      <p id="head"></p>
       <table id="health">
         <colgroup>
           <col style=""/> <!-- Host -->
