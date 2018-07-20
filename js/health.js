@@ -44,6 +44,7 @@ function health_init() {
           '<td class="host"><a href="http://' + addr + '/">' + r.host + '</a></td>' +
           '<td class="port">' + r.port + '</td>' +
           '<td class="ping data"></td>' +
+          '<td class="flag data" data-ip="' + r.host + '"></td>' +
           '<td class="cpus data"></td>' +
           '<td class="threads data"></td>' +
           '<td class="score data"></td>' +
@@ -58,14 +59,23 @@ function health_init() {
           '<td class="age data"></td>' +
           '<td class="wallet"></td>' +
           '</tr>'
-      )
+      );
+      health_flag(r.host);
       window.setTimeout(function () { health_node(addr); }, 0);
     });
   }).fail(function() { console.log('Failed to load the list of remotes from ' + root); });
 }
 
+function health_flag(host) {
+  var $td = $('#health td[data-ip="' + host + '"]');
+  $.getJSON('https://ssl.geoplugin.net/json.gp?k=af0ad95fd7caa623&ip=' + $td.data('ip'), function(json) {
+    var country = json.geoplugin_countryCode;
+    $td.html('<img src="https://flagpedia.net/data/flags/normal/' + country.toLowerCase() + '.png" style="width:1em;"/>');
+  }).fail(function() { $td.text('?'); });
+}
+
 function health_check() {
-var wallet = $('#wallet').val();
+  var wallet = $('#wallet').val();
   $('#health tr[data-addr]').each(function () {
     var addr = $(this).data('addr');
     var $td = $(this).find('td.wallet');
