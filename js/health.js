@@ -70,7 +70,8 @@ function health_flag(host) {
   var $td = $('#health td[data-ip="' + host + '"]');
   $.getJSON('https://ssl.geoplugin.net/json.gp?k=af0ad95fd7caa623&ip=' + $td.data('ip'), function(json) {
     var country = json.geoplugin_countryCode;
-    $td.html('<img src="https://flagpedia.net/data/flags/normal/' + country.toLowerCase() + '.png" style="width:1em;"/>');
+    $td.html('<img src="https://flagpedia.net/data/flags/normal/' +
+      country.toLowerCase() + '.png" alt="' + country + '" style="width:1em;"/>');
   }).fail(function() { $td.text('?'); });
 }
 
