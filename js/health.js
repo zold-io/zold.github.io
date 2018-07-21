@@ -75,7 +75,7 @@ function health_flag(host) {
   }).fail(function() { $td.text('?'); });
 }
 
-function health_check() {
+function health_check_wallet() {
   var wallet = $('#wallet').val();
   $('#health tr[data-addr]').each(function () {
     var addr = $(this).data('addr');
@@ -122,7 +122,20 @@ function health_node(addr) {
       });
       $('#total_nodes').text(seen_nodes.size);
     });
+    health_update_cost();
   })
   .always(function() { window.setTimeout(function () { health_node(addr); }, delay); })
   .fail(function(jqXHR, status, error) { $tr.find('td.ping').text('#' + jqXHR.status).addClass('red'); });
+}
+
+function health_update_cost() {
+  var cpus = 0;
+  $('#health td.cpus').each(function () {
+    var td = $(this).text();
+    if (td.match(/^[0-9]+$/)) {
+      cpus += parseInt(td);
+    }
+  });
+  $('#total_cpus').text(cpus);
+  $('#total_dollars').text(cpus * 0.16);
 }

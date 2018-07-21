@@ -50,11 +50,14 @@ SOFTWARE.
       </p>
       <p>
         Total nodes:
-        <span id="total_nodes">?</span>
+        <span id="total_nodes">?</span>;
+        CPUs:
+        <span id="total_cpus">?</span>;
+        Network cost: $<span id="total_dollars">?</span>/day.
       </p>
       <p>
         <input type="text" size="20" maxlength="16" placeholder="Wallet ID..." id="wallet" autofocus="true" tabindex="1"/>
-        <input type="submit" value="Check" tabindex="2" onclick="health_check();"/>
+        <input type="submit" value="Check" tabindex="2" onclick="health_check_wallet();"/>
       </p>
       <p id="head"></p>
       <table id="health">
