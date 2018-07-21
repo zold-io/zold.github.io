@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+/**
 (The MIT License)
 
 Copyright (c) 2018 Yegor Bugayenko
@@ -21,33 +20,21 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
--->
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8"/>
-    <title>/map</title>
-    <meta name="description" content="Full map of visible Zold nodes"/>
-    <meta name="keywords" content="zerocracy, management, robotocracy, meritocracy"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="shortcut icon" href="https://www.zold.io/logo.png"/>
-    <link href="0.5.0/css/map.min.css" rel="stylesheet"/>
-    <script src="https://maps.google.com/maps/api/js?key=AIzaSyArj6RePmR3DAAF7Tx9nK9UvO5exPStHu8">
-      // Should be empty
-    </script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js">
-      // Should be empty
-    </script>
-    <script src="0.5.0/js/map.js">
-      // Should be empty
-    </script>
-  </head>
-  <body onload="map_init();">
-    <div id="container">
-      <div id="map">
-        <!-- Empty on start -->
-      </div>
-      <img id="logo" src="https://www.zold.io/logo.svg"/>
-    </div>
-  </body>
-</html>
+*/
+
+$.fn.colorize = function(colors) {
+  var data = parseFloat(this.text());
+  var keys = Object.keys(colors)
+    .map(function (k) { return parseInt(k); })
+    .sort(function (a,b) { return a - b; })
+    .reverse();
+  for (i = 0; i < keys.length; ++i) {
+    var max = keys[i];
+    if (data >= max) {
+      this.addClass(colors[max]);
+      return;
+    }
+    this.removeClass(colors[max]);
+  }
+  return this;
+}
