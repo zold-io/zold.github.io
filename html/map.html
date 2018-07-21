@@ -38,28 +38,11 @@ SOFTWARE.
     <script src="https://code.jquery.com/jquery-3.3.1.min.js">
       // Should be empty
     </script>
-    <script src="@@VERSION/js/zold.min.js">
+    <script src="@@VERSION/js/map.js">
       // Should be empty
     </script>
   </head>
-  <body onload="init();">
-    <div id="nodes">
-      <div class="messages-container"></div>
-      <div id="header">
-        <!-- Empty on start -->
-      </div>
-      <table class="condensed-table">
-        <tbody id="remotes-table">
-          <tr class="table-head">
-            <td>address</td>
-            <td>score</td>
-            <td>wallets</td>
-            <td>version</td>
-          </tr>
-          <!-- Empty on start -->
-        </tbody>
-      </table>
-    </div>
+  <body onload="map_init();">
     <div id="container">
       <div id="map">
         <!-- Empty on start -->
