@@ -121,8 +121,8 @@ function health_node(addr) {
         seen_nodes.add(r.host + ':' + r.port);
       });
       $('#total_nodes').text(seen_nodes.size);
+      health_update_cost();
     });
-    health_update_cost();
   })
   .always(function() { window.setTimeout(function () { health_node(addr); }, delay); })
   .fail(function(jqXHR, status, error) { $tr.find('td.ping').text('#' + jqXHR.status).addClass('red'); });
@@ -137,5 +137,7 @@ function health_update_cost() {
     }
   });
   $('#total_cpus').text(cpus);
-  $('#total_dollars').text(cpus * 0.16);
+  var nodes = parseInt($('#total_nodes').text());
+  var visible = $('#health td.cpus').length;
+  $('#total_dollars').text(Math.round(0.16 * nodes * cpus / visible, 2));
 }
