@@ -139,5 +139,5 @@ function health_update_cost() {
   $('#total_cpus').text(cpus);
   var nodes = parseInt($('#total_nodes').text());
   var visible = $('#health td.cpus').length;
-  $('#total_dollars').text(Math.round(0.16 * nodes * cpus / visible, 2));
+  $('#total_dollars').text((0.16 * nodes * cpus / visible).toFixed(2));
 }
