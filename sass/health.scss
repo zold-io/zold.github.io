@@ -27,6 +27,18 @@ section {
   width: 100%;
 }
 
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}
+
+.orange {
+  color: orange;
+}
+
 #health {
   font-size: 90%;
 
@@ -67,18 +79,6 @@ section {
       &.speed,
       &.port {
         text-align: right;
-      }
-
-      &.red {
-        color: red;
-      }
-
-      &.green {
-        color: green;
-      }
-
-      &.orange {
-        color: orange;
       }
 
       @media all and (max-width: 1024px) {

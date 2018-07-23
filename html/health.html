@@ -56,6 +56,17 @@ SOFTWARE.
         Network cost: ~$<span id="total_dollars">?</span>/day.
       </p>
       <p>
+        Avg remotes:
+        <span id="avg_remotes">?</span>;
+        Avg speed:
+        <span id="avg_speed">?</span>s;
+        Avg queue:
+        <span id="avg_queue">?</span>;
+        Expected lag:
+        <span id="lag">?</span>s
+        (<span id="hops">?</span> hops).
+      </p>
+      <p>
         <input type="text" size="20" maxlength="16" placeholder="Wallet ID..." id="wallet" autofocus="true" tabindex="1"/>
         <input type="submit" value="Check" tabindex="2" onclick="health_check_wallet();"/>
       </p>
@@ -66,6 +77,7 @@ SOFTWARE.
           <col style=""/> <!-- Port -->
           <col style="width:4em;"/> <!-- Ping -->
           <col style=""/> <!-- Flag -->
+          <col style=""/> <!-- Platform -->
           <col style=""/> <!-- CPUs -->
           <col style=""/> <!-- Threads -->
           <col style=""/> <!-- Score -->
@@ -86,6 +98,7 @@ SOFTWARE.
             <th class="port">Port</th>
             <th class="ping">Ping</th>
             <th class="flag"></th>
+            <th class="platform">Platform</th>
             <th class="cpus">CPUs</th>
             <th class="threads">Threads</th>
             <th class="score">Score</th>

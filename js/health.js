@@ -45,6 +45,7 @@ function health_init() {
           '<td class="port">' + r.port + '</td>' +
           '<td class="ping data"></td>' +
           '<td class="flag data" data-ip="' + r.host + '"></td>' +
+          '<td class="platform data"></td>' +
           '<td class="cpus data"></td>' +
           '<td class="threads data"></td>' +
           '<td class="score data"></td>' +
@@ -99,6 +100,7 @@ function health_node(addr) {
     var msec = new Date() - start;
     var $ping = $tr.find('td.ping');
     $ping.text(msec).colorize({ 200: 'red', 0: 'green' });
+    $tr.find('td.platform').text(json.platform);
     $tr.find('td.cpus').text(json.cpus);
     $tr.find('td.threads').text(json.threads);
     $tr.find('td.score').text(json.score.value).colorize({ 16: 'green', 4: 'orange', 0: 'red'});
@@ -115,6 +117,7 @@ function health_node(addr) {
       $tr.find('td.qage').text(Math.round(json.entrance.queue_age)).colorize({ 180: 'red', 60: 'orange', 0: 'green'});
     }
     $tr.find('td.speed').text(Math.round(json.entrance.speed)).colorize({ 32: 'red', 16: 'orange', 0: 'green'});
+    health_update_lag();
     $.getJSON('http://' + addr + '/remotes', function(json) {
       seen_nodes.add(addr);
       $.each(json.all, function (i, r) {
@@ -140,4 +143,34 @@ function health_update_cost() {
   var nodes = parseInt($('#total_nodes').text());
   var visible = $('#health td.cpus').length;
   $('#total_dollars').text((0.16 * nodes * cpus / visible).toFixed(2));
+}
+
+function health_update_lag() {
+  var remotes = avg('remotes');
+  $('#avg_remotes').text(Math.round(remotes));
+  var speed = avg('speed');
+  $('#avg_speed').text(Math.round(speed)).colorize({ 32: 'red', 16: 'orange', 0: 'green'});
+  var queue = avg('queue');
+  $('#avg_queue').text(queue.toFixed(1)).colorize({ 32: 'red', 8: 'orange', 0: 'green'});
+  var remotes = avg('remotes');
+  var hops = 1 + Math.log(Math.log(seen_nodes.size)) / Math.log(remotes);
+  $('#hops').text(hops.toFixed(2));
+  var lag = hops * speed * (1 + queue);
+  $('#lag').text(Math.round(lag)).colorize({ 32: 'red', 16: 'orange', 0: 'green'});
+}
+
+function avg(type) {
+  var total = 0, count = 0;
+  $('#health td.' + type).each(function () {
+    var td = $(this).text();
+    if (td.match(/^[0-9\.]+$/)) {
+      total += parseInt(td);
+      count += 1;
+    }
+  });
+  var avg = 0;
+  if (count > 0) {
+    avg = total / count;
+  }
+  return avg;
 }
