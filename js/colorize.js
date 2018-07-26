@@ -28,13 +28,20 @@ $.fn.colorize = function(colors) {
     .map(function (k) { return parseInt(k); })
     .sort(function (a,b) { return a - b; })
     .reverse();
+  var used = '';
   for (i = 0; i < keys.length; ++i) {
     var max = keys[i];
     if (data >= max) {
       this.addClass(colors[max]);
-      return;
+      used = colors[max];
+      break;
     }
-    this.removeClass(colors[max]);
+  }
+  for (i = 0; i < keys.length; ++i) {
+    var color = colors[keys[i]];
+    if (used != color) {
+      this.removeClass(color);
+    }
   }
   return this;
 }
