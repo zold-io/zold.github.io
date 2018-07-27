@@ -99,7 +99,7 @@ function health_node(addr) {
   $.getJSON('http://' + addr + '/', function(json) {
     var msec = new Date() - start;
     var $ping = $tr.find('td.ping');
-    $ping.text(msec).colorize({ 200: 'red', 0: 'green' });
+    $ping.text(msec).colorize({ 1000: 'red', 500: 'orange', 0: 'green' });
     $tr.find('td.platform').text(json.platform);
     $tr.find('td.cpus').text(json.cpus);
     $tr.find('td.threads').text(json.threads);
