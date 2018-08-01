@@ -32,14 +32,14 @@ SOFTWARE.
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="shortcut icon" href="https://www.zold.io/logo.png"/>
     <link href="https://cdn.rawgit.com/yegor256/tacit/gh-pages/tacit-css-1.3.0.min.css" rel="stylesheet"/>
-    <link href="0.6.4/css/health.min.css" rel="stylesheet"/>
+    <link href="0.6.5/css/health.min.css" rel="stylesheet"/>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js">
       // Should be empty
     </script>
-    <script src="0.6.4/js/colorize.js">
+    <script src="0.6.5/js/colorize.js">
       // Should be empty
     </script>
-    <script src="0.6.4/js/health.js">
+    <script src="0.6.5/js/health.js">
       // Should be empty
     </script>
   </head>
@@ -49,7 +49,9 @@ SOFTWARE.
         <img class="logo" src="https://www.zold.io/logo.svg"/>
       </p>
       <p>
-        Total nodes:
+        NScore:
+        <span id="nscore">?</span>;
+        Visible nodes:
         <span id="total_nodes">?</span>;
         CPUs:
         <span id="total_cpus">?</span>;
@@ -79,6 +81,7 @@ SOFTWARE.
           <col style=""/> <!-- Flag -->
           <col style=""/> <!-- Platform -->
           <col style=""/> <!-- CPUs -->
+          <col style=""/> <!-- Memory -->
           <col style=""/> <!-- Threads -->
           <col style=""/> <!-- Score -->
           <col style=""/> <!-- Wallets -->
@@ -100,16 +103,17 @@ SOFTWARE.
             <th class="flag"></th>
             <th class="platform">Platform</th>
             <th class="cpus">CPUs</th>
+            <th class="memory">Mem</th>
             <th class="threads">Threads</th>
             <th class="score">Score</th>
             <th class="wallets">Wallets</th>
             <th class="version">Version</th>
             <th class="nscore">NScore</th>
-            <th class="remotes">Remotes</th>
-            <th class="history">History</th>
-            <th class="queue">Queue</th>
+            <th class="remotes">Rmts</th>
+            <th class="history">Hstr</th>
+            <th class="queue">QLen</th>
             <th class="qage">QAge</th>
-            <th class="speed">Speed</th>
+            <th class="speed">Spd</th>
             <th class="age">Age</th>
             <th class="wallet">Check</th>
           </tr>
@@ -122,16 +126,17 @@ SOFTWARE.
         "Host" is the IP address or a hostname of the node;
         "Port" is the TCP port the node is responding at;
         "CPUs" is the total amount of processors at the particular node;
+        "Mem" (memory) is the amount of memory the core Zold process consumes on the node, in Mb;
         "Threads" is the amount of active threads vs. total threads at the node;
         "Score" is the trust score of the node it exposes currently;
         "Wallets" is the total amount of wallets the node is holding;
         "Version" is the version of software the node runs;
-        "NScore" is the total network trust score the node estimates;
-        "Remotes" is the total amount of remote nodes the node is connected to;
-        "History" is the amount of recently processed PUSH requests;
-        "Queue" is the amount of PUSH requests staying in the line and wating processing;
-        "QAge" is the age of the oldest wallet in the queue, in seconds;
-        "Speed" is the average amount of time in seconds the node spends per each PUSH request processing;
+        "NScore" is the total network trust score the node estimates, <a href="https://blog.zold.io/2018/07/22/nscore.html">read more</a>;
+        "Rmts" (remotes) is the total amount of remote nodes the node is connected to;
+        "Hstr" (history) is the amount of recently processed PUSH requests;
+        "QLen" (queue length) is the amount of PUSH requests staying in the line and wating processing;
+        "QAge" (queue age) is the age of the oldest wallet in the queue, in seconds;
+        "Spd" (speed) is the average amount of time in seconds the node spends per each PUSH request processing;
         "Age" is the amount of hours since recent reboot of the node.
       </p>
     </section>
