@@ -47,6 +47,7 @@ function health_init() {
           '<td class="flag data" data-ip="' + r.host + '"></td>' +
           '<td class="platform data"></td>' +
           '<td class="cpus data"></td>' +
+          '<td class="memory data"></td>' +
           '<td class="threads data"></td>' +
           '<td class="score data"></td>' +
           '<td class="wallets data"></td>' +
@@ -102,6 +103,7 @@ function health_node(addr) {
     $ping.text(msec).colorize({ 1000: 'red', 500: 'orange', 0: 'green' });
     $tr.find('td.platform').text(json.platform);
     $tr.find('td.cpus').text(json.cpus);
+    $tr.find('td.memory').text((json.memory / (1024 * 1024)).toFixed(0)).colorize({ 200: 'red', 100: 'orange', 0: 'green'});;
     $tr.find('td.threads').text(json.threads);
     $tr.find('td.score').text(json.score.value).colorize({ 16: 'green', 4: 'orange', 0: 'red'});
     $tr.find('td.wallets').text(json.wallets);
