@@ -105,7 +105,7 @@ function health_node(addr) {
     $tr.find('td.threads').text(json.threads);
     $tr.find('td.score').text(json.score.value).colorize({ 16: 'green', 4: 'orange', 0: 'red'});
     $tr.find('td.wallets').text(json.wallets);
-    $tr.find('td.remotes').text(json.remotes);
+    $tr.find('td.remotes').text(json.remotes).colorize({ 20: 'orange', 8: 'green', 0: 'red'});;
     $tr.find('td.version').text(json.version + '/' + json.protocol);
     $tr.find('td.nscore').text(json.nscore);
     $tr.find('td.age').text(parseFloat(Math.round(json.hours_alive)));
