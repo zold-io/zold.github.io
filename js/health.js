@@ -103,7 +103,7 @@ function health_node(addr) {
     $ping.text(msec).colorize({ 1000: 'red', 500: 'orange', 0: 'green' });
     $tr.find('td.platform').text(json.platform);
     $tr.find('td.cpus').text(json.cpus);
-    $tr.find('td.memory').text((json.memory / (1024 * 1024)).toFixed(0)).colorize({ 200: 'red', 100: 'orange', 0: 'green'});;
+    $tr.find('td.memory').text((json.memory / (1024 * 1024)).toFixed(0)).colorize({ 256: 'red', 128: 'orange', 0: 'green'});;
     $tr.find('td.threads').text(json.threads);
     $tr.find('td.score').text(json.score.value).colorize({ 16: 'green', 4: 'orange', 0: 'red'});
     $tr.find('td.wallets').text(json.wallets);
@@ -120,6 +120,7 @@ function health_node(addr) {
     }
     $tr.find('td.speed').text(Math.round(json.entrance.speed)).colorize({ 32: 'red', 16: 'orange', 0: 'green'});
     health_update_lag();
+    health_update_nscore();
     $.getJSON('http://' + addr + '/remotes', function(json) {
       seen_nodes.add(addr);
       $.each(json.all, function (i, r) {
@@ -131,6 +132,20 @@ function health_node(addr) {
   })
   .always(function() { window.setTimeout(function () { health_node(addr); }, delay); })
   .fail(function(jqXHR, status, error) { $tr.find('td.ping').text('#' + jqXHR.status).addClass('red'); });
+}
+
+function health_update_nscore() {
+  var nscore = 0;
+  $('#health td.nscore').each(function () {
+    var td = $(this).text();
+    if (td.match(/^[0-9]+$/)) {
+      n = parseInt(td);
+      if (n > nscore) {
+        nscore = n;
+      }
+    }
+  });
+  $('#nscore').text(nscore);
 }
 
 function health_update_cost() {

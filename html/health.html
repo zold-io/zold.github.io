@@ -49,7 +49,9 @@ SOFTWARE.
         <img class="logo" src="https://www.zold.io/logo.svg"/>
       </p>
       <p>
-        Total nodes:
+        NScore:
+        <span id="nscore">?</span>;
+        Visible nodes:
         <span id="total_nodes">?</span>;
         CPUs:
         <span id="total_cpus">?</span>;
@@ -109,7 +111,7 @@ SOFTWARE.
             <th class="nscore">NScore</th>
             <th class="remotes">Rmts</th>
             <th class="history">Hstr</th>
-            <th class="queue">Q</th>
+            <th class="queue">QLen</th>
             <th class="qage">QAge</th>
             <th class="speed">Spd</th>
             <th class="age">Age</th>
@@ -132,8 +134,8 @@ SOFTWARE.
         "NScore" is the total network trust score the node estimates, <a href="https://blog.zold.io/2018/07/22/nscore.html">read more</a>;
         "Rmts" (remotes) is the total amount of remote nodes the node is connected to;
         "Hstr" (history) is the amount of recently processed PUSH requests;
-        "Q" (queue) is the amount of PUSH requests staying in the line and wating processing;
-        "QAge" is the age of the oldest wallet in the queue, in seconds;
+        "QLen" (queue length) is the amount of PUSH requests staying in the line and wating processing;
+        "QAge" (queue age) is the age of the oldest wallet in the queue, in seconds;
         "Spd" (speed) is the average amount of time in seconds the node spends per each PUSH request processing;
         "Age" is the amount of hours since recent reboot of the node.
       </p>
