@@ -33,37 +33,41 @@ function health_init() {
   }
   root = 'b1.zold.io';
   $('#head').html('Wait a second, we are loading the list of nodes from ' + root + '...');
+  health_discover(root);
+}
+
+function health_discover(root) {
   $.getJSON('http://' + root + '/remotes', function(data) {
-    $('#head').html('The node <a href="http://' + root + '">' + root +
-      '</a> currently sees <strong>' + data.all.length +
-      ' nodes</strong> (refresh the page to update):');
     $.each(data.all.sort(function (r) { return r.host; }), function (i, r) {
       var addr = r.host + ':' + r.port;
-      $('#health tbody').append(
-        '<tr data-addr="' + addr + '">' +
-          '<td class="host"><a href="http://' + addr + '/">' + r.host + '</a></td>' +
-          '<td class="port">' + r.port + '</td>' +
-          '<td class="ping data"></td>' +
-          '<td class="flag data" data-ip="' + r.host + '"></td>' +
-          '<td class="platform data"></td>' +
-          '<td class="cpus data"></td>' +
-          '<td class="memory data"></td>' +
-          '<td class="threads data"></td>' +
-          '<td class="score data"></td>' +
-          '<td class="wallets data"></td>' +
-          '<td class="version data"></td>' +
-          '<td class="nscore data"></td>' +
-          '<td class="remotes data"></td>' +
-          '<td class="history data"></td>' +
-          '<td class="queue data"></td>' +
-          '<td class="qage data"></td>' +
-          '<td class="speed data"></td>' +
-          '<td class="age data"></td>' +
-          '<td class="wallet"></td>' +
-          '</tr>'
-      );
-      health_flag(r.host);
-      window.setTimeout(function () { health_node(addr); }, 0);
+      if (!seen_nodes.has(addr)) {
+        seen_nodes.add(addr);
+        $('#health tbody').append(
+          '<tr data-addr="' + addr + '">' +
+            '<td class="host"><a href="http://' + addr + '/">' + r.host + '</a></td>' +
+            '<td class="port">' + r.port + '</td>' +
+            '<td class="ping data"></td>' +
+            '<td class="flag data" data-ip="' + r.host + '"></td>' +
+            '<td class="platform data"></td>' +
+            '<td class="cpus data"></td>' +
+            '<td class="memory data"></td>' +
+            '<td class="threads data"></td>' +
+            '<td class="score data"></td>' +
+            '<td class="wallets data"></td>' +
+            '<td class="version data"></td>' +
+            '<td class="nscore data"></td>' +
+            '<td class="remotes data"></td>' +
+            '<td class="history data"></td>' +
+            '<td class="queue data"></td>' +
+            '<td class="qage data"></td>' +
+            '<td class="speed data"></td>' +
+            '<td class="age data"></td>' +
+            '<td class="wallet"></td>' +
+            '</tr>'
+        );
+        health_flag(r.host);
+        window.setTimeout(function () { health_node(addr); }, 0);
+      }
     });
   }).fail(function() { console.log('Failed to load the list of remotes from ' + root); });
 }
@@ -96,14 +100,14 @@ function health_check_wallet() {
 function health_node(addr) {
   var $tr = $('#health tr[data-addr="' + addr + '"]');
   var start = new Date();
-  $tr.find('td.ping').html('<div class="spinner">&nbsp;</div>');
+  $tr.find('td.ping').prepend('<div class="spinner">&nbsp;</div> ');
   $.getJSON('http://' + addr + '/', function(json) {
     var msec = new Date() - start;
     var $ping = $tr.find('td.ping');
     $ping.text(msec).colorize({ 1000: 'red', 500: 'orange', 0: 'green' });
     $tr.find('td.platform').text(json.platform);
     $tr.find('td.cpus').text(json.cpus);
-    $tr.find('td.memory').text((json.memory / (1024 * 1024)).toFixed(0)).colorize({ 256: 'red', 128: 'orange', 0: 'green'});;
+    $tr.find('td.memory').text((json.memory / (1024 * 1024)).toFixed(0));
     $tr.find('td.threads').text(json.threads);
     $tr.find('td.score').text(json.score.value).colorize({ 16: 'green', 4: 'orange', 0: 'red'});
     $tr.find('td.wallets').text(json.wallets);
@@ -121,14 +125,9 @@ function health_node(addr) {
     $tr.find('td.speed').text(Math.round(json.entrance.speed)).colorize({ 32: 'red', 16: 'orange', 0: 'green'});
     health_update_lag();
     health_update_nscore();
-    $.getJSON('http://' + addr + '/remotes', function(json) {
-      seen_nodes.add(addr);
-      $.each(json.all, function (i, r) {
-        seen_nodes.add(r.host + ':' + r.port);
-      });
-      $('#total_nodes').text(seen_nodes.size);
-      health_update_cost();
-    });
+    health_update_cost();
+    health_discover(addr);
+    $('#total_nodes').text(seen_nodes.size);
   })
   .always(function() { window.setTimeout(function () { health_node(addr); }, delay); })
   .fail(function(jqXHR, status, error) { $tr.find('td.ping').text('#' + jqXHR.status).addClass('red'); });
@@ -157,7 +156,7 @@ function health_update_cost() {
     }
   });
   $('#total_cpus').text(cpus);
-  var nodes = parseInt($('#total_nodes').text());
+  var nodes = $('#health td.cpus').length;
   var visible = $('#health td.cpus').length;
   $('#total_dollars').text((0.16 * nodes * cpus / visible).toFixed(2));
 }
