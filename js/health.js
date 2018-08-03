@@ -135,16 +135,26 @@ function health_node(addr) {
 
 function health_update_nscore() {
   var nscore = 0;
+  var nodes = 0;
   $('#health td.nscore').each(function () {
     var td = $(this).text();
     if (td.match(/^[0-9]+$/)) {
       n = parseInt(td);
       if (n > nscore) {
-        nscore = n;
+        nscore += n;
+        nodes += 1;
       }
     }
   });
-  $('#nscore').text(nscore);
+  nscore = Math.round(nscore / nodes);
+  var score = 0;
+  $('#health td.score').each(function () {
+    var td = $(this).text();
+    if (td.match(/^[0-9]+$/)) {
+      score += parseInt(td);
+    }
+  });
+  $('#nscore').html('<span title="average">' + nscore + '</span>/<span title="actual">' + score + '</span>');
 }
 
 function health_update_cost() {
