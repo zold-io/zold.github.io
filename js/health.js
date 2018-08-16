@@ -51,6 +51,7 @@ function health_discover(root) {
             '<td class="platform data"></td>' +
             '<td class="cpus data"></td>' +
             '<td class="memory data"></td>' +
+            '<td class="load data"></td>' +
             '<td class="threads data"></td>' +
             '<td class="score data"></td>' +
             '<td class="wallets data"></td>' +
@@ -111,6 +112,7 @@ function health_node(addr) {
     $tr.find('td.platform').text(json.platform);
     $tr.find('td.cpus').text(json.cpus);
     $tr.find('td.memory').text((json.memory / (1024 * 1024)).toFixed(0));
+    $tr.find('td.load').text(json.load.toFixed(2)).colorize({ 8: 'red', 4: 'orange', 0: 'green'});
     $tr.find('td.threads').text(json.threads);
     $tr.find('td.score').text(json.score.value).colorize({ 16: 'green', 4: 'orange', 0: 'red'});
     $tr.find('td.wallets').text(json.wallets);
