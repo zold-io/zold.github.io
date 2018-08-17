@@ -112,22 +112,22 @@ function health_node(addr) {
     $tr.find('td.platform').text(json.platform);
     $tr.find('td.cpus').text(json.cpus);
     $tr.find('td.memory').text((json.memory / (1024 * 1024)).toFixed(0));
-    $tr.find('td.load').text(json.load.toFixed(2)).colorize({ 8: 'red', 4: 'orange', 0: 'green'});
+    $tr.find('td.load').text(json.load.toFixed(2)).colorize({ 8: 'red', 4: 'orange', 0: 'green' });
     $tr.find('td.threads').text(json.threads);
-    $tr.find('td.score').text(json.score.value).colorize({ 16: 'green', 4: 'orange', 0: 'red'});
+    $tr.find('td.score').text(json.score.value).colorize({ 16: 'green', 4: 'orange', 0: 'red' });
     $tr.find('td.wallets').text(json.wallets);
-    $tr.find('td.remotes').text(json.remotes).colorize({ 20: 'orange', 8: 'green', 0: 'red'});;
+    $tr.find('td.remotes').text(json.remotes).colorize({ 20: 'orange', 8: 'green', 0: 'red' });
     $tr.find('td.version').text(json.version + '/' + json.protocol);
     $tr.find('td.nscore').text(json.nscore);
-    $tr.find('td.age').text(parseFloat(Math.round(json.hours_alive)));
-    $tr.find('td.history').text(json.entrance.history_size).colorize({ 8: 'green', 0: 'red'});
-    $tr.find('td.queue').text(json.entrance.queue).colorize({ 32: 'red', 8: 'orange', 0: 'green'});
+    $tr.find('td.age').text(json.hours_alive.round(1)).colorize({ 1: 'green', 0: 'red' });
+    $tr.find('td.history').text(json.entrance.history_size).colorize({ 8: 'green', 0: 'red' });
+    $tr.find('td.queue').text(json.entrance.queue).colorize({ 32: 'red', 8: 'orange', 0: 'green' });
     if (json.entrance.queue_age == 0) {
       $tr.find('td.qage').html('&mdash;');
     } else {
-      $tr.find('td.qage').text(Math.round(json.entrance.queue_age)).colorize({ 180: 'red', 60: 'orange', 0: 'green'});
+      $tr.find('td.qage').text(Math.round(json.entrance.queue_age)).colorize({ 180: 'red', 60: 'orange', 0: 'green' });
     }
-    $tr.find('td.speed').text(Math.round(json.entrance.speed)).colorize({ 32: 'red', 16: 'orange', 0: 'green'});
+    $tr.find('td.speed').text(Math.round(json.entrance.speed)).colorize({ 32: 'red', 16: 'orange', 0: 'green' });
     health_update_lag();
     health_update_nscore();
     health_update_cost();
