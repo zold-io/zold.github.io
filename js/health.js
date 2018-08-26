@@ -119,7 +119,7 @@ function health_node(addr) {
     $tr.find('td.remotes').text(json.remotes).colorize({ 20: 'orange', 8: 'green', 0: 'red' });
     $tr.find('td.version').text(json.version + '/' + json.protocol);
     $tr.find('td.nscore').text(json.nscore);
-    $tr.find('td.age').text(json.hours_alive.round(1)).colorize({ 1: 'green', 0: 'red' });
+    $tr.find('td.age').text(json.hours_alive.toFixed(1)).colorize({ 1: 'green', 0: 'red' });
     $tr.find('td.history').text(json.entrance.history_size).colorize({ 8: 'green', 0: 'red' });
     $tr.find('td.queue').text(json.entrance.queue).colorize({ 32: 'red', 8: 'orange', 0: 'green' });
     if (json.entrance.queue_age == 0) {
