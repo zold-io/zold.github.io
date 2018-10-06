@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f5c0dc7b-9e0e-45da-857f-0820cb87f9fd" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/sass/ledger.scss" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/html/ledger.html" afterPath="$PROJECT_DIR$/html/ledger.html" />
-    </list>
+    <list default="true" id="f5c0dc7b-9e0e-45da-857f-0820cb87f9fd" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -218,12 +214,12 @@
       <workItem from="1538739160804" duration="193000" />
       <workItem from="1538743603392" duration="627000" />
       <workItem from="1538797885467" duration="613000" />
-      <workItem from="1538803358044" duration="824000" />
+      <workItem from="1538803358044" duration="1170000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2273000" />
+    <option name="totallyTimeSpent" value="2619000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="812" extended-state="6" />
