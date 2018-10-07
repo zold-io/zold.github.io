@@ -39,21 +39,26 @@ SOFTWARE.
     <script src="https://cdn.rawgit.com/yegor256/colorizejs/gh-pages/colorizejs.min.js">
       // Should be empty
     </script>
+    <script src="file:///code/zold-browser/js/ledger.js">
+        // Should be empty
+    </script>
   </head>
-  <body>
+  <body onload="ledger_init();">
     <p>
       <p>
-        <img class="logo" src="https://www.zold.io/logo.svg"/>
+        <img class="logo" src="https://www.zold.io/logo.svg" width="64px" style="vertical-align: middle"/>
+        <input name="wallet" size="25" placeholder="Enter Zold wallet ID"/>
+        <input type="submit" value="Search"/>
       </p>
-      <p>
-        <h2>Zold wallet browser</h2>
       </p>
-      <p>
-        Enter wallet ID:
-      </p>
-      <p>
-        <input name="wallet" size="20"/>
-      </p>
+      <div id="results" style="display:none;">
+        <p>
+          Wallet ID:
+          <b id="wallet">?</b>
+        </p>
+        <p id="transactions">
+        </p>
+      </div>
       <p class="footnotes">
         @@VERSION
       </p>
