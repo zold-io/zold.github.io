@@ -26,28 +26,41 @@ SOFTWARE.
 <html>
   <head>
     <meta charset="utf-8"/>
-    <title>/map</title>
-    <meta name="description" content="Full map of visible Zold nodes"/>
-    <meta name="keywords" content="zerocracy, management, robotocracy, meritocracy"/>
+    <title>/ledger</title>
+    <meta name="description" content="Zold wallet browser"/>
+    <meta name="keywords" content="zold wallet browser"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="shortcut icon" href="https://www.zold.io/logo.png"/>
-    <link href="0.9.0/css/map.min.css" rel="stylesheet"/>
-    <script src="https://maps.google.com/maps/api/js?key=AIzaSyArj6RePmR3DAAF7Tx9nK9UvO5exPStHu8">
-      // Should be empty
-    </script>
+    <link href="https://cdn.rawgit.com/yegor256/tacit/gh-pages/tacit-css-1.3.0.min.css" rel="stylesheet"/>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js">
       // Should be empty
     </script>
-    <script src="0.9.0/js/map.js">
+    <script src="https://cdn.rawgit.com/yegor256/colorizejs/gh-pages/colorizejs.min.js">
       // Should be empty
     </script>
+    <script src="file:///code/zold-browser/js/ledger.js">
+        // Should be empty
+    </script>
   </head>
-  <body onload="map_init();">
-    <div id="container">
-      <div id="map">
-        <!-- Empty on start -->
+  <body onload="ledger_init();">
+    <p>
+      <p>
+        <img class="logo" src="https://www.zold.io/logo.svg" width="64px" style="vertical-align: middle"/>
+        <input name="wallet" size="25" placeholder="Enter Zold wallet ID"/>
+        <input type="submit" value="Search"/>
+      </p>
+      </p>
+      <div id="results" style="display:none;">
+        <p>
+          Wallet ID:
+          <b id="wallet">?</b>
+        </p>
+        <p id="transactions">
+        </p>
       </div>
-      <img id="logo" src="https://www.zold.io/logo.svg"/>
-    </div>
+      <p class="footnotes">
+        0.9.0
+      </p>
+    </section>
   </body>
 </html>
