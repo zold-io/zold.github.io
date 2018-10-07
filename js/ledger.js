@@ -23,9 +23,9 @@ SOFTWARE.
 */
 
 function ledger_init() {
-  var url = window.location.href;
-  var wallet = url.split('?')[1].split('=')[1];
-  ledger_refresh(wallet);
+    var url = window.location.href;
+    var wallet = url.split('?')[1].split('=')[1];
+    ledger_refresh(wallet);
 }
 
 function ledger_refresh(wallet) {
@@ -35,12 +35,11 @@ function ledger_refresh(wallet) {
         var txns = json.body.split("\n");
         var txns_lines = '<table>';
         for (var i = 5; i < txns.length-1; i++) {
-          var tx = txns[i].split(';');
-          txns_lines += '<tr><td><b>' + tx[0] + '</b></td><td>' +
-            human_date(tx[1]) + '</td><td>' + zold_amount(tx[2]) + '</td><td>' +
-            "<a href='ledger.html?wallet=" + tx[4] + "'>" + tx[4] +  '</a></td><td>' +
-            tx[5] + '</i>' + '</a></td></tr>';
-
+            var tx = txns[i].split(';');
+            txns_lines += '<tr><td><b>' + tx[0] + '</b></td><td>' +
+                human_date(tx[1]) + '</td><td>' + zold_amount(tx[2]) + '</td><td>' +
+                "<a href='ledger.html?wallet=" + tx[4] + "'>" + tx[4] +  '</a></td><td>' +
+                tx[5] + '</i>' + '</a></td></tr>';
         }
         $('#transactions').html(txns_lines + '</table>');
     }).fail(function() { console.log('Failed to load the JSON'); });
