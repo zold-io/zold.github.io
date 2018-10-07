@@ -34,7 +34,7 @@ function ledger_refresh(wallet) {
         $('#wallet').text(json.id);
         var txns = json.body.split("\n");
         var txns_lines = '<table>';
-        for (var i = 5; i < txns.length-1; i++) {
+        for (var i = 5; i < txns.length - 1; i++) {
             var tx = txns[i].split(';');
             txns_lines += '<tr><td><b>' + tx[0] + '</b></td><td>' +
                 human_date(tx[1]) + '</td><td>' + zold_amount(tx[2]) + '</td><td>' +
