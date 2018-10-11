@@ -53,7 +53,8 @@ SOFTWARE.
         <span id="age">?</span>.
       </p>
       <p>
-        Wallets in the pool: <span id="wallets">?</span>.
+        Wallets in the pool: <span id="wallets">?</span>;
+        Remotes: <span id="remotes">?</span>.
       </p>
       <div id="results" style="display:none;">
         <p>
@@ -69,12 +70,18 @@ SOFTWARE.
         <p>
           <code>PUSH</code> requests made:
           <span id="push_ok">?</span>
-          (<span id="push_percent">?</span>% failures).
+          (<span id="push_percent">?</span>% failures);
+          ~<span id="push_time">?</span> seconds each.
         </p>
         <p>
           <code>PULL</code> requests made:
           <span id="pull_ok">?</span>
-          (<span id="pull_percent">?</span>% failures).
+          (<span id="pull_percent">?</span>% failures);
+          ~<span id="pull_time">?</span> seconds each.
+        </p>
+        <p>
+          Average cycle duration:
+          <span id="cycle_time">?</span> seconds.
         </p>
         <p>
           Payments:

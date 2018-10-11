@@ -115,6 +115,11 @@ function health_node(addr) {
     $tr.find('td.load').text(json.load.toFixed(2)).colorize({ 8: 'red', 4: 'orange', 0: 'green' });
     $tr.find('td.threads').text(json.threads);
     $tr.find('td.score').text(json.score.value).colorize({ 16: 'green', 4: 'orange', 0: 'red' });
+    if (json.score.expired) {
+      $tr.find('td.score').addClass('cross');
+    } else {
+      $tr.find('td.score').removeClass('cross');
+    }
     $tr.find('td.wallets').text(json.wallets);
     $tr.find('td.remotes').text(json.remotes).colorize({ 20: 'orange', 8: 'green', 0: 'red' });
     $tr.find('td.version').text(json.version + '/' + json.protocol);
