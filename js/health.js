@@ -119,7 +119,7 @@ function health_node(addr) {
     $ping.text(msec).colorize({ 1000: 'red', 500: 'orange', 0: 'green' });
     $tr.find('td.alias').text(json.alias);
     $tr.find('td.platform').text(json.platform);
-    $tr.find('td.cpus').text(json.cpus);
+    $tr.find('td.cpus').html("<a href='http://" + addr + "/farm'>" + json.cpus + "</a>");
     $tr.find('td.memory').text((json.memory / (1024 * 1024)).toFixed(0));
     $tr.find('td.load').text(json.load.toFixed(2)).colorize({ 8: 'red', 4: 'orange', 0: 'green' });
     $tr.find('td.threads').html("<a href='http://" + addr + "/threads'>" + json.threads + "</a>");
