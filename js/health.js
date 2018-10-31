@@ -31,7 +31,10 @@ function health_init() {
     $(location).attr('href', 'http://www.zold.io/health.html');
     return;
   }
-  root = 'b1.zold.io';
+  root = new URLSearchParams(window.location.search).get('start');
+  if (root == null) {
+    root = 'b1.zold.io';
+  }
   $('#head').html('Wait a second, we are loading the list of nodes from ' + root + '...');
   health_discover(root);
 }
@@ -42,6 +45,7 @@ function health_discover(root) {
       $('#head').text('The list of remotes is empty!');
       return;
     }
+    $('#head').hide();
     $.each(data.all.sort(function (r) { return r.host; }), function (i, r) {
       var addr = r.host + ':' + r.port;
       if (!seen_nodes.has(addr)) {
@@ -128,7 +132,7 @@ function health_node(addr) {
     $tr.find('td.wallets').text(json.wallets);
     $tr.find('td.remotes').text(json.remotes).colorize({ 20: 'orange', 8: 'green', 0: 'red' });
     $tr.find('td.version').text(json.version + '/' + json.protocol);
-    $tr.find('td.nscore').text(json.nscore);
+    $tr.find('td.nscore').html("<a href='/health.html?start=" + addr + "'>" + json.nscore + "</a>");
     $tr.find('td.age').text(json.hours_alive.toFixed(1)).colorize({ 1: 'green', 0: 'red' });
     $tr.find('td.history').text(json.entrance.history_size).colorize({ 8: 'green', 0: 'red' });
     $tr.find('td.queue').text(json.entrance.queue).colorize({ 32: 'red', 8: 'orange', 0: 'green' });
