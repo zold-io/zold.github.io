@@ -129,7 +129,7 @@ function health_node(addr) {
     } else {
       $tr.find('td.score').removeClass('cross');
     }
-    $tr.find('td.wallets').text(json.wallets);
+    $tr.find('td.wallets').text(json.wallets).colorize({ 256: 'gray', 257: 'inherit' });
     $tr.find('td.remotes').text(json.remotes).colorize({ 20: 'orange', 8: 'green', 0: 'red' });
     $tr.find('td.version').text(json.version + '/' + json.protocol);
     $tr.find('td.nscore').html("<a href='/health.html?start=" + addr + "'>" + json.nscore + "</a>");
