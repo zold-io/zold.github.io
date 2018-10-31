@@ -33,31 +33,31 @@ function stress_init() {
 }
 
 function stress_refresh() {
+  var $ping = $('#ping');
+  $ping.html('<div class="spinner">&nbsp;</div>');
+  var start = new Date();
   $.getJSON('http://wts.zold.io/stress.json', function(json) {
+    var msec = new Date() - start;
+    $ping.text(msec).colorize({ 1000: 'red', 500: 'orange', 0: 'green' });
     $('#age').text(Math.round(json.alive_hours * 60 * 60) + ' seconds');
     $('#wallets').text(json.wallets.length).colorize({ 7: 'green', 0: 'red' });
     $('#remotes').text(json.remotes).colorize({ 7: 'green', 0: 'red' });
-    if (json.arrived) {
-      $('#results').show();
-      $('#tps').text(Math.round(json.arrived.total / (json.alive_hours * 60 * 60), 3));
-      $('#sent').text(json.paid.total);
-      $('#arrived').text(json.arrived.total);
-      $('#waiting').text(Object.keys(json.waiting).length);
-      $('#confirmation_time').text(Math.round(json.arrived.avg / 60, 2));
-      push_ok = json.push_ok ? json.push_ok.total : 0;
-      push_errors = json.push_errors ? json.push_errors.total : 0;
-      $('#push_ok').text(push_ok + push_errors);
-      $('#push_percent').text(Math.round(push_errors / (push_ok + push_errors) * 100, 2));
-      $('#push_time').text(Math.round(json.push_ok.avg)).colorize({ 16: 'red', 0: 'green' });;
-      pull_ok = json.pull_ok ? json.pull_ok.total : 0;
-      pull_errors = json.pull_errors ? json.pull_errors.total : 0;
-      $('#pull_ok').text(pull_ok + pull_errors);
-      $('#pull_percent').text(Math.round(pull_errors / (pull_ok + pull_errors) * 100, 2)).colorize({ 0: 'red' });;
-      $('#pull_time').text(Math.round(json.pull_ok.avg)).colorize({ 16: 'red', 0: 'green' });
-      $('#cycle_time').text(Math.round(json.cycles_ok.avg)).colorize({ 16: 'red', 0: 'green' });
-    } else {
-      $('#results').hide();
-    }
+    $('#tps').text(Math.round(json.arrived.total / json.arrived.age, 3));
+    $('#sent').text(json.paid.total);
+    $('#arrived').text(json.arrived.total);
+    $('#waiting').text(Object.keys(json.waiting).length);
+    $('#confirmation_time').text(Math.round(json.arrived.avg / 60, 2));
+    push_ok = json.push_ok ? json.push_ok.total : 0;
+    push_error = json.push_error ? json.push_error.total : 0;
+    $('#push_ok').text(push_ok + push_error);
+    $('#push_percent').text(Math.round(push_error / (push_ok + push_error) * 100, 2));
+    $('#push_time').text(Math.round(json.push_ok.avg)).colorize({ 16: 'red', 0: 'green' });;
+    pull_ok = json.pull_ok ? json.pull_ok.total : 0;
+    pull_error = json.pull_error ? json.pull_error.total : 0;
+    $('#pull_ok').text(pull_ok + pull_error);
+    $('#pull_percent').text(Math.round(pull_error / (pull_ok + pull_error) * 100, 2)).colorize({ 0: 'red' });;
+    $('#pull_time').text(Math.round(json.pull_ok.avg)).colorize({ 16: 'red', 0: 'green' });
+    $('#cycle_time').text(Math.round(json.cycle_ok.avg)).colorize({ 16: 'red', 0: 'green' });
     window.setTimeout(stress_refresh, delay);
   }).fail(function() { console.log('Failed to load the JSON'); });
 }

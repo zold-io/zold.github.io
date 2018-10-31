@@ -38,13 +38,17 @@ function health_init() {
 
 function health_discover(root) {
   $.getJSON('http://' + root + '/remotes', function(data) {
+    if (data.all.length == 0) {
+      $('#head').text('The list of remotes is empty!');
+      return;
+    }
     $.each(data.all.sort(function (r) { return r.host; }), function (i, r) {
       var addr = r.host + ':' + r.port;
       if (!seen_nodes.has(addr)) {
         seen_nodes.add(addr);
         $('#health tbody').append(
           '<tr data-addr="' + addr + '">' +
-            '<td class="host"><a href="http://' + addr + '/">' + r.host + '</a></td>' +
+            '<td class="host"><a href="http://' + addr + '/" class="alias">' + r.host + '</a></td>' +
             '<td class="port">' + r.port + '</td>' +
             '<td class="ping data"></td>' +
             '<td class="flag data" data-ip="' + r.host + '"></td>' +
@@ -70,7 +74,7 @@ function health_discover(root) {
         window.setTimeout(function () { health_node(addr); }, 0);
       }
     });
-  }).fail(function() { console.log('Failed to load the list of remotes from ' + root); });
+  }).fail(function() { $('#head').text('Failed to load the list of remotes from ' + root); });
 }
 
 function health_flag(host) {
@@ -109,11 +113,12 @@ function health_node(addr) {
     var msec = new Date() - start;
     var $ping = $tr.find('td.ping');
     $ping.text(msec).colorize({ 1000: 'red', 500: 'orange', 0: 'green' });
+    $tr.find('td.alias').text(json.alias);
     $tr.find('td.platform').text(json.platform);
     $tr.find('td.cpus').text(json.cpus);
     $tr.find('td.memory').text((json.memory / (1024 * 1024)).toFixed(0));
     $tr.find('td.load').text(json.load.toFixed(2)).colorize({ 8: 'red', 4: 'orange', 0: 'green' });
-    $tr.find('td.threads').text(json.threads);
+    $tr.find('td.threads').html("<a href='http://" + addr + "/threads'>" + json.threads + "</a>");
     $tr.find('td.score').text(json.score.value).colorize({ 16: 'green', 4: 'orange', 0: 'red' });
     if (json.score.expired) {
       $tr.find('td.score').addClass('cross');
