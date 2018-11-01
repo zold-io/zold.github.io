@@ -113,43 +113,52 @@ function health_node(addr) {
   var $tr = $('#health tr[data-addr="' + addr + '"]');
   var start = new Date();
   $tr.find('td.ping').prepend('<div class="spinner">&nbsp;</div> ');
-  $.getJSON('http://' + addr + '/', function(json) {
-    var msec = new Date() - start;
-    var $ping = $tr.find('td.ping');
-    $ping.text(msec).colorize({ 1000: 'red', 500: 'orange', 0: 'green' });
-    $tr.find('td.alias').text(json.alias);
-    $tr.find('td.platform').text(json.platform);
-    $tr.find('td.cpus').html("<a href='http://" + addr + "/farm'>" + json.cpus + "</a>");
-    $tr.find('td.memory').text((json.memory / (1024 * 1024)).toFixed(0));
-    $tr.find('td.load').text(json.load.toFixed(2)).colorize({ 8: 'red', 4: 'orange', 0: 'green' });
-    $tr.find('td.threads').html("<a href='http://" + addr + "/threads'>" + json.threads + "</a>");
-    $tr.find('td.score').text(json.score.value).colorize({ 16: 'green', 4: 'orange', 0: 'red' });
-    if (json.score.expired) {
-      $tr.find('td.score').addClass('cross');
-    } else {
-      $tr.find('td.score').removeClass('cross');
+  $.ajax({
+    url: 'http://' + addr + '/',
+    timeout: 16000,
+    success: function(json) {
+      var msec = new Date() - start;
+      $tr.find('td.ping').removeClass('failure');
+      var $ping = $tr.find('td.ping');
+      $ping.text(msec).colorize({ 1000: 'red', 500: 'orange', 0: 'green' });
+      $tr.find('td.alias').text(json.alias);
+      $tr.find('td.platform').text(json.platform);
+      $tr.find('td.cpus').html("<a href='http://" + addr + "/farm'>" + json.cpus + "</a>");
+      $tr.find('td.memory').text((json.memory / (1024 * 1024)).toFixed(0));
+      $tr.find('td.load').text(json.load.toFixed(2)).colorize({ 8: 'red', 4: 'orange', 0: 'green' });
+      $tr.find('td.threads').html("<a href='http://" + addr + "/threads'>" + json.threads + "</a>");
+      $tr.find('td.score').text(json.score.value).colorize({ 16: 'green', 4: 'orange', 0: 'red' });
+      if (json.score.expired) {
+        $tr.find('td.score').addClass('cross');
+      } else {
+        $tr.find('td.score').removeClass('cross');
+      }
+      $tr.find('td.wallets').text(json.wallets).colorize({ 256: 'gray', 257: 'inherit' });
+      $tr.find('td.remotes').text(json.remotes).colorize({ 20: 'orange', 8: 'green', 0: 'red' });
+      $tr.find('td.version').text(json.version + '/' + json.protocol);
+      $tr.find('td.nscore').html("<a href='/health.html?start=" + addr + "'>" + json.nscore + "</a>");
+      $tr.find('td.age').text(json.hours_alive.toFixed(1)).colorize({ 1: 'green', 0: 'red' });
+      $tr.find('td.history').text(json.entrance.history_size).colorize({ 8: 'green', 0: 'red' });
+      $tr.find('td.queue').text(json.entrance.queue).colorize({ 32: 'red', 8: 'orange', 0: 'green' });
+      if (json.entrance.queue_age == 0) {
+        $tr.find('td.qage').html('&mdash;');
+      } else {
+        $tr.find('td.qage').text(Math.round(json.entrance.queue_age)).colorize({ 180: 'red', 60: 'orange', 0: 'green' });
+      }
+      $tr.find('td.speed').text(Math.round(json.entrance.speed)).colorize({ 32: 'red', 16: 'orange', 0: 'green' });
+      health_update_lag();
+      health_update_nscore();
+      health_update_cost();
+      health_discover(addr);
+      $('#total_nodes').text(seen_nodes.size);
+    },
+    error: function(jqXHR, status, error) {
+      $tr.find('td.ping').text('#' + jqXHR.status).addClass('failure');
+    },
+    complete: function() {
+      window.setTimeout(function () { health_node(addr); }, delay);
     }
-    $tr.find('td.wallets').text(json.wallets).colorize({ 256: 'gray', 257: 'inherit' });
-    $tr.find('td.remotes').text(json.remotes).colorize({ 20: 'orange', 8: 'green', 0: 'red' });
-    $tr.find('td.version').text(json.version + '/' + json.protocol);
-    $tr.find('td.nscore').html("<a href='/health.html?start=" + addr + "'>" + json.nscore + "</a>");
-    $tr.find('td.age').text(json.hours_alive.toFixed(1)).colorize({ 1: 'green', 0: 'red' });
-    $tr.find('td.history').text(json.entrance.history_size).colorize({ 8: 'green', 0: 'red' });
-    $tr.find('td.queue').text(json.entrance.queue).colorize({ 32: 'red', 8: 'orange', 0: 'green' });
-    if (json.entrance.queue_age == 0) {
-      $tr.find('td.qage').html('&mdash;');
-    } else {
-      $tr.find('td.qage').text(Math.round(json.entrance.queue_age)).colorize({ 180: 'red', 60: 'orange', 0: 'green' });
-    }
-    $tr.find('td.speed').text(Math.round(json.entrance.speed)).colorize({ 32: 'red', 16: 'orange', 0: 'green' });
-    health_update_lag();
-    health_update_nscore();
-    health_update_cost();
-    health_discover(addr);
-    $('#total_nodes').text(seen_nodes.size);
-  })
-  .always(function() { window.setTimeout(function () { health_node(addr); }, delay); })
-  .fail(function(jqXHR, status, error) { $tr.find('td.ping').text('#' + jqXHR.status).addClass('red'); });
+  });
 }
 
 function health_update_nscore() {

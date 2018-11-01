@@ -69,6 +69,10 @@ section {
     th {
       padding: 0.1em .4em;
 
+      &.failure {
+        background-color: lighten(#BB342F, 40);
+      }
+
       &.score,
       &.ping,
       &.wallets,
