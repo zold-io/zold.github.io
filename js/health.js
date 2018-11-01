@@ -53,7 +53,7 @@ function health_discover(root) {
         $('#health tbody').append(
           '<tr data-addr="' + addr + '">' +
             '<td class="host"><a href="http://' + addr + '/" class="alias">' + r.host + '</a></td>' +
-            '<td class="port">' + r.port + '</td>' +
+            '<td class="port ' + (r['default'] ? 'green' : '') + '">' + r.port + '</td>' +
             '<td class="ping data"></td>' +
             '<td class="flag data" data-ip="' + r.host + '"></td>' +
             '<td class="platform data"></td>' +
