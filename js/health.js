@@ -114,7 +114,7 @@ function health_check_wallet() {
 function health_node(addr) {
   var $tr = $('#health tr[data-addr="' + addr + '"]');
   var start = new Date();
-  $tr.find('td.ping').prepend('<div class="spinner">&nbsp;</div> ');
+  $tr.find('td.ping').html('<div class="spinner">&nbsp;</div> ');
   $.ajax({
     url: 'http://' + addr + '/',
     timeout: 16000,
