@@ -44,7 +44,7 @@ section {
 }
 
 #health {
-  font-size: 90%;
+  font-size: 85%;
 
   @media all and (max-width: 1024px) {
     display: none;
@@ -81,6 +81,7 @@ section {
       &.memory,
       &.load,
       &.threads,
+      &.processes,
       &.remotes,
       &.age,
       &.history,

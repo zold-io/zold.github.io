@@ -62,6 +62,7 @@ function health_discover(root) {
             '<td class="memory data"></td>' +
             '<td class="load data"></td>' +
             '<td class="threads data"></td>' +
+            '<td class="processes data"></td>' +
             '<td class="score data"></td>' +
             '<td class="wallets data"></td>' +
             '<td class="version data"></td>' +
@@ -128,6 +129,7 @@ function health_node(addr) {
       $tr.find('td.memory').text((json.memory / (1024 * 1024)).toFixed(0)).colorize({ 512: 'red', 256: 'orange', 0: 'green' });
       $tr.find('td.load').text(json.load.toFixed(2)).colorize({ 8: 'red', 4: 'orange', 0: 'green' });
       $tr.find('td.threads').html("<a href='http://" + addr + "/threads'>" + json.threads + "</a>");
+      $tr.find('td.processes').html("<a href='http://" + addr + "/ps'>" + json.processes + "</a>");
       $tr.find('td.score').text(json.score.value).colorize({ 16: 'green', 4: 'orange', 0: 'red' });
       if (json.score.expired) {
         $tr.find('td.score').addClass('cross');

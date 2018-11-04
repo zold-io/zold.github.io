@@ -84,6 +84,7 @@ SOFTWARE.
           <col style=""/> <!-- Memory -->
           <col style=""/> <!-- Load -->
           <col style=""/> <!-- Threads -->
+          <col style=""/> <!-- Processes -->
           <col style=""/> <!-- Score -->
           <col style=""/> <!-- Wallets -->
           <col style=""/> <!-- Version -->
@@ -107,6 +108,7 @@ SOFTWARE.
             <th class="memory">Mem</th>
             <th class="load">Load</th>
             <th class="threads">Threads</th>
+            <th class="processes">Pcs</th>
             <th class="score">Score</th>
             <th class="wallets">Wallets</th>
             <th class="version">Version</th>
@@ -130,6 +132,7 @@ SOFTWARE.
         "CPUs" is the total amount of processors at the particular node;
         "Mem" (memory) is the amount of memory the core Zold process consumes on the node, in Mb (the number has to stay below 256);
         "Threads" is the amount of active threads vs. total threads at the node;
+        "Pcs" is the amount of server processes which belong to the zold node;
         "Score" is the trust score of the node it exposes currently (it is expired and not valid, if it is crossed through);
         "Wallets" is the total amount of wallets the node is holding (256 means that the node is unable to calculate its wallets);
         "Version" is the version of software the node runs;
