@@ -67,6 +67,7 @@ section {
 
     td,
     th {
+      overflow: hidden;
       padding: 0.1em .4em;
 
       &.failure {
