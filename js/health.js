@@ -36,6 +36,12 @@ function health_init() {
     root = 'b1.zold.io';
   }
   $('#head').html('Wait a second, we are loading the list of nodes from ' + root + '...');
+  $.get('http://b1.zold.io/version', function(data) {
+    $('#version').text(data);
+  });
+  $.get('http://b1.zold.io/protocol', function(data) {
+    $('#protocol').text(data);
+  });
   health_discover(root);
 }
 
@@ -137,7 +143,11 @@ function health_node(addr) {
       }
       $tr.find('td.wallets').text(json.wallets).colorize({ 256: 'gray', 257: 'inherit' });
       $tr.find('td.remotes').text(json.remotes).colorize({ 20: 'orange', 8: 'green', 0: 'red' });
-      $tr.find('td.version').text(json.version + '/' + json.protocol);
+      $tr.find('td.version').html(
+        "<span class='" + (json.version == $('#version').text() ? 'green' : 'red') + "'>" +
+        json.version + "</span>/<span class='" + (json.protocol == $('#protocol').text() ? 'green' : 'red') + "'>" +
+        json.protocol + "</span>"
+      );
       $tr.find('td.nscore').html("<a href='/health.html?start=" + addr + "'>" + json.nscore + "</a>");
       $tr.find('td.age').text(json.hours_alive.toFixed(1)).colorize({ 1: 'green', 0: 'red' });
       $tr.find('td.history').text(json.entrance.history_size).colorize({ 8: 'green', 0: 'red' });
