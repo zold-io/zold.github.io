@@ -70,7 +70,6 @@ function health_discover(root) {
             '<td class="remotes data"></td>' +
             '<td class="history data"></td>' +
             '<td class="queue data"></td>' +
-            '<td class="qage data"></td>' +
             '<td class="speed data"></td>' +
             '<td class="age data"></td>' +
             '<td class="wallet"></td>' +
@@ -143,11 +142,6 @@ function health_node(addr) {
       $tr.find('td.age').text(json.hours_alive.toFixed(1)).colorize({ 1: 'green', 0: 'red' });
       $tr.find('td.history').text(json.entrance.history_size).colorize({ 8: 'green', 0: 'red' });
       $tr.find('td.queue').text(json.entrance.queue).colorize({ 32: 'red', 8: 'orange', 0: 'green' });
-      if (json.entrance.queue_age == 0) {
-        $tr.find('td.qage').html('&mdash;');
-      } else {
-        $tr.find('td.qage').text(Math.round(json.entrance.queue_age)).colorize({ 180: 'red', 60: 'orange', 0: 'green' });
-      }
       $tr.find('td.speed').text(Math.round(json.entrance.speed)).colorize({ 32: 'red', 16: 'orange', 0: 'green' });
       health_update_lag();
       health_update_nscore();
