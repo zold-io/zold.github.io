@@ -26,6 +26,18 @@ var delay = 5000;
 
 var seen_nodes = new Set([]);
 
+function random_default() {
+  var defaults = [
+    'b1.zold.io',
+    'b2.zold.io:4096',
+    '159.203.63.90:4096',
+    '167.99.77.100:4096',
+    '159.203.19.189:4096',
+    '138.197.140.42:4096'
+  ];
+  return defaults[Math.floor(Math.random() * defaults.length)];
+}
+
 function health_init() {
   if (window.location.protocol.startsWith('https')) {
     $(location).attr('href', 'http://www.zold.io/health.html');
@@ -33,7 +45,7 @@ function health_init() {
   }
   root = new URLSearchParams(window.location.search).get('start');
   if (root == null) {
-    root = 'b1.zold.io';
+    root = random_default();
   }
   $('#head').html('Wait a second, we are loading the list of nodes from ' + root + '...');
   $.get('http://b1.zold.io/version', function(data) {
@@ -46,46 +58,53 @@ function health_init() {
 }
 
 function health_discover(root) {
-  $.getJSON('http://' + root + '/remotes', function(data) {
-    if (data.all.length == 0) {
-      $('#head').text('The list of remotes is empty!');
-      return;
-    }
-    $('#head').hide();
-    $.each(data.all.sort(function (r) { return r.host; }), function (i, r) {
-      var addr = r.host + ':' + r.port;
-      if (!seen_nodes.has(addr)) {
-        seen_nodes.add(addr);
-        $('#health tbody').append(
-          '<tr data-addr="' + addr + '">' +
-            '<td class="host" style="' + (r['default'] ? 'font-weight:bold;' : '') +
-              '"><a href="http://' + addr + '/" class="alias">' + r.host + '</a></td>' +
-            '<td class="port">' + r.port + '</td>' +
-            '<td class="ping data"></td>' +
-            '<td class="flag data" data-ip="' + r.host + '"></td>' +
-            '<td class="platform data"></td>' +
-            '<td class="cpus data"></td>' +
-            '<td class="memory data"></td>' +
-            '<td class="load data"></td>' +
-            '<td class="threads data"></td>' +
-            '<td class="processes data"></td>' +
-            '<td class="score data"></td>' +
-            '<td class="wallets data"></td>' +
-            '<td class="version data"></td>' +
-            '<td class="nscore data"></td>' +
-            '<td class="remotes data"></td>' +
-            '<td class="history data"></td>' +
-            '<td class="queue data"></td>' +
-            '<td class="speed data"></td>' +
-            '<td class="age data"></td>' +
-            '<td class="wallet"></td>' +
-            '</tr>'
-        );
-        health_flag(r.host);
-        window.setTimeout(function () { health_node(addr); }, 0);
+  $.ajax({
+    url: 'http://' + root + '/remotes',
+    success: function(data) {
+      if (data.all.length == 0) {
+        $('#head').text('The list of remotes is empty!');
+        return;
       }
-    });
-  }).fail(function() { $('#head').text('Failed to load the list of remotes from ' + root); });
+      $('#head').hide();
+      $.each(data.all.sort(function (r) { return r.host; }), function (i, r) {
+        var addr = r.host + ':' + r.port;
+        if (!seen_nodes.has(addr)) {
+          seen_nodes.add(addr);
+          $('#health tbody').append(
+            '<tr data-addr="' + addr + '">' +
+              '<td class="host" style="' + (r['default'] ? 'font-weight:bold;' : '') +
+                '"><a href="http://' + addr + '/" class="alias">' + r.host + '</a></td>' +
+              '<td class="port">' + r.port + '</td>' +
+              '<td class="ping data"></td>' +
+              '<td class="flag data" data-ip="' + r.host + '"></td>' +
+              '<td class="platform data"></td>' +
+              '<td class="cpus data"></td>' +
+              '<td class="memory data"></td>' +
+              '<td class="load data"></td>' +
+              '<td class="threads data"></td>' +
+              '<td class="processes data"></td>' +
+              '<td class="score data"></td>' +
+              '<td class="wallets data"></td>' +
+              '<td class="version data"></td>' +
+              '<td class="nscore data"></td>' +
+              '<td class="remotes data"></td>' +
+              '<td class="history data"></td>' +
+              '<td class="queue data"></td>' +
+              '<td class="speed data"></td>' +
+              '<td class="age data"></td>' +
+              '<td class="wallet"></td>' +
+              '</tr>'
+          );
+          health_flag(r.host);
+          window.setTimeout(function () { health_node(addr); }, 0);
+        }
+      });
+    },
+    error: function() {
+      $('#head').text('Failed to load the list of remotes from ' + root);
+      health_discover(random_default());
+    }
+  });
 }
 
 function health_flag(host) {
