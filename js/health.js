@@ -60,6 +60,7 @@ function health_init() {
 function health_discover(root) {
   $.ajax({
     url: 'http://' + root + '/remotes',
+    timeout: 4000,
     success: function(data) {
       if (data.all.length == 0) {
         $('#head').text('The list of remotes is empty!');
