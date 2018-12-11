@@ -23,43 +23,44 @@ SOFTWARE.
 */
 
 function ledger_init() {
-    var url = window.location.href;
-    var wallet = url.split('?')[1].split('=')[1];
-    ledger_refresh(wallet);
+  root = new URLSearchParams(window.location.search).get('wallet');
+  if (root == null) {
+    root = '0000000000000000';
+  }
+  ledger_refresh(root);
 }
 
 function ledger_refresh(wallet) {
-    $.getJSON('http://b2.zold.io:4096/wallet/' + wallet, function(json) {
-        $('#results').show();
-        $('#wallet').text(json.id);
-        var txns = json.body.split("\n");
-        var txns_lines = '<table>';
-        for (var i = 5; i < txns.length - 1; i++) {
-            var tx = txns[i].split(';');
-            txns_lines += '<tr><td><b>' + tx[0] + '</b></td><td>' +
-                human_date(tx[1]) + '</td><td>' + zold_amount(tx[2]) + '</td><td>' +
-                "<a href='ledger.html?wallet=" + tx[4] + "'>" + tx[4] +  '</a></td><td>' +
-                tx[5] + '</i>' + '</a></td></tr>';
-        }
-        $('#transactions').html(txns_lines + '</table>');
-    }).fail(function() { console.log('Failed to load the JSON'); });
+  $.getJSON('http://b2.zold.io:4096/wallet/' + wallet + '/txns.json', function(json) {
+    $('#wallet').html('<code>' + wallet + '</code>');
+    var $tbody = $('#txns');
+    for (var i = 0; i < json.length; i++) {
+      var txn = json[i];
+      $tbody.append(
+        '<tr>' +
+        '<td>' + txn['id'] + '</td>' +
+        '<td>' + zold_date(txn['date']) + '</td>' +
+        '<td style="text-align:right;color:' + (txn['amount'] < 0 ? 'darkred' : 'darkgreen') + '">' +
+          zold_amount(txn['amount']) + '</td>' +
+        '<td><code><a href="?wallet=' + txn['bfn'] + '">' + txn['bfn'] + '</a></code></td>' +
+        '<td>' + txn['details'] + '</td>' +
+        '</tr>'
+      );
+    }
+  }).fail(function() { $('#wallet').text('Failed to load the wallet ' + wallet); });
 }
 
 function zold_amount(am) {
-    return parseFloat(am / Math.pow(2, 32)).toFixed(7) + ' ZLD';
+  return parseFloat(am / Math.pow(2, 32)).toFixed(4);
 }
 
-function human_date(d) {
-    var monthNames = [
-        "Jan", "Feb", "Mar",
-        "Apr", "May", "Jun", "Jul",
-        "Aug", "Sep", "Oct",
-        "Nov", "Dec"
-    ];
-    var day = new Date(Date.parse(d));
-    var monthIndex = day.getMonth();
-    var year = day.getFullYear();
-    var hour = day.getHours();
-    var minutes = day.getMinutes();
-    return monthNames[monthIndex] + ' ' + year + ' ' + hour + ':' + minutes;
+function zold_date(d) {
+  var monthNames = [
+    "Jan", "Feb", "Mar",
+    "Apr", "May", "Jun", "Jul",
+    "Aug", "Sep", "Oct",
+    "Nov", "Dec"
+  ];
+  var day = new Date(Date.parse(d));
+  return day.getMonth() + '/' + day.getDay() + '/' + day.getFullYear() + ' ' + day.getHours() + ':' + day.getMinutes();
 }
