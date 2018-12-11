@@ -156,7 +156,7 @@ function health_node(addr) {
       $tr.find('td.threads').html("<a href='http://" + addr + "/threads'>" + json.threads + "</a>");
       $tr.find('td.processes').html("<a href='http://" + addr + "/ps'>" + json.processes + "</a>");
       $tr.find('td.score').text(json.score.value).colorize({ 16: 'green', 4: 'orange', 0: 'red' });
-      if (json.score.expired || json.score.strength < 7) {
+      if (json.score.expired || json.score.strength < 8 || Date.parse(json.score.time) > new Date()) {
         $tr.find('td.score').addClass('cross');
       } else {
         $tr.find('td.score').removeClass('cross');
