@@ -60,9 +60,10 @@ function health_discover(root) {
         if (!seen_nodes.has(addr)) {
           seen_nodes.add(addr);
           $('#health tbody').append(
-            '<tr data-addr="' + addr + '">' +
-              '<td class="host" style="' + (r['default'] ? 'font-weight:bold;' : '') +
-                '"><a href="http://' + addr + '/" class="alias">' + r.host + '</a></td>' +
+            '<tr data-addr="' + addr + '" data-errors="0">' +
+              '<td class="host" style="' + (default_nodes.includes(addr) ? 'font-weight:bold;' : '') + '"' +
+                ' title="Found at ' + root + '"' +
+                '><a href="http://' + addr + '/" class="alias">' + r.host + '</a></td>' +
               '<td class="port">' + r.port + '</td>' +
               '<td class="ping data"></td>' +
               '<td class="flag data" data-ip="' + r.host + '"></td>' +
@@ -126,6 +127,12 @@ function health_check_wallet() {
 
 function health_node(addr) {
   var $tr = $('#health tr[data-addr="' + addr + '"]');
+  var errors = parseInt($tr.attr('data-errors'));
+  if (errors > 3) {
+    $tr.remove();
+    seen_nodes.delete(addr);
+    return;
+  }
   var start = new Date();
   $tr.find('td.ping').html('<div class="spinner">&nbsp;</div> ');
   $.ajax({
@@ -133,10 +140,12 @@ function health_node(addr) {
     timeout: 16000,
     success: function(json) {
       var msec = new Date() - start;
-      $tr.find('td.ping').removeClass('failure');
+      $tr.find('td.ping').css('color', 'inherit').removeClass('failure');
       var $ping = $tr.find('td.ping');
       $ping.text(msec).colorize({ 1000: 'red', 500: 'orange', 0: 'green' });
-      $tr.find('td.alias').text(json.alias);
+      if (json.alias) {
+        $tr.find('td.alias').text(json.alias);
+      }
       $tr.find('td.platform').text(json.platform);
       $tr.find('td.cpus').html("<a href='http://" + addr + "/farm'>" + json.cpus + "</a>");
       $tr.find('td.memory').text((json.memory / (1024 * 1024)).toFixed(0)).colorize({ 512: 'red', 256: 'orange', 0: 'green' });
@@ -146,6 +155,7 @@ function health_node(addr) {
       $tr.find('td.score').text(json.score.value).colorize({ 16: 'green', 4: 'orange', 0: 'red' });
       if (json.score.expired || json.score.strength < 8 || Date.parse(json.score.time) > new Date()) {
         $tr.find('td.score').addClass('cross');
+        errors += 1;
       } else {
         $tr.find('td.score').removeClass('cross');
       }
@@ -166,11 +176,14 @@ function health_node(addr) {
       health_update_cost();
       health_discover(addr);
       $('#total_nodes').text(seen_nodes.size);
+      $tr.data('errors', 0);
     },
     error: function(jqXHR, status, error) {
-      $tr.find('td.ping').text('#' + jqXHR.status).addClass('failure');
+      $tr.find('td.ping').text('#' + jqXHR.status + '/' + errors).addClass('failure');
+      errors += 1;
     },
     complete: function() {
+      $tr.attr('data-errors', errors);
       window.setTimeout(function () { health_node(addr); }, delay);
     }
   });

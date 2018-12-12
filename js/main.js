@@ -22,14 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+var default_nodes = [
+  'b1.zold.io:80',
+  'b2.zold.io:4096',
+  '159.203.63.90:4096',
+  '167.99.77.100:4096',
+  '159.203.19.189:4096',
+  '138.197.140.42:4096'
+];
+
 function random_default() {
-  var defaults = [
-    'b1.zold.io',
-    'b2.zold.io:4096',
-    '159.203.63.90:4096',
-    '167.99.77.100:4096',
-    '159.203.19.189:4096',
-    '138.197.140.42:4096'
-  ];
-  return defaults[Math.floor(Math.random() * defaults.length)];
+  return default_nodes[Math.floor(Math.random() * default_nodes.length)];
 }

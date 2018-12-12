@@ -56,8 +56,7 @@ function ledger_refresh(wallet) {
       }
     },
     error: function() {
-      $head.css('color', 'darkred');
-      $head.html('Failed to load ' + html);
+      $head.html('Didn\'t find ' + html);
       window.setTimeout(function () { ledger_refresh(wallet); }, 1000);
     }
   });
