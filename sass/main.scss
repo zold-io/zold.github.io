@@ -22,70 +22,56 @@
 // SOFTWARE.
 //
 
-#health {
-  font-size: 85%;
-
-  @media all and (max-width: 1024px) {
-    display: none;
-  }
-
-  thead {
-    @media all and (max-width: 1024px) {
-      display: none;
-    }
-  }
-
-  tr {
-    td.issues {
-      color: red;
-    }
-
-    th {
-      font-weight: normal;
-    }
-
-    td,
-    th {
-      overflow: hidden;
-      padding: 0.1em .4em;
-
-      &.failure {
-        background-color: lighten(#BB342F, 40);
-      }
-
-      &.score,
-      &.ping,
-      &.wallets,
-      &.nscore,
-      &.cpus,
-      &.memory,
-      &.load,
-      &.threads,
-      &.processes,
-      &.remotes,
-      &.age,
-      &.history,
-      &.queue,
-      &.speed,
-      &.port {
-        text-align: right;
-      }
-
-      @media all and (max-width: 1024px) {
-        display: inline-block;
-        border: 0;
-        &.ping:after {
-          content: "ms";
-        }
-      }
-    }
-    @media all and (max-width: 1024px) {
-      display: inline-block;
-      margin: .6em 0;
-    }
-  }
-  @media all and (max-width: 1024px) {
-    display: inline-block;
-  }
+section {
+  padding: .5em;
+  width: 100%;
 }
 
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}
+
+.orange {
+  color: orange;
+}
+
+.cross {
+  text-decoration: line-through;
+}
+
+.footnotes {
+  font-size: 80%;
+  line-height: 1.3em;
+}
+
+.gray {
+  color: gray !important;
+}
+
+.logo {
+  width: 64px;
+  height: 64px;
+  vertical-align: middle;
+}
+
+.spinner {
+  display: inline-block;
+  line-height: 1em;
+  vertical-align: middle;
+  border: 2px solid #ccc;
+  border-top: 2px solid #3498db;
+  border-bottom: 2px solid #3498db;
+  border-radius: 50%;
+  width: 1em;
+  height: 1em;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

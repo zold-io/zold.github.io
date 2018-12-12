@@ -31,36 +31,47 @@ function ledger_init() {
 }
 
 function ledger_refresh(wallet) {
-  $.getJSON('http://b2.zold.io:4096/wallet/' + wallet + '/txns.json', function(json) {
-    $('#wallet').html('<code>' + wallet + '</code>');
-    var $tbody = $('#txns');
-    for (var i = 0; i < json.length; i++) {
-      var txn = json[i];
-      $tbody.append(
-        '<tr>' +
-        '<td>' + txn['id'] + '</td>' +
-        '<td>' + zold_date(txn['date']) + '</td>' +
-        '<td style="text-align:right;color:' + (txn['amount'] < 0 ? 'darkred' : 'darkgreen') + '">' +
-          zold_amount(txn['amount']) + '</td>' +
-        '<td><code><a href="?wallet=' + txn['bfn'] + '">' + txn['bfn'] + '</a></code></td>' +
-        '<td>' + txn['details'] + '</td>' +
-        '</tr>'
-      );
+  var $head = $('#wallet');
+  var host = 'b2.zold.io:4096';
+  $.ajax({
+    url: 'http://' + host + '/wallet/' + wallet + '/txns.json',
+    timeout: 4000,
+    success: function(json) {
+      $head.html('<code>' + wallet + '</code> (' +
+        json.length + 't) at <a href="http://' + host + '/wallet/' + wallet + '.txt">' + host + '</a>');
+      var $tbody = $('#txns');
+      for (var i = 0; i < json.length; i++) {
+        var txn = json[i];
+        $tbody.append(
+          '<tr>' +
+          '<td>' + txn['id'] + '</td>' +
+          '<td>' + zold_date(txn['date']) + '</td>' +
+          '<td style="text-align:right;color:' + (txn['amount'] < 0 ? 'darkred' : 'darkgreen') + '">' +
+            zold_amount(txn['amount']) + '</td>' +
+          '<td><code><a href="?wallet=' + txn['bnf'] + '">' + txn['bnf'] + '</a></code></td>' +
+          '<td>' + txn['details'].replace(/([^ ]{16})/g, '$1&shy;') + '</td>' +
+          '</tr>'
+        );
+      }
+    },
+    error: function() {
+      $head.css('color', 'darkred');
+      $head.html('Failed to load the wallet <code>' + wallet +
+        '</code> from ' +
+        '<a href="http://' + host + '/wallet/' + wallet + '.txt">' + host + '</a>, refresh the page');
     }
-  }).fail(function() { $('#wallet').text('Failed to load the wallet ' + wallet); });
+  });
 }
 
 function zold_amount(am) {
-  return parseFloat(am / Math.pow(2, 32)).toFixed(4);
+  return parseFloat(am / Math.pow(2, 32)).toFixed(2);
 }
 
 function zold_date(d) {
-  var monthNames = [
-    "Jan", "Feb", "Mar",
-    "Apr", "May", "Jun", "Jul",
-    "Aug", "Sep", "Oct",
-    "Nov", "Dec"
-  ];
-  var day = new Date(Date.parse(d));
-  return day.getMonth() + '/' + day.getDay() + '/' + day.getFullYear() + ' ' + day.getHours() + ':' + day.getMinutes();
+  var date = new Date(Date.parse(d));
+  return (date.getMonth() + 1) + '/' +
+    date.getDate() + '/' +
+    date.getFullYear() + ' ' +
+    (date.getHours() < 10 ? '0' : '') + date.getHours() + ':' +
+    (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
 }
