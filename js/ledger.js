@@ -32,19 +32,20 @@ function ledger_init() {
 
 function ledger_refresh(wallet) {
   var $head = $('#wallet');
-  var host = 'b2.zold.io:4096';
+  var host = random_default();
+  var html = '<code>' + wallet + '</code> from ' + '<a href="http://' + host + '/wallet/' + wallet + '.txt">' + host + '</a>';
+  $head.html('Loading ' + html + ' <div class="spinner">&nbsp;</div>');
   $.ajax({
     url: 'http://' + host + '/wallet/' + wallet + '/txns.json',
     timeout: 4000,
     success: function(json) {
-      $head.html('<code>' + wallet + '</code> (' +
-        json.length + 't) at <a href="http://' + host + '/wallet/' + wallet + '.txt">' + host + '</a>');
+      $head.html(html);
       var $tbody = $('#txns');
       for (var i = 0; i < json.length; i++) {
         var txn = json[i];
         $tbody.append(
           '<tr>' +
-          '<td>' + txn['id'] + '</td>' +
+          '<td>' + (txn['amount'] < 0 ? '#' + txn['id'] : '&mdash;') + '</td>' +
           '<td>' + zold_date(txn['date']) + '</td>' +
           '<td style="text-align:right;color:' + (txn['amount'] < 0 ? 'darkred' : 'darkgreen') + '">' +
             zold_amount(txn['amount']) + '</td>' +
@@ -56,9 +57,8 @@ function ledger_refresh(wallet) {
     },
     error: function() {
       $head.css('color', 'darkred');
-      $head.html('Failed to load the wallet <code>' + wallet +
-        '</code> from ' +
-        '<a href="http://' + host + '/wallet/' + wallet + '.txt">' + host + '</a>, refresh the page');
+      $head.html('Failed to load ' + html);
+      window.setTimeout(function () { ledger_refresh(wallet); }, 1000);
     }
   });
 }

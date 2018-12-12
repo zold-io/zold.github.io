@@ -40,16 +40,21 @@ SOFTWARE.
     <script src="https://cdn.rawgit.com/yegor256/colorizejs/gh-pages/colorizejs.min.js">
       // Should be empty
     </script>
+    <script src="@@VERSION/js/main.js">
+      // Should be empty
+    </script>
     <script src="@@VERSION/js/ledger.js">
-        // Should be empty
+      // Should be empty
     </script>
   </head>
   <body onload="ledger_init();">
     <section>
       <p>
         <img class="logo" src="https://www.zold.io/logo.svg"/>
-        <input name="wallet" size="25" placeholder="Enter Zold wallet ID"/>
-        <input type="submit" value="Search"/>
+        <form method="get">
+          <input name="wallet" size="25" placeholder="Enter Zold wallet ID"/>
+          <input type="submit" value="Search"/>
+        </form>
       </p>
       <div>
         <p id="wallet">&nbsp;</p>
