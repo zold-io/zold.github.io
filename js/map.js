@@ -22,7 +22,44 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+/*global URLSearchParams, random_default, $, window, console, google */
+
+function map_by_ip(map, ip, port) {
+  'use strict';
+  $.getJSON('http://www.geoplugin.net/json.gp?ip=' + ip, function(json) {
+    var lat = parseFloat(json.geoplugin_latitude),
+      lon = parseFloat(json.geoplugin_longitude);
+    var marker = new google.maps.Marker({
+      position: { lat: lat, lng: lon },
+      title: ip + ':' + port
+    });
+    marker.setMap(map);
+  }).fail(function() { console.log('Failed to find geo-location for ' + ip); });
+}
+
+function map_by_host(map, host, port) {
+  'use strict';
+  $.getJSON('https://api.exana.io/dns/' + host + '/a', function(json) {
+    var ip = $.grep(json.answer, function (a, ignore) { return a.type === 'A'; })[0].rdata;
+    map_by_ip(map, ip, port);
+  }).fail(function() { console.log('Failed to find IP for ' + host); });
+}
+
+function map_refresh(host, map) {
+  'use strict';
+  $.getJSON('http://' + host + '/remotes', function(json) {
+    $.each(json.all, function (ignore, r) {
+      if (r.host.match(/^[0-9\.]+$/)) {
+        map_by_ip(map, r.host, r.port);
+      } else {
+        map_by_host(map, r.host, r.port);
+      }
+    });
+  });
+}
+
 function map_init() {
+  'use strict';
   if (window.location.protocol.startsWith('https')) {
     $(location).attr('href', 'http://www.zold.io/map.html');
     return;
@@ -47,35 +84,4 @@ function map_init() {
     }
   });
   map_refresh('b1.zold.io', map);
-}
-
-function map_refresh(host, map) {
-  $.getJSON('http://' + host + '/remotes', function(json) {
-    $.each(json.all, function (i, r) {
-      if (r.host.match(/^[0-9\.]+$/)) {
-        map_by_ip(map, r.host, r.port);
-      } else {
-        map_by_host(map, r.host, r.port);
-      }
-    });
-  });
-}
-
-function map_by_host(map, host, port) {
-  $.getJSON('https://api.exana.io/dns/' + host + '/a', function(json) {
-    var ip = $.grep(json.answer, function (a, i) { return a.type == 'A'; })[0].rdata;
-    map_by_ip(map, ip, port);
-  }).fail(function() { console.log('Failed to find IP for ' + host); });
-}
-
-function map_by_ip(map, ip, port) {
-  $.getJSON('http://www.geoplugin.net/json.gp?ip=' + ip, function(json) {
-    var lat = parseFloat(json.geoplugin_latitude),
-      lon = parseFloat(json.geoplugin_longitude);
-    new google.maps.Marker({
-      position: { lat: lat, lng: lon },
-      map: map,
-      title: ip + ':' + port
-    });
-  }).fail(function() { console.log('Failed to find geo-location for ' + ip); });
 }

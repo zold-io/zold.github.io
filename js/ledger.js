@@ -22,7 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-/*global URLSearchParams, random_default, $ */
+/*global URLSearchParams, random_default, $, window */
+
+function zold_amount(am) {
+  'use strict';
+  return parseFloat(am / Math.pow(2, 32)).toFixed(2);
+}
+
+function zold_date(d) {
+  'use strict';
+  var date = new Date(Date.parse(d));
+  return (date.getMonth() + 1) + '/' +
+    date.getDate() + '/' +
+    date.getFullYear() + ' ' +
+    (date.getHours() < 10 ? '0' : '') + date.getHours() + ':' +
+    (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+}
 
 function ledger_refresh(wallet) {
   'use strict';
@@ -36,9 +51,9 @@ function ledger_refresh(wallet) {
     success: function(json) {
       $head.html(html);
       var $tbody = $('#txns');
-      var i = 0;
+      var i = 0, txn;
       for (i = 0; i < json.length; i += 1) {
-        var txn = json[i];
+        txn = json[i];
         $tbody.append(
           '<tr>' +
           '<td>' + (txn.amount < 0 ? '#' + txn.id : '&mdash;') + '</td>' +
@@ -46,7 +61,7 @@ function ledger_refresh(wallet) {
           '<td style="text-align:right;color:' + (txn.amount < 0 ? 'darkred' : 'darkgreen') + '">' +
             zold_amount(txn.amount) + '</td>' +
           '<td><code><a href="?wallet=' + txn.bnf + '">' + txn.bnf + '</a></code></td>' +
-          '<td>' + txn.details.replace(/([^ ]{16})/g, '$1&shy;') + '</td>' +
+          '<td>' + txn.details.replace(/([^\ ]{16})/g, '$1&shy;') + '</td>' +
           '</tr>'
         );
       }
@@ -67,17 +82,3 @@ function ledger_init() {
   ledger_refresh(root);
 }
 
-function zold_amount(am) {
-  'use strict';
-  return parseFloat(am / Math.pow(2, 32)).toFixed(2);
-}
-
-function zold_date(d) {
-  'use strict';
-  var date = new Date(Date.parse(d));
-  return (date.getMonth() + 1) + '/' +
-    date.getDate() + '/' +
-    date.getFullYear() + ' ' +
-    (date.getHours() < 10 ? '0' : '') + date.getHours() + ':' +
-    (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
-}

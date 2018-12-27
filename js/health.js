@@ -22,82 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+/*global URLSearchParams, random_default, $, window, Set, master_nodes */
+
 var delay = 5000;
 
 var seen_nodes = new Set([]);
-
-function health_init() {
-  'use strict';
-  if (window.location.protocol.startsWith('https')) {
-    $(location).attr('href', 'http://www.zold.io/health.html');
-    return;
-  }
-  root = new URLSearchParams(window.location.search).get('start');
-  if (root == null) {
-    root = random_default();
-  }
-  $('#head').html('Wait a second, we are loading the list of nodes from ' + root + '...');
-  $.get('http://b1.zold.io/version', function(data) {
-    $('#version').text(data);
-  });
-  $.get('http://b1.zold.io/protocol', function(data) {
-    $('#protocol').text(data);
-  });
-  health_discover(root);
-}
-
-function health_discover(root) {
-  'use strict';
-  $.ajax({
-    url: 'http://' + root + '/remotes',
-    timeout: 4000,
-    success: function(data) {
-      if (data.all.length == 0) {
-        $('#head').text('The list of remotes is empty!');
-        return;
-      }
-      $('#head').hide();
-      $.each(data.all.sort(function (r) { return r.host; }), function (i, r) {
-        var addr = r.host + ':' + r.port;
-        if (!seen_nodes.has(addr)) {
-          seen_nodes.add(addr);
-          $('#health tbody').append(
-            '<tr data-addr="' + addr + '" data-errors="0">' +
-              '<td class="host" style="' + (default_nodes.includes(addr) ? 'font-weight:bold;' : '') + '"' +
-                ' title="Found at ' + root + '"' +
-                '><a href="http://' + addr + '/" class="alias">' + r.host + '</a></td>' +
-              '<td class="port">' + r.port + '</td>' +
-              '<td class="ping data"></td>' +
-              '<td class="flag data" data-ip="' + r.host + '"></td>' +
-              '<td class="platform data"></td>' +
-              '<td class="cpus data"></td>' +
-              '<td class="memory data"></td>' +
-              '<td class="load data"></td>' +
-              '<td class="threads data"></td>' +
-              '<td class="processes data"></td>' +
-              '<td class="score data"></td>' +
-              '<td class="wallets data"></td>' +
-              '<td class="version data"></td>' +
-              '<td class="nscore data"></td>' +
-              '<td class="remotes data"></td>' +
-              '<td class="history data"></td>' +
-              '<td class="queue data"></td>' +
-              '<td class="speed data"></td>' +
-              '<td class="age data"></td>' +
-              '<td class="wallet"></td>' +
-              '</tr>'
-          );
-          health_flag(r.host);
-          window.setTimeout(function () { health_node(addr); }, 0);
-        }
-      });
-    },
-    error: function() {
-      $('#head').text('Failed to load the list of remotes from ' + root);
-      health_discover(random_default());
-    }
-  });
-}
 
 function health_flag(host) {
   'use strict';
@@ -112,21 +41,76 @@ function health_flag(host) {
   }
 }
 
-function health_check_wallet() {
+function health_update_nscore() {
   'use strict';
-  var wallet = $('#wallet').val();
-  $('#health tr[data-addr]').each(function () {
-    var addr = $(this).data('addr');
-    var $td = $(this).find('td.wallet');
-    var url = 'http://' + addr + '/wallet/' + wallet + '/balance';
-    $td.text('checking...').addClass('gray').removeClass('green');
-    $td.attr('title', url);
-    $.getJSON(url, function(data) {
-      $td.text(Math.round(parseInt(data) / Math.pow(2, 32), 2) + 'ZLD')
-        .removeClass('gray red').addClass('green');
-    })
-    .fail(function(jqXHR, status, error) { $td.text(jqXHR.status).addClass('red'); });
+  var nscore = 0;
+  var nodes = 0;
+  $('#health td.nscore').each(function () {
+    var td = $(this).text();
+    if (td.match(/^[0-9]+$/)) {
+      var n = parseInt(td);
+      if (n > nscore) {
+        nscore += n;
+        nodes += 1;
+      }
+    }
   });
+  nscore = Math.round(nscore / nodes);
+  var score = 0;
+  $('#health td.score').each(function () {
+    var td = $(this).text();
+    if (td.match(/^[0-9]+$/)) {
+      score += parseInt(td);
+    }
+  });
+  $('#nscore').html('<span title="average">' + nscore + '</span>/<span title="actual">' + score + '</span>');
+}
+
+function health_update_cost() {
+  'use strict';
+  var cpus = 0;
+  $('#health td.cpus').each(function () {
+    var td = $(this).text();
+    if (td.match(/^[0-9]+$/)) {
+      cpus += parseInt(td);
+    }
+  });
+  $('#total_cpus').text(cpus);
+  var nodes = $('#health td.cpus').length;
+  var visible = $('#health td.cpus').length;
+  var dollars = (0.16 * nodes * cpus / visible);
+  $('#total_dollars').text(dollars.toFixed(2));
+}
+
+function avg(type) {
+  'use strict';
+  var total = 0, count = 0;
+  $('#health td.' + type).each(function () {
+    var td = $(this).text();
+    if (td.match(/^[0-9\.]+$/)) {
+      total += parseInt(td);
+      count += 1;
+    }
+  });
+  var a = 0;
+  if (count > 0) {
+    a = total / count;
+  }
+  return a;
+}
+
+function health_update_lag() {
+  'use strict';
+  var remotes = avg('remotes');
+  $('#avg_remotes').text(Math.round(remotes));
+  var speed = avg('speed');
+  $('#avg_speed').text(Math.round(speed)).colorize({ '32': 'red', '16': 'orange', '0': 'green'});
+  var queue = avg('queue');
+  $('#avg_queue').text(queue.toFixed(1)).colorize({ '32': 'red', '8': 'orange', '0': 'green'});
+  var hops = 1 + Math.log(Math.log(seen_nodes.size)) / Math.log(remotes);
+  $('#hops').text(hops.toFixed(2));
+  var lag = hops * speed * (1 + queue);
+  $('#lag').text(Math.round(lag)).colorize({ '32': 'red', '16': 'orange', '0': 'green'});
 }
 
 function health_node(addr) {
@@ -181,8 +165,8 @@ function health_node(addr) {
         .text(json.remotes)
         .colorize({ '20': 'orange', '8': 'green', '0': 'red' });
       $tr.find('td.version').html(
-        "<span class='" + (json.version == $('#version').text() ? 'green' : 'red') + "'>" +
-        json.version + "</span>/<span class='" + (json.protocol == $('#protocol').text() ? 'green' : 'red') + "'>" +
+        "<span class='" + (json.version === $('#version').text() ? 'green' : 'red') + "'>" +
+        json.version + "</span>/<span class='" + (json.protocol === $('#protocol').text() ? 'green' : 'red') + "'>" +
         json.protocol + "</span>"
       );
       $tr.find('td.nscore')
@@ -202,11 +186,10 @@ function health_node(addr) {
       health_update_lag();
       health_update_nscore();
       health_update_cost();
-      health_discover(addr);
       $('#total_nodes').text(seen_nodes.size);
       $tr.data('errors', 0);
     },
-    error: function(jqXHR, status, error) {
+    error: function(jqXHR) {
       $tr.find('td.ping').text('#' + jqXHR.status + '/' + errors).addClass('failure');
       errors += 1;
     },
@@ -217,73 +200,95 @@ function health_node(addr) {
   });
 }
 
-function health_update_nscore() {
+function health_discover(root) {
   'use strict';
-  var nscore = 0;
-  var nodes = 0;
-  $('#health td.nscore').each(function () {
-    var td = $(this).text();
-    if (td.match(/^[0-9]+$/)) {
-      n = parseInt(td);
-      if (n > nscore) {
-        nscore += n;
-        nodes += 1;
+  $.ajax({
+    url: 'http://' + root + '/remotes',
+    timeout: 4000,
+    success: function(data) {
+      if (data.all.length === 0) {
+        $('#head').text('The list of remotes is empty!');
+        return;
       }
+      $('#head').hide();
+      $.each(data.all.sort(function (r) { return r.host; }), function (ignore, r) {
+        var addr = r.host + ':' + r.port;
+        if (!seen_nodes.has(addr)) {
+          seen_nodes.add(addr);
+          $('#health tbody').append(
+            '<tr data-addr="' + addr + '" data-errors="0">' +
+              '<td class="host" style="' + (master_nodes.includes(addr) ? 'font-weight:bold;' : '') + '"' +
+                ' title="Found at ' + root + '"' +
+                '><a href="http://' + addr + '/" class="alias">' + r.host + '</a></td>' +
+              '<td class="port">' + r.port + '</td>' +
+              '<td class="ping data"></td>' +
+              '<td class="flag data" data-ip="' + r.host + '"></td>' +
+              '<td class="platform data"></td>' +
+              '<td class="cpus data"></td>' +
+              '<td class="memory data"></td>' +
+              '<td class="load data"></td>' +
+              '<td class="threads data"></td>' +
+              '<td class="processes data"></td>' +
+              '<td class="score data"></td>' +
+              '<td class="wallets data"></td>' +
+              '<td class="version data"></td>' +
+              '<td class="nscore data"></td>' +
+              '<td class="remotes data"></td>' +
+              '<td class="history data"></td>' +
+              '<td class="queue data"></td>' +
+              '<td class="speed data"></td>' +
+              '<td class="age data"></td>' +
+              '<td class="wallet"></td>' +
+              '</tr>'
+          );
+          health_flag(r.host);
+          window.setTimeout(function () {
+            health_node(addr);
+            health_discover(addr);
+          }, 0);
+        }
+      });
+    },
+    error: function() {
+      $('#head').text('Failed to load the list of remotes from ' + root);
+      health_discover(random_default());
     }
   });
-  nscore = Math.round(nscore / nodes);
-  var score = 0;
-  $('#health td.score').each(function () {
-    var td = $(this).text();
-    if (td.match(/^[0-9]+$/)) {
-      score += parseInt(td);
-    }
-  });
-  $('#nscore').html('<span title="average">' + nscore + '</span>/<span title="actual">' + score + '</span>');
 }
 
-function health_update_cost() {
+function health_check_wallet() {
   'use strict';
-  var cpus = 0;
-  $('#health td.cpus').each(function () {
-    var td = $(this).text();
-    if (td.match(/^[0-9]+$/)) {
-      cpus += parseInt(td);
-    }
+  var wallet = $('#wallet').val();
+  $('#health tr[data-addr]').each(function () {
+    var addr = $(this).data('addr');
+    var $td = $(this).find('td.wallet');
+    var url = 'http://' + addr + '/wallet/' + wallet + '/balance';
+    $td.text('checking...').addClass('gray').removeClass('green');
+    $td.attr('title', url);
+    $.getJSON(url, function(data) {
+      $td.text(Math.round(parseInt(data) / Math.pow(2, 32), 2) + 'ZLD')
+        .removeClass('gray red').addClass('green');
+    })
+    .fail(function(jqXHR) { $td.text(jqXHR.status).addClass('red'); });
   });
-  $('#total_cpus').text(cpus);
-  var nodes = $('#health td.cpus').length;
-  var visible = $('#health td.cpus').length;
-  $('#total_dollars').text((0.16 * nodes * cpus / visible).toFixed(2));
 }
 
-function health_update_lag() {
+function health_init() {
   'use strict';
-  var remotes = avg('remotes');
-  $('#avg_remotes').text(Math.round(remotes));
-  var speed = avg('speed');
-  $('#avg_speed').text(Math.round(speed)).colorize({ '32': 'red', '16': 'orange', '0': 'green'});
-  var queue = avg('queue');
-  $('#avg_queue').text(queue.toFixed(1)).colorize({ '32': 'red', '8': 'orange', '0': 'green'});
-  var hops = 1 + Math.log(Math.log(seen_nodes.size)) / Math.log(remotes);
-  $('#hops').text(hops.toFixed(2));
-  var lag = hops * speed * (1 + queue);
-  $('#lag').text(Math.round(lag)).colorize({ '32': 'red', '16': 'orange', '0': 'green'});
-}
-
-function avg(type) {
-  'use strict';
-  var total = 0, count = 0;
-  $('#health td.' + type).each(function () {
-    var td = $(this).text();
-    if (td.match(/^[0-9\.]+$/)) {
-      total += parseInt(td);
-      count += 1;
-    }
-  });
-  var avg = 0;
-  if (count > 0) {
-    avg = total / count;
+  if (window.location.protocol.startsWith('https')) {
+    $(location).attr('href', 'http://www.zold.io/health.html');
+    return;
   }
-  return avg;
+  var root = new URLSearchParams(window.location.search).get('start');
+  if (root === null) {
+    root = random_default();
+  }
+  $('#head').html('Wait a second, we are loading the list of nodes from ' + root + '...');
+  $.get('http://b1.zold.io/version', function(data) {
+    $('#version').text(data);
+  });
+  $.get('http://b1.zold.io/protocol', function(data) {
+    $('#protocol').text(data);
+  });
+  health_discover(root);
 }

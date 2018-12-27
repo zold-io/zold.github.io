@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-var default_nodes = [
+var master_nodes = [
   'b1.zold.io:80',
   'b2.zold.io:4096',
   '159.203.63.90:4096',
@@ -33,5 +33,5 @@ var default_nodes = [
 
 function random_default() {
   'use strict';
-  return default_nodes[Math.floor(Math.random() * default_nodes.length)];
+  return master_nodes[Math.floor(Math.random() * master_nodes.length)];
 }
