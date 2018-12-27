@@ -234,7 +234,6 @@ function health_update_lag() {
   $('#avg_speed').text(Math.round(speed)).colorize({ 32: 'red', 16: 'orange', 0: 'green'});
   var queue = avg('queue');
   $('#avg_queue').text(queue.toFixed(1)).colorize({ 32: 'red', 8: 'orange', 0: 'green'});
-  var remotes = avg('remotes');
   var hops = 1 + Math.log(Math.log(seen_nodes.size)) / Math.log(remotes);
   $('#hops').text(hops.toFixed(2));
   var lag = hops * speed * (1 + queue);

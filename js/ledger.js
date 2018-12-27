@@ -24,7 +24,7 @@ SOFTWARE.
 
 function ledger_init() {
   root = new URLSearchParams(window.location.search).get('wallet');
-  if (root == null) {
+  if (root == null || !/^[0-9a-f]{16}$/.test(root)) {
     root = '0000000000000000';
   }
   ledger_refresh(root);
@@ -45,12 +45,12 @@ function ledger_refresh(wallet) {
         var txn = json[i];
         $tbody.append(
           '<tr>' +
-          '<td>' + (txn['amount'] < 0 ? '#' + txn['id'] : '&mdash;') + '</td>' +
-          '<td>' + zold_date(txn['date']) + '</td>' +
-          '<td style="text-align:right;color:' + (txn['amount'] < 0 ? 'darkred' : 'darkgreen') + '">' +
-            zold_amount(txn['amount']) + '</td>' +
-          '<td><code><a href="?wallet=' + txn['bnf'] + '">' + txn['bnf'] + '</a></code></td>' +
-          '<td>' + txn['details'].replace(/([^ ]{16})/g, '$1&shy;') + '</td>' +
+          '<td>' + (txn.amount < 0 ? '#' + txn.id : '&mdash;') + '</td>' +
+          '<td>' + zold_date(txn.date) + '</td>' +
+          '<td style="text-align:right;color:' + (txn.amount < 0 ? 'darkred' : 'darkgreen') + '">' +
+            zold_amount(txn.amount) + '</td>' +
+          '<td><code><a href="?wallet=' + txn.bnf + '">' + txn.bnf + '</a></code></td>' +
+          '<td>' + txn.details.replace(/([^ ]{16})/g, '$1&shy;') + '</td>' +
           '</tr>'
         );
       }
