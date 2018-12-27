@@ -131,5 +131,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-sass-lint');
   grunt.loadNpmTasks('grunt-replace');
-  grunt.registerTask('default', ['copy', 'replace', 'uglify', 'jshint', 'jslint', 'sasslint', 'sass']);
+  grunt.registerTask('default', ['build']);
+  grunt.registerTask('build', ['copy', 'replace', 'uglify', 'jshint', 'jslint', 'sasslint', 'sass']);
 };

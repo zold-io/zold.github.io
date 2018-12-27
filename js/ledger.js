@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-/*global URLSearchParams, random_default, $, window */
+/*global URLSearchParams, random_default, $, window, console, master_nodes */
 
 function zold_amount(am) {
   'use strict';
@@ -39,18 +39,13 @@ function zold_date(d) {
     (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
 }
 
-function ledger_refresh(wallet) {
+function ledger_draw(host, wallet) {
   'use strict';
-  var $head = $('#wallet');
-  var host = random_default();
-  var html = '<code>' + wallet + '</code> from ' + '<a href="http://' + host + '/wallet/' + wallet + '.txt">' + host + '</a>';
-  $head.html('Loading ' + html + ' <div class="spinner">&nbsp;</div>');
   $.ajax({
     url: 'http://' + host + '/wallet/' + wallet + '/txns.json',
     timeout: 4000,
     success: function(json) {
-      $head.html(html);
-      var $tbody = $('#txns');
+      var $tbody = $('#ledger tbody');
       var i = 0, txn;
       for (i = 0; i < json.length; i += 1) {
         txn = json[i];
@@ -58,7 +53,7 @@ function ledger_refresh(wallet) {
           '<tr>' +
           '<td>' + (txn.amount < 0 ? '#' + txn.id : '&mdash;') + '</td>' +
           '<td>' + zold_date(txn.date) + '</td>' +
-          '<td style="text-align:right;color:' + (txn.amount < 0 ? 'darkred' : 'darkgreen') + '">' +
+          '<td class="data" style="color:' + (txn.amount < 0 ? 'darkred' : 'darkgreen') + '">' +
             zold_amount(txn.amount) + '</td>' +
           '<td><code><a href="?wallet=' + txn.bnf + '">' + txn.bnf + '</a></code></td>' +
           '<td>' + txn.details.replace(/([^\ ]{16})/g, '$1&shy;') + '</td>' +
@@ -67,8 +62,47 @@ function ledger_refresh(wallet) {
       }
     },
     error: function() {
-      $head.html('Didn\'t find ' + html);
-      window.setTimeout(function () { ledger_refresh(wallet); }, 1000);
+      console.log('failed to find ' + wallet);
+      // window.setTimeout(function () { ledger_refresh(wallet); }, 1000);
+    }
+  });
+}
+
+function ledger_fetch(host, wallet) {
+  'use strict';
+  $.ajax({
+    url: 'http://' + host + '/wallet/' + wallet,
+    timeout: 4000,
+    success: function(json) {
+      var $tbody = $('#copies tbody');
+      var $tr = $tbody.find('tr:has(td[data-digest="' + json.digest + '"])');
+      if ($tr.length === 0) {
+        $tbody.append(
+          '<tr>' +
+          '<td data-digest="' + json.digest + '"><code>' + json.digest.substring(0, 8) + '</code></td>' +
+          '<td class="data score">' + json.score.value + '</td>' +
+          '<td class="data nodes">1</td>' +
+          '<td class="data">' + zold_amount(json.balance) + '</td>' +
+          '<td class="data">' + json.txns + '</td>' +
+          '<td class="hosts">' + host + '</td>' +
+          '</tr>'
+        );
+      } else {
+        var hosts = $tr.find('td.hosts').text().split('; ');
+        if (!hosts.includes(host)) {
+          console.log('New node for ' + host + ' for wallet ' + wallet);
+          $tr.find('td.score').text(parseInt($tr.find('td.score').text()) + json.score.value);
+          $tr.find('td.nodes').text(parseInt($tr.find('td.nodes').text()) + 1);
+          hosts.push(host);
+          $tr.find('td.hosts').text(hosts.join('; '));
+        }
+      }
+      if ($('#ledger tbody tr').length === 0) {
+        ledger_draw(host, wallet);
+      }
+    },
+    error: function() {
+      console.log('Failed to find ' + wallet + ' at ' + host);
     }
   });
 }
@@ -79,6 +113,8 @@ function ledger_init() {
   if (root === null || !(/^[0-9a-f]{16}$/).test(root)) {
     root = '0000000000000000';
   }
-  ledger_refresh(root);
+  master_nodes.forEach(function (host) {
+    ledger_fetch(host, root);
+  });
 }
 

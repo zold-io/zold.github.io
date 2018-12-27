@@ -22,16 +22,23 @@
 // SOFTWARE.
 //
 
-#ledger {
+#ledger,
+#copies {
   font-size: 85%;
-  width: 100%;
 
   tr {
     td,
     th {
       overflow: hidden;
       padding: 0.1em .4em;
+
+      &.data {
+        text-align: right;
+      }
     }
   }
 }
 
+#ledger {
+  width: 100%;
+}
