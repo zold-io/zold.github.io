@@ -32,18 +32,18 @@ SOFTWARE.
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="shortcut icon" href="https://www.zold.io/logo.png"/>
     <link href="https://cdn.rawgit.com/yegor256/tacit/gh-pages/tacit-css-1.3.0.min.css" rel="stylesheet"/>
-    <link href="0.10.9/css/main.min.css" rel="stylesheet"/>
-    <link href="0.10.9/css/ledger.min.css" rel="stylesheet"/>
+    <link href="0.11.0/css/main.min.css" rel="stylesheet"/>
+    <link href="0.11.0/css/ledger.min.css" rel="stylesheet"/>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js">
       // Should be empty
     </script>
     <script src="https://cdn.rawgit.com/yegor256/colorizejs/gh-pages/colorizejs.min.js">
       // Should be empty
     </script>
-    <script src="0.10.9/js/main.js">
+    <script src="0.11.0/js/main.js">
       // Should be empty
     </script>
-    <script src="0.10.9/js/ledger.js">
+    <script src="0.11.0/js/ledger.js">
       // Should be empty
     </script>
   </head>
@@ -56,12 +56,33 @@ SOFTWARE.
       </p>
       <p>
         <form method="get">
-          <input name="wallet" size="25" placeholder="Enter Zold wallet ID"/>
+          <input name="wallet" size="25" placeholder="Enter Zold wallet ID" type="text" pattern="[a-f0-9]{16}"/>
           <input type="submit" value="Search"/>
         </form>
       </p>
       <div>
-        <p id="wallet">&nbsp;</p>
+        <table id="copies">
+          <colgroup>
+            <col style="width:8em"/> <!-- Digest -->
+            <col style="width:4em"/> <!-- Score -->
+            <col style="width:4em"/> <!-- Nodes -->
+            <col style="width:7em"/> <!-- Balance -->
+            <col style="width:4em"/> <!-- Txns -->
+            <col style="width:20em"/> <!-- Hosts -->
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Digest</th>
+              <th>Score</th>
+              <th>Nodes</th>
+              <th>Balance</th>
+              <th>Txns</th>
+              <th>Hosts</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
         <table id="ledger">
           <colgroup>
             <col style="width:2em"/> <!-- No. -->
@@ -79,16 +100,16 @@ SOFTWARE.
               <th>Details</th>
             </tr>
           </thead>
-          <tbody id="txns">
+          <tbody>
           </tbody>
         </table>
       </div>
       <p class="footnotes">
-        0.10.9
+        0.11.0
       </p>
       <p>
-        <a href="https://github.com/zold-io/zold/stargazers">
-          <img src="https://img.shields.io/github/stars/zold-io/zold.svg?style=flat-square" alt="stars"/>
+        <a href="https://github.com/zold-io/zold.github.io/stargazers">
+          <img src="https://img.shields.io/github/stars/zold-io/zold.github.io.svg?style=flat-square" alt="stars"/>
         </a>
       </p>
     </section>
