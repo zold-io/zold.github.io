@@ -147,7 +147,7 @@ function health_node(addr) {
       var msec = new Date() - start;
       $tr.find('td.ping').css('color', 'inherit').removeClass('failure');
       var $ping = $tr.find('td.ping');
-      $ping.text(msec).colorize({ 1000: 'red', 500: 'orange', 0: 'green' });
+      $ping.text(msec).colorize({ '1000': 'red', '500': 'orange', '0': 'green' });
       if (json.alias) {
         $tr.find('td.alias').text(json.alias);
       }
@@ -157,17 +157,17 @@ function health_node(addr) {
       var mb = json.memory / (1024 * 1024);
       $tr.find('td.memory')
         .text(mb.toFixed(0))
-        .colorize({ 512: 'red', 256: 'orange', 0: 'green' });
+        .colorize({ '512': 'red', '256': 'orange', '0': 'green' });
       $tr.find('td.load')
         .text(json.load.toFixed(2))
-        .colorize({ 8: 'red', 4: 'orange', 0: 'green' });
+        .colorize({ '8': 'red', '4': 'orange', '0': 'green' });
       $tr.find('td.threads')
         .html("<a href='http://" + addr + "/threads'>" + json.threads + "</a>");
       $tr.find('td.processes')
         .html("<a href='http://" + addr + "/ps'>" + json.processes + "</a>");
       $tr.find('td.score')
         .text(json.score.value)
-        .colorize({ 16: 'green', 4: 'orange', 0: 'red' });
+        .colorize({ '16': 'green', '4': 'orange', '0': 'red' });
       if (json.score.expired || json.score.strength < 8 || Date.parse(json.score.time) > new Date()) {
         $tr.find('td.score').addClass('cross');
         errors += 1;
@@ -176,10 +176,10 @@ function health_node(addr) {
       }
       $tr.find('td.wallets')
         .text(json.wallets)
-        .colorize({ 256: 'gray', 257: 'inherit' });
+        .colorize({ '256': 'gray', '257': 'inherit' });
       $tr.find('td.remotes')
         .text(json.remotes)
-        .colorize({ 20: 'orange', 8: 'green', 0: 'red' });
+        .colorize({ '20': 'orange', '8': 'green', '0': 'red' });
       $tr.find('td.version').html(
         "<span class='" + (json.version == $('#version').text() ? 'green' : 'red') + "'>" +
         json.version + "</span>/<span class='" + (json.protocol == $('#protocol').text() ? 'green' : 'red') + "'>" +
@@ -189,16 +189,16 @@ function health_node(addr) {
         .html("<a href='/health.html?start=" + addr + "'>" + json.nscore + "</a>");
       $tr.find('td.age')
         .text(json.hours_alive.toFixed(1))
-        .colorize({ 1: 'green', 0: 'red' });
+        .colorize({ '1': 'green', '0': 'red' });
       $tr.find('td.history')
         .text(json.entrance.history_size)
-        .colorize({ 8: 'green', 0: 'red' });
+        .colorize({ '8': 'green', '0': 'red' });
       $tr.find('td.queue')
         .text(json.entrance.queue)
-        .colorize({ 32: 'red', 8: 'orange', 0: 'green' });
+        .colorize({ '32': 'red', '8': 'orange', '0': 'green' });
       $tr.find('td.speed')
         .text(Math.round(json.entrance.speed))
-        .colorize({ 32: 'red', 16: 'orange', 0: 'green' });
+        .colorize({ '32': 'red', '16': 'orange', '0': 'green' });
       health_update_lag();
       health_update_nscore();
       health_update_cost();
@@ -262,13 +262,13 @@ function health_update_lag() {
   var remotes = avg('remotes');
   $('#avg_remotes').text(Math.round(remotes));
   var speed = avg('speed');
-  $('#avg_speed').text(Math.round(speed)).colorize({ 32: 'red', 16: 'orange', 0: 'green'});
+  $('#avg_speed').text(Math.round(speed)).colorize({ '32': 'red', '16': 'orange', '0': 'green'});
   var queue = avg('queue');
-  $('#avg_queue').text(queue.toFixed(1)).colorize({ 32: 'red', 8: 'orange', 0: 'green'});
+  $('#avg_queue').text(queue.toFixed(1)).colorize({ '32': 'red', '8': 'orange', '0': 'green'});
   var hops = 1 + Math.log(Math.log(seen_nodes.size)) / Math.log(remotes);
   $('#hops').text(hops.toFixed(2));
   var lag = hops * speed * (1 + queue);
-  $('#lag').text(Math.round(lag)).colorize({ 32: 'red', 16: 'orange', 0: 'green'});
+  $('#lag').text(Math.round(lag)).colorize({ '32': 'red', '16': 'orange', '0': 'green'});
 }
 
 function avg(type) {
