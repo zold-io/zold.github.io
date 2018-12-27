@@ -32,5 +32,6 @@ var default_nodes = [
 ];
 
 function random_default() {
+  'use strict';
   return default_nodes[Math.floor(Math.random() * default_nodes.length)];
 }

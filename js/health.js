@@ -27,6 +27,7 @@ var delay = 5000;
 var seen_nodes = new Set([]);
 
 function health_init() {
+  'use strict';
   if (window.location.protocol.startsWith('https')) {
     $(location).attr('href', 'http://www.zold.io/health.html');
     return;
@@ -46,6 +47,7 @@ function health_init() {
 }
 
 function health_discover(root) {
+  'use strict';
   $.ajax({
     url: 'http://' + root + '/remotes',
     timeout: 4000,
@@ -98,6 +100,7 @@ function health_discover(root) {
 }
 
 function health_flag(host) {
+  'use strict';
   var $td = $('#health td[data-ip="' + host + '"]');
   var ip = $td.data('ip');
   if (ip.match(/^[0-9\.]+$/)) {
@@ -110,6 +113,7 @@ function health_flag(host) {
 }
 
 function health_check_wallet() {
+  'use strict';
   var wallet = $('#wallet').val();
   $('#health tr[data-addr]').each(function () {
     var addr = $(this).data('addr');
@@ -126,6 +130,7 @@ function health_check_wallet() {
 }
 
 function health_node(addr) {
+  'use strict';
   var $tr = $('#health tr[data-addr="' + addr + '"]');
   var errors = parseInt($tr.attr('data-errors'));
   if (errors > 3) {
@@ -147,30 +152,53 @@ function health_node(addr) {
         $tr.find('td.alias').text(json.alias);
       }
       $tr.find('td.platform').text(json.platform);
-      $tr.find('td.cpus').html("<a href='http://" + addr + "/farm'>" + json.cpus + "</a>");
-      $tr.find('td.memory').text((json.memory / (1024 * 1024)).toFixed(0)).colorize({ 512: 'red', 256: 'orange', 0: 'green' });
-      $tr.find('td.load').text(json.load.toFixed(2)).colorize({ 8: 'red', 4: 'orange', 0: 'green' });
-      $tr.find('td.threads').html("<a href='http://" + addr + "/threads'>" + json.threads + "</a>");
-      $tr.find('td.processes').html("<a href='http://" + addr + "/ps'>" + json.processes + "</a>");
-      $tr.find('td.score').text(json.score.value).colorize({ 16: 'green', 4: 'orange', 0: 'red' });
+      $tr.find('td.cpus')
+        .html("<a href='http://" + addr + "/farm'>" + json.cpus + "</a>");
+      var mb = json.memory / (1024 * 1024);
+      $tr.find('td.memory')
+        .text(mb.toFixed(0))
+        .colorize({ 512: 'red', 256: 'orange', 0: 'green' });
+      $tr.find('td.load')
+        .text(json.load.toFixed(2))
+        .colorize({ 8: 'red', 4: 'orange', 0: 'green' });
+      $tr.find('td.threads')
+        .html("<a href='http://" + addr + "/threads'>" + json.threads + "</a>");
+      $tr.find('td.processes')
+        .html("<a href='http://" + addr + "/ps'>" + json.processes + "</a>");
+      $tr.find('td.score')
+        .text(json.score.value)
+        .colorize({ 16: 'green', 4: 'orange', 0: 'red' });
       if (json.score.expired || json.score.strength < 8 || Date.parse(json.score.time) > new Date()) {
         $tr.find('td.score').addClass('cross');
         errors += 1;
       } else {
         $tr.find('td.score').removeClass('cross');
       }
-      $tr.find('td.wallets').text(json.wallets).colorize({ 256: 'gray', 257: 'inherit' });
-      $tr.find('td.remotes').text(json.remotes).colorize({ 20: 'orange', 8: 'green', 0: 'red' });
+      $tr.find('td.wallets')
+        .text(json.wallets)
+        .colorize({ 256: 'gray', 257: 'inherit' });
+      $tr.find('td.remotes')
+        .text(json.remotes)
+        .colorize({ 20: 'orange', 8: 'green', 0: 'red' });
       $tr.find('td.version').html(
         "<span class='" + (json.version == $('#version').text() ? 'green' : 'red') + "'>" +
         json.version + "</span>/<span class='" + (json.protocol == $('#protocol').text() ? 'green' : 'red') + "'>" +
         json.protocol + "</span>"
       );
-      $tr.find('td.nscore').html("<a href='/health.html?start=" + addr + "'>" + json.nscore + "</a>");
-      $tr.find('td.age').text(json.hours_alive.toFixed(1)).colorize({ 1: 'green', 0: 'red' });
-      $tr.find('td.history').text(json.entrance.history_size).colorize({ 8: 'green', 0: 'red' });
-      $tr.find('td.queue').text(json.entrance.queue).colorize({ 32: 'red', 8: 'orange', 0: 'green' });
-      $tr.find('td.speed').text(Math.round(json.entrance.speed)).colorize({ 32: 'red', 16: 'orange', 0: 'green' });
+      $tr.find('td.nscore')
+        .html("<a href='/health.html?start=" + addr + "'>" + json.nscore + "</a>");
+      $tr.find('td.age')
+        .text(json.hours_alive.toFixed(1))
+        .colorize({ 1: 'green', 0: 'red' });
+      $tr.find('td.history')
+        .text(json.entrance.history_size)
+        .colorize({ 8: 'green', 0: 'red' });
+      $tr.find('td.queue')
+        .text(json.entrance.queue)
+        .colorize({ 32: 'red', 8: 'orange', 0: 'green' });
+      $tr.find('td.speed')
+        .text(Math.round(json.entrance.speed))
+        .colorize({ 32: 'red', 16: 'orange', 0: 'green' });
       health_update_lag();
       health_update_nscore();
       health_update_cost();
@@ -190,6 +218,7 @@ function health_node(addr) {
 }
 
 function health_update_nscore() {
+  'use strict';
   var nscore = 0;
   var nodes = 0;
   $('#health td.nscore').each(function () {
@@ -214,6 +243,7 @@ function health_update_nscore() {
 }
 
 function health_update_cost() {
+  'use strict';
   var cpus = 0;
   $('#health td.cpus').each(function () {
     var td = $(this).text();
@@ -228,6 +258,7 @@ function health_update_cost() {
 }
 
 function health_update_lag() {
+  'use strict';
   var remotes = avg('remotes');
   $('#avg_remotes').text(Math.round(remotes));
   var speed = avg('speed');
@@ -241,6 +272,7 @@ function health_update_lag() {
 }
 
 function avg(type) {
+  'use strict';
   var total = 0, count = 0;
   $('#health td.' + type).each(function () {
     var td = $(this).text();

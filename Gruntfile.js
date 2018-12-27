@@ -72,6 +72,28 @@ module.exports = function(grunt) {
         ]
       }
     },
+    jslint: {
+      main: {
+        src: [
+          'js/*.js',
+        ],
+        directives: {
+          this: true,
+          for: true,
+          white: true,
+          getset: true,
+          fudge: true,
+          browser: true
+        },
+        options: {
+          edition: 'latest',
+          log: 'build/jslint.log',
+          jslintXml: 'build/jslint.xml',
+          errorsOnly: false,
+          failOnError: true
+        }
+      }
+    },
     sasslint: {
       options: {
         configFile: '.sass-lint.yml'
@@ -105,8 +127,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-jslint');
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-sass-lint');
   grunt.loadNpmTasks('grunt-replace');
-  grunt.registerTask('default', ['copy', 'replace', 'uglify', 'jshint', 'sasslint', 'sass']);
+  grunt.registerTask('default', ['copy', 'replace', 'uglify', 'jshint', 'jslint', 'sasslint', 'sass']);
 };

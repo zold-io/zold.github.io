@@ -22,15 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-function ledger_init() {
-  root = new URLSearchParams(window.location.search).get('wallet');
-  if (root == null || !/^[0-9a-f]{16}$/.test(root)) {
-    root = '0000000000000000';
-  }
-  ledger_refresh(root);
-}
+/*global URLSearchParams, random_default, $ */
 
 function ledger_refresh(wallet) {
+  'use strict';
   var $head = $('#wallet');
   var host = random_default();
   var html = '<code>' + wallet + '</code> from ' + '<a href="http://' + host + '/wallet/' + wallet + '.txt">' + host + '</a>';
@@ -41,7 +36,8 @@ function ledger_refresh(wallet) {
     success: function(json) {
       $head.html(html);
       var $tbody = $('#txns');
-      for (var i = 0; i < json.length; i++) {
+      var i = 0;
+      for (i = 0; i < json.length; i += 1) {
         var txn = json[i];
         $tbody.append(
           '<tr>' +
@@ -62,11 +58,22 @@ function ledger_refresh(wallet) {
   });
 }
 
+function ledger_init() {
+  'use strict';
+  var root = new URLSearchParams(window.location.search).get('wallet');
+  if (root === null || !(/^[0-9a-f]{16}$/).test(root)) {
+    root = '0000000000000000';
+  }
+  ledger_refresh(root);
+}
+
 function zold_amount(am) {
+  'use strict';
   return parseFloat(am / Math.pow(2, 32)).toFixed(2);
 }
 
 function zold_date(d) {
+  'use strict';
   var date = new Date(Date.parse(d));
   return (date.getMonth() + 1) + '/' +
     date.getDate() + '/' +
