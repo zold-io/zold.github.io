@@ -46,6 +46,9 @@ function ledger_draw(host, wallet) {
     timeout: 4000,
     success: function(json) {
       var $tbody = $('#ledger tbody');
+      if ($tbody.find('tr').length > 0) {
+        return;
+      }
       var i = 0, txn;
       for (i = 0; i < json.length; i += 1) {
         txn = json[i];
