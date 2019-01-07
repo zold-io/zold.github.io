@@ -1,7 +1,7 @@
 /**
 (The MIT License)
 
-Copyright (c) 2018 Yegor Bugayenko
+Copyright (c) 2018-2019 Zerocracy, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the 'Software'), to deal
@@ -62,8 +62,7 @@ function ledger_draw(host, wallet) {
       }
     },
     error: function() {
-      console.log('failed to find ' + wallet);
-      // window.setTimeout(function () { ledger_refresh(wallet); }, 1000);
+      console.log('Failed to find ' + wallet + ' at ' + host);
     }
   });
 }
@@ -95,6 +94,18 @@ function ledger_fetch(host, wallet) {
           $tr.find('td.nodes').text(parseInt($tr.find('td.nodes').text()) + 1);
           hosts.push(host);
           $tr.find('td.hosts').text(hosts.join('; '));
+          if (hosts.length < 16) {
+            $.ajax({
+              url: 'http://' + host + '/remotes',
+              timeout: 4000,
+              success: function(data) {
+                $.each(data.all, function (ignore, r) {
+                  var addr = r.host + ':' + r.port;
+                  ledger_fetch(addr, wallet);
+                });
+              }
+            });
+          }
         }
       }
       if ($('#ledger tbody tr').length === 0) {

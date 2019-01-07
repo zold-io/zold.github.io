@@ -80,6 +80,7 @@ module.exports = function(grunt) {
         directives: {
           this: true,
           for: true,
+          devel: true,
           white: true,
           getset: true,
           fudge: true,
