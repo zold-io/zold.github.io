@@ -218,8 +218,9 @@ function health_node(addr) {
         .text(json.remotes)
         .colorize({ '20': 'orange', '8': 'green', '0': 'red' });
       $tr.find('td.version').html(
+        "<a href='https://github.com/" + json.repo + "'><i class='icon icon-github' style='margin-right:.3em;'/></a>" +
         "<span class='" + (json.version === $('#version').text() ? 'green' : 'red') + "'>" +
-        json.version + "</span>/<span class='" + (json.protocol === $('#protocol').text() ? 'green' : 'red') + "'>" +
+        json.version + "</span>/<span class='" + (json.protocol.toString() === $('#protocol').text() ? 'green' : 'red') + "'>" +
         json.protocol + "</span>"
       );
       $tr.find('td.nscore')
@@ -282,10 +283,10 @@ function health_init() {
     root = random_default();
   }
   $('#head').html('Wait a second, we are loading the list of nodes from ' + root + '...');
-  $.get('http://b1.zold.io/version', function(data) {
+  $.get('http://b2.zold.io:4096/version', function(data) {
     $('#version').text(data);
   });
-  $.get('http://b1.zold.io/protocol', function(data) {
+  $.get('http://b2.zold.io:4096/protocol', function(data) {
     $('#protocol').text(data);
   });
   health_discover(root);
