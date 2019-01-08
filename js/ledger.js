@@ -127,6 +127,7 @@ function ledger_init() {
   if (root === null || !(/^[0-9a-f]{16}$/).test(root)) {
     root = '0000000000000000';
   }
+  $('#root').val(root);
   master_nodes.forEach(function (host) {
     ledger_fetch(host, root);
   });
