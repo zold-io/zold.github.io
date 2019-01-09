@@ -83,5 +83,5 @@ function map_init() {
       });
     }
   });
-  map_refresh('b1.zold.io', map);
+  map_refresh(random_default(), map);
 }
