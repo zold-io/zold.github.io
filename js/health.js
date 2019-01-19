@@ -166,6 +166,12 @@ function health_discover(root) {
   });
 }
 
+function mb(bytes) {
+  'use strict';
+  var mega = bytes / (1024 * 1024);
+  return mega.toFixed(0);
+}
+
 function health_node(addr) {
   'use strict';
   var $tr = $('#health tr[data-addr="' + addr + '"]');
@@ -191,10 +197,11 @@ function health_node(addr) {
       $tr.find('td.platform').text(json.platform);
       $tr.find('td.cpus')
         .html("<a href='http://" + addr + "/farm'>" + json.cpus + "</a>");
-      var mb = json.memory / (1024 * 1024);
+      var mem = (json.memory / json.total_mem) * 100;
       $tr.find('td.memory')
-        .text(mb.toFixed(0))
-        .colorize({ '512': 'red', '256': 'orange', '0': 'green' });
+        .attr('title', mb(json.memory) + 'Mb out of ' + mb(json.total_mem) + 'Mb')
+        .text(mem.toFixed(0))
+        .colorize({ '75': 'red', '50': 'orange', '0': 'green' });
       $tr.find('td.load')
         .text(json.load.toFixed(2))
         .colorize({ '8': 'red', '4': 'orange', '0': 'green' });
