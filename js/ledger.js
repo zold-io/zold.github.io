@@ -70,53 +70,81 @@ function ledger_draw(host, wallet) {
   });
 }
 
+function ledger_seen(host) {
+  'use strict';
+  var seen = $('#copies a.host')
+    .map(function() { return $.trim($(this).text()); })
+    .get()
+    .includes(host);
+  console.log('Host ' + host + ' seen: ' + seen);
+  return seen;
+}
+
+function ledger_move(json, $a) {
+  'use strict';
+  var $tbody = $('#copies tbody');
+  var $tr = $tbody.find('tr:has(td[data-digest="' + json.digest + '"])');
+  if ($tr.length === 0) {
+    $tr = $(
+      '<tr>' +
+      '<td data-digest="' + json.digest + '"><code>' + json.digest.substring(0, 8) + '</code></td>' +
+      '<td class="data score">' + json.score.value + '</td>' +
+      '<td class="data nodes">1</td>' +
+      '<td class="data">' + zold_amount(json.balance) + '</td>' +
+      '<td class="data">' + json.txns + '</td>' +
+      '<td class="hosts"></td>' +
+      '</tr>'
+    );
+    $tbody.append($tr);
+  }
+  $tr.find('td.score').text(parseInt($tr.find('td.score').text()) + json.score.value);
+  $tr.find('td.nodes').text(parseInt($tr.find('td.nodes').text()) + 1);
+  var $td = $tr.find('td.hosts');
+  $td.append($td.text() === '' ? '' : '; ');
+  $a.remove();
+  $a.css('color', '');
+  $td.append($a);
+}
+
 function ledger_fetch(host, wallet) {
   'use strict';
+  if (ledger_seen(host)) {
+    return;
+  }
+  var $a = $(
+    '<a class="host" style="color:gray" href="http://' + host + '/wallet/' + wallet +
+    '.txt" data-addr="' + host + '">' + host + '</a>'
+  );
+  $('#copies td#candidates').append($a).append(' ');
   $.ajax({
     url: 'http://' + host + '/wallet/' + wallet,
     timeout: 4000,
+    error: function(request, error, thrown) {
+      $a.attr('title', request + '; ' + error + '; ' + thrown);
+      $a.css('color', 'red');
+    },
     success: function(json) {
-      var $tbody = $('#copies tbody');
-      var $tr = $tbody.find('tr:has(td[data-digest="' + json.digest + '"])');
-      if ($tr.length === 0) {
-        $tbody.append(
-          '<tr>' +
-          '<td data-digest="' + json.digest + '"><code>' + json.digest.substring(0, 8) + '</code></td>' +
-          '<td class="data score">' + json.score.value + '</td>' +
-          '<td class="data nodes">1</td>' +
-          '<td class="data">' + zold_amount(json.balance) + '</td>' +
-          '<td class="data">' + json.txns + '</td>' +
-          '<td class="hosts">' + host + '</td>' +
-          '</tr>'
-        );
-      } else {
-        var hosts = $tr.find('td.hosts').text().split('; ');
-        if (!hosts.includes(host)) {
-          console.log('New node for ' + host + ' for wallet ' + wallet);
-          $tr.find('td.score').text(parseInt($tr.find('td.score').text()) + json.score.value);
-          $tr.find('td.nodes').text(parseInt($tr.find('td.nodes').text()) + 1);
-          hosts.push(host);
-          $tr.find('td.hosts').text(hosts.join('; '));
-          if (hosts.length < 16) {
-            $.ajax({
-              url: 'http://' + host + '/remotes',
-              timeout: 4000,
-              success: function(data) {
-                $.each(data.all, function (ignore, r) {
-                  var addr = r.host + ':' + r.port;
-                  ledger_fetch(addr, wallet);
-                });
+      ledger_move(json, $a);
+      if ($('#copies tbody td.hosts a').length < 15) {
+        $.ajax({
+          url: 'http://' + host + '/remotes',
+          timeout: 4000,
+          success: function(data) {
+            $.each(data.all, function (ignore, r) {
+              var addr = r.host + ':' + r.port;
+              if (!ledger_seen(addr)) {
+                ledger_fetch(addr, wallet);
               }
             });
+          },
+          error: function() {
+            $a.css('color', 'red');
           }
-        }
+        });
       }
       if ($('#ledger tbody tr').length === 0) {
         ledger_draw(host, wallet);
       }
-    },
-    error: function() {
-      console.log('Failed to find ' + wallet + ' at ' + host);
     }
   });
 }
