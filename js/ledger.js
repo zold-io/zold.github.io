@@ -72,15 +72,13 @@ function ledger_draw(host, wallet) {
 
 function ledger_seen(host) {
   'use strict';
-  var seen = $('#copies a.host')
+  return $('#copies a.host')
     .map(function() { return $.trim($(this).text()); })
     .get()
     .includes(host);
-  console.log('Host ' + host + ' seen: ' + seen);
-  return seen;
 }
 
-function ledger_move(json, $a) {
+function ledger_move(json, $span) {
   'use strict';
   var $tbody = $('#copies tbody');
   var $tr = $tbody.find('tr:has(td[data-digest="' + json.digest + '"])');
@@ -92,6 +90,7 @@ function ledger_move(json, $a) {
       '<td class="data nodes">1</td>' +
       '<td class="data">' + zold_amount(json.balance) + '</td>' +
       '<td class="data">' + json.txns + '</td>' +
+      '<td class="data">' + json.size + '</td>' +
       '<td class="hosts"></td>' +
       '</tr>'
     );
@@ -101,9 +100,9 @@ function ledger_move(json, $a) {
   $tr.find('td.nodes').text(parseInt($tr.find('td.nodes').text()) + 1);
   var $td = $tr.find('td.hosts');
   $td.append($td.text() === '' ? '' : '; ');
-  $a.remove();
-  $a.css('color', '');
-  $td.append($a);
+  $span.remove();
+  $span.removeClass('candidate');
+  $td.append($span);
 }
 
 function ledger_fetch(host, wallet) {
@@ -111,20 +110,22 @@ function ledger_fetch(host, wallet) {
   if (ledger_seen(host)) {
     return;
   }
-  var $a = $(
-    '<a class="host" style="color:gray" href="http://' + host + '/wallet/' + wallet +
-    '.txt" data-addr="' + host + '">' + host + '</a>'
+  var $span = $(
+    '<span class="candidate"><a class="host" href="http://' + host + '/wallet/' + wallet +
+    '.txt" data-addr="' + host + '">' + host + '</a></span>'
   );
-  $('#copies td#candidates').append($a).append(' ');
+  $('#copies td#candidates').append($span).append(' ');
+  var start = new Date().getTime();
   $.ajax({
     url: 'http://' + host + '/wallet/' + wallet,
     timeout: 4000,
     error: function(request, error, thrown) {
-      $a.attr('title', request + '; ' + error + '; ' + thrown);
-      $a.css('color', 'red');
+      $span.attr('title', request + '; ' + error + '; ' + thrown);
+      $span.css('color', 'red');
     },
     success: function(json) {
-      ledger_move(json, $a);
+      $span.find('a').after('<span class="ms">/' + (new Date().getTime() - start) + 'ms</span>');
+      ledger_move(json, $span);
       if ($('#copies tbody td.hosts a').length < 15) {
         $.ajax({
           url: 'http://' + host + '/remotes',
@@ -138,7 +139,7 @@ function ledger_fetch(host, wallet) {
             });
           },
           error: function() {
-            $a.css('color', 'red');
+            $span.css('color', 'red');
           }
         });
       }
