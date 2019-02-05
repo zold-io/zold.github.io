@@ -46,9 +46,11 @@ function ledger_draw(host, wallet) {
     timeout: 4000,
     success: function(json) {
       var $tbody = $('#ledger tbody');
-      if ($tbody.find('tr').length > 0) {
-        return;
-      }
+      $tbody.find('tr').remove();
+      $tbody.append('<tr><td colspan="5">Found ' + json.length +
+        ' transactions at <a href="http://' +
+        host + '/wallet/' + wallet + '.txt">' +
+        host + '/wallet/' + wallet + '.txt</a>:</td></tr>');
       var i = 0, txn;
       for (i = 0; i < json.length; i += 1) {
         txn = json[i];
@@ -78,6 +80,27 @@ function ledger_seen(host) {
     .includes(host);
 }
 
+function ledger_reorder($tr) {
+  'use strict';
+  var mine = parseInt($tr.find('.score').text());
+  var $prev;
+  while ($tr.index() > 0) {
+    $prev = $tr.prev();
+    if (parseInt($prev.find('.score').text()) >= mine) {
+      break;
+    }
+    $prev.insertAfter($tr);
+  }
+  var $next;
+  while ($tr.index() < $tr.parent().find('tr').length - 1) {
+    $next = $tr.next();
+    if (parseInt($next.find('.score').text()) <= mine) {
+      break;
+    }
+    $next.insertBefore($tr);
+  }
+}
+
 function ledger_move(json, $span) {
   'use strict';
   var $tbody = $('#copies tbody');
@@ -103,6 +126,8 @@ function ledger_move(json, $span) {
   $span.remove();
   $span.removeClass('candidate');
   $td.append($span);
+  ledger_reorder($tr);
+  return $tr.index();
 }
 
 function ledger_fetch(host, wallet) {
@@ -119,13 +144,15 @@ function ledger_fetch(host, wallet) {
   $.ajax({
     url: 'http://' + host + '/wallet/' + wallet,
     timeout: 4000,
+    complete: function() {
+      $span.find('a').after('<span class="ms">/' + (new Date().getTime() - start) + 'ms</span>');
+    },
     error: function(request, error, thrown) {
       $span.attr('title', request + '; ' + error + '; ' + thrown);
-      $span.css('color', 'red');
+      $span.removeClass('candidate').addClass('failed-candidate');
     },
     success: function(json) {
-      $span.find('a').after('<span class="ms">/' + (new Date().getTime() - start) + 'ms</span>');
-      ledger_move(json, $span);
+      var row = ledger_move(json, $span);
       if ($('#copies tbody td.hosts a').length < 15) {
         $.ajax({
           url: 'http://' + host + '/remotes',
@@ -143,7 +170,7 @@ function ledger_fetch(host, wallet) {
           }
         });
       }
-      if ($('#ledger tbody tr').length === 0) {
+      if (row === 0) {
         ledger_draw(host, wallet);
       }
     }

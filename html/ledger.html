@@ -60,58 +60,56 @@ SOFTWARE.
           <input type="submit" value="Search"/>
         </form>
       </p>
-      <div>
-        <table id="copies">
-          <colgroup>
-            <col style="width:8em"/> <!-- Digest -->
-            <col style="width:4em"/> <!-- Score -->
-            <col style="width:4em"/> <!-- Nodes -->
-            <col style="width:7em"/> <!-- Balance -->
-            <col style="width:4em"/> <!-- Txns -->
-            <col style="width:6em"/> <!-- Size -->
-            <col style="width:30em"/> <!-- Hosts -->
-          </colgroup>
-          <thead>
-            <tr>
-              <th>Digest</th>
-              <th>Score</th>
-              <th>Nodes</th>
-              <th>Balance</th>
-              <th>Txns</th>
-              <th>Size</th>
-              <th>Hosts</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="6" style="text-align:right">Candidates:</th>
-              <td id="candidates"></td>
-            </tr>
-          </thead>
-        </table>
-        <table id="ledger">
-          <colgroup>
-            <col style="width:2em"/> <!-- No. -->
-            <col style="width:10em"/> <!-- Time -->
-            <col style="width:4em"/> <!-- Amount -->
-            <col style="width:10em"/> <!-- Beneficiary -->
-            <col style=""/> <!-- Details -->
-          </colgroup>
-          <thead>
-            <tr>
-              <th>No.</th>
-              <th>Time</th>
-              <th>Amount</th>
-              <th>Beneficiary</th>
-              <th>Details</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
+      <table id="copies">
+        <colgroup>
+          <col style="width:8em"/> <!-- Digest -->
+          <col style="width:4em"/> <!-- Score -->
+          <col style="width:4em"/> <!-- Nodes -->
+          <col style="width:7em"/> <!-- Balance -->
+          <col style="width:4em"/> <!-- Txns -->
+          <col style="width:6em"/> <!-- Size -->
+          <col style="width:40em"/> <!-- Hosts -->
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Digest</th>
+            <th>Score</th>
+            <th>Nodes</th>
+            <th>Balance</th>
+            <th>Txns</th>
+            <th>Size</th>
+            <th>Hosts</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="6" style="text-align:right">Candidates:</th>
+            <td id="candidates"></td>
+          </tr>
+        </thead>
+      </table>
+      <table id="ledger">
+        <colgroup>
+          <col style="width:2em"/> <!-- No. -->
+          <col style="width:10em"/> <!-- Time -->
+          <col style="width:4em"/> <!-- Amount -->
+          <col style="width:10em"/> <!-- Beneficiary -->
+          <col style=""/> <!-- Details -->
+        </colgroup>
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>Time</th>
+            <th>Amount</th>
+            <th>Beneficiary</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
       <p class="footnotes">
         @@VERSION
       </p>
