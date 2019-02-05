@@ -39,18 +39,21 @@ function zold_date(d) {
     (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
 }
 
-function ledger_draw(host, wallet) {
+function ledger_draw(host, wallet, digest) {
   'use strict';
+  var $tbody = $('#ledger tbody');
+  if ($tbody.find('tr[data-digest="' + digest + '"]').length !== 0) {
+    return;
+  }
   $.ajax({
     url: 'http://' + host + '/wallet/' + wallet + '/txns.json',
     timeout: 4000,
     success: function(json) {
-      var $tbody = $('#ledger tbody');
       $tbody.find('tr').remove();
-      $tbody.append('<tr><td colspan="5">Found ' + json.length +
+      $tbody.append('<tr data-digest="' + digest + '"><td colspan="5">Found ' + json.length +
         ' transactions at <a href="http://' +
         host + '/wallet/' + wallet + '.txt">' +
-        host + '/wallet/' + wallet + '.txt</a>:</td></tr>');
+        host + '/wallet/' + wallet + '.txt</a> (<code>' + digest + '</code>):</td></tr>');
       var i = 0, txn;
       for (i = 0; i < json.length; i += 1) {
         txn = json[i];
@@ -171,7 +174,7 @@ function ledger_fetch(host, wallet) {
         });
       }
       if (row === 0) {
-        ledger_draw(host, wallet);
+        ledger_draw(host, wallet, json.digest);
       }
     }
   });
