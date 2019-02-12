@@ -76,6 +76,7 @@ SOFTWARE.
       <p>
         <input type="text" size="20" maxlength="16" placeholder="Wallet ID..." id="wallet" autofocus="true" tabindex="1"/>
         <input type="submit" value="Check" tabindex="2" onclick="health_check_wallet();"/>
+        <span id="ledger_link">&nbsp;</span>
       </p>
       <p id="head"></p>
       <table id="health">
@@ -99,7 +100,7 @@ SOFTWARE.
           <col style=""/> <!-- Queue -->
           <col style=""/> <!-- Speed -->
           <col style=""/> <!-- Age -->
-          <col style=""/> <!-- Check -->
+          <col style="width:6em;"/> <!-- Check -->
         </colgroup>
         <thead>
           <tr>

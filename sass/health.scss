@@ -23,7 +23,8 @@
 //
 
 #health {
-  font-size: 85%;
+  font-size: 75%;
+  width: 100%;
 
   @media all and (max-width: 1024px) {
     display: none;
@@ -53,21 +54,7 @@
         background-color: lighten(#BB342F, 40);
       }
 
-      &.score,
-      &.ping,
-      &.wallets,
-      &.nscore,
-      &.cpus,
-      &.memory,
-      &.load,
-      &.threads,
-      &.processes,
-      &.remotes,
-      &.age,
-      &.history,
-      &.queue,
-      &.speed,
-      &.port {
+      &.data {
         text-align: right;
       }
 
