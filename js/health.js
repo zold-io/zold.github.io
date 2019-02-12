@@ -121,14 +121,17 @@ function health_update_lag() {
 function health_earnings(host, wallet) {
   'use strict';
   var $td = $('#health tr[data-addr="' + host + '"] td.earnings');
+  var root = 'b2.zold.io:4096';
   $.ajax({
-    url: 'http://b2.zold.io:4096/wallet/' + wallet + '/balance',
+    url: 'http://' + root + '/wallet/' + wallet + '/balance',
     timeout: 4000,
     success: function(data) {
-      $td.text(health_amount(data));
+      $td.html('<a href="/ledger.html?wallet=' + wallet + '">' + health_amount(data) + '</a>');
+      $td.attr('title', data + ' zents in the wallet ' + wallet + ' (found in ' + root + ')');
     },
     error: function() {
       $td.text('?');
+      $td.attr('title', 'Can\'t fetch the wallet ' + wallet + ' from ' + root);
     }
   });
 }
