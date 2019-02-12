@@ -28,6 +28,11 @@ var delay = 5000;
 
 var seen_nodes = new Set([]);
 
+function health_amount(zents) {
+  'use strict';
+  return Math.round(parseInt(zents) / Math.pow(2, 32), 2) + 'Z';
+}
+
 function health_flag(host) {
   'use strict';
   var $td = $('#health td[data-ip="' + host + '"]');
@@ -113,6 +118,21 @@ function health_update_lag() {
   $('#lag').text(Math.round(lag)).colorize({ '32': 'red', '16': 'orange', '0': 'green'});
 }
 
+function health_earnings(host, wallet) {
+  'use strict';
+  var $td = $('#health tr[data-addr="' + host + '"] td.earnings');
+  $.ajax({
+    url: 'http://b2.zold.io:4096/wallet/' + wallet + '/balance',
+    timeout: 4000,
+    success: function(data) {
+      $td.text(health_amount(data));
+    },
+    error: function() {
+      $td.text('?');
+    }
+  });
+}
+
 function health_discover(root) {
   'use strict';
   $.ajax({
@@ -151,6 +171,7 @@ function health_discover(root) {
               '<td class="queue data"></td>' +
               '<td class="speed data"></td>' +
               '<td class="age data"></td>' +
+              '<td class="earnings data"></td>' +
               '<td class="wallet data"></td>' +
               '</tr>'
           );
@@ -244,6 +265,7 @@ function health_node(addr) {
       $tr.find('td.speed')
         .text(Math.round(json.entrance.speed))
         .colorize({ '32': 'red', '16': 'orange', '0': 'green' });
+      health_earnings(addr, json.score.invoice.split('@')[1]);
       health_update_lag();
       health_update_nscore();
       health_update_cost();
@@ -273,8 +295,7 @@ function health_check_wallet() {
     $td.text('checking...').addClass('gray').removeClass('green');
     $td.attr('title', url);
     $.getJSON(url, function(data) {
-      $td.text(Math.round(parseInt(data) / Math.pow(2, 32), 2) + 'ZLD')
-        .removeClass('gray red').addClass('green');
+      $td.text(health_amount(data)).removeClass('gray red').addClass('green');
     })
     .fail(function(jqXHR) { $td.text(jqXHR.status).addClass('red'); });
   });

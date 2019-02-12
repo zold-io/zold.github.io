@@ -100,6 +100,7 @@ SOFTWARE.
           <col style=""/> <!-- Queue -->
           <col style=""/> <!-- Speed -->
           <col style=""/> <!-- Age -->
+          <col style="width:6em;"/> <!-- Earnings -->
           <col style="width:6em;"/> <!-- Check -->
         </colgroup>
         <thead>
@@ -123,6 +124,7 @@ SOFTWARE.
             <th class="queue">QLen</th>
             <th class="speed">Spd</th>
             <th class="age">Age</th>
+            <th class="earnings">Earnings</th>
             <th class="wallet">Check</th>
           </tr>
         </thead>
@@ -146,7 +148,8 @@ SOFTWARE.
         "Hstr" (history) is the amount of recently processed PUSH requests;
         "QLen" (queue length) is the amount of PUSH requests staying in the line and wating processing;
         "Spd" (speed) is the average amount of time in seconds the node spends per each PUSH request processing;
-        "Age" is the amount of hours since recent reboot of the node.
+        "Age" is the amount of hours since recent reboot of the node;
+        "Earnings" is how much the node owner's wallet contains at the moment.
       </p>
       <p class="footnotes">
         @@VERSION
