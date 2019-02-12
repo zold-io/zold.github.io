@@ -290,7 +290,7 @@ function health_node(addr) {
 function health_check_wallet() {
   'use strict';
   var wallet = $('#wallet').val();
-  $('#ledger-link').html('<a href="/ledger.html?wallet=' + wallet + '">/ledger</a>');
+  $('#ledger_link').html('<a href="/ledger.html?wallet=' + wallet + '">/ledger</a>');
   $('#health tr[data-addr]').each(function () {
     var addr = $(this).data('addr');
     var $td = $(this).find('td.wallet');
@@ -298,7 +298,8 @@ function health_check_wallet() {
     $td.text('checking...').addClass('gray').removeClass('green');
     $td.attr('title', url);
     $.getJSON(url, function(data) {
-      $td.text(health_amount(data)).removeClass('gray red').addClass('green');
+      $td.html('<a href="http://' + addr + '/wallet/' + wallet + '.txt">' + health_amount(data) + '</a>');
+      $td.removeClass('gray red');
     })
     .fail(function(jqXHR) { $td.text(jqXHR.status).addClass('red'); });
   });
