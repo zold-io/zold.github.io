@@ -25,3 +25,8 @@ The build has to be clean. If it's not, [submit an issue](https://github.com/zol
 
 Then, make your changes, make sure the build is still clean,
 and [submit a pull request](https://www.yegor256.com/2014/04/15/github-guidelines.html).
+
+You can develop and debug locally. First, run `grunt`. Then, open
+the file from `/build` directory, for example `health.html`, in your browser.
+Then, run `grunt watch` and make changes to the sources. The HTML file in
+the `/build` directory will be re-compiled on-fly. Have fun!
