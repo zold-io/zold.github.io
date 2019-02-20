@@ -53,7 +53,7 @@ function ledger_draw(host, wallet, digest) {
       $tbody.append('<tr data-digest="' + digest + '"><td colspan="5">Found ' + json.length +
         ' transactions at <a href="http://' +
         host + '/wallet/' + wallet + '.txt">' +
-        host + '/wallet/' + wallet + '.txt</a> (<code>' + digest + '</code>):</td></tr>');
+        host + '/wallet/' + wallet + '.txt</a> / <code>' + digest.substring(0, 8) + '</code>:</td></tr>');
       var i = 0, txn;
       for (i = 0; i < json.length; i += 1) {
         txn = json[i];
