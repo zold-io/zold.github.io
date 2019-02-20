@@ -140,7 +140,9 @@ function ledger_fetch(host, wallet) {
   }
   var $span = $(
     '<span class="candidate"><a class="host" href="http://' + host + '/wallet/' + wallet +
-    '.txt" data-addr="' + host + '">' + host + '</a></span>'
+    '.txt" data-addr="' + host + '" style="' +
+    (master_nodes.includes(host) ? 'font-weight:bold' : '') +
+    '">' + host + '</a></span>'
   );
   $('#copies td#candidates').append($span).append(' ');
   var start = new Date().getTime();
@@ -163,7 +165,7 @@ function ledger_fetch(host, wallet) {
           success: function(data) {
             $.each(data.all, function (ignore, r) {
               var addr = r.host + ':' + r.port;
-              if (!ledger_seen(addr)) {
+              if (!ledger_seen(addr) && ($('#copies a.host').length < 16 || master_nodes.includes(addr))) {
                 ledger_fetch(addr, wallet);
               }
             });
