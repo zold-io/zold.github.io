@@ -24,6 +24,18 @@ SOFTWARE.
 
 /*global URLSearchParams, random_default, $, window, Set, master_nodes */
 
+$.fn.reset = function(v) {
+  'use strict';
+  var $this = this;
+  var before = parseFloat($this.text());
+  $this.text(v);
+  if (before !== parseFloat(v)) {
+    $this.css('background-color', before > v ? '#EECBCA' : '#E3EFCA');
+    setTimeout(function () { $this.css('background-color', 'inherit'); }, 800);
+  }
+  return this;
+};
+
 var delay = 5000;
 
 var seen_nodes = new Set([]);
@@ -109,13 +121,13 @@ function health_update_lag() {
   var remotes = avg('remotes');
   $('#avg_remotes').text(Math.round(remotes));
   var speed = avg('speed');
-  $('#avg_speed').text(Math.round(speed)).colorize({ '32': 'red', '16': 'orange', '0': 'green'});
+  $('#avg_speed').reset(Math.round(speed)).colorize({ '32': 'red', '16': 'orange', '0': 'green'});
   var queue = avg('queue');
-  $('#avg_queue').text(queue.toFixed(1)).colorize({ '32': 'red', '8': 'orange', '0': 'green'});
+  $('#avg_queue').reset(queue.toFixed(1)).colorize({ '32': 'red', '8': 'orange', '0': 'green'});
   var hops = 1 + Math.log(Math.log(seen_nodes.size)) / Math.log(remotes);
-  $('#hops').text(hops.toFixed(2));
+  $('#hops').reset(hops.toFixed(2));
   var lag = hops * speed * (1 + queue);
-  $('#lag').text(Math.round(lag)).colorize({ '32': 'red', '16': 'orange', '0': 'green'});
+  $('#lag').reset(Math.round(lag)).colorize({ '32': 'red', '16': 'orange', '0': 'green'});
 }
 
 function health_earnings(host, wallet) {
@@ -224,17 +236,17 @@ function health_node(addr) {
       var mem = (json.memory / json.total_mem) * 100;
       $tr.find('td.memory')
         .attr('title', mb(json.memory) + 'Mb out of ' + mb(json.total_mem) + 'Mb')
-        .text(mem.toFixed(0))
+        .reset(mem.toFixed(0))
         .colorize({ '75': 'red', '50': 'orange', '0': 'green' });
       $tr.find('td.load')
-        .text(json.load.toFixed(2))
+        .reset(json.load.toFixed(2))
         .colorize({ '8': 'red', '4': 'orange', '0': 'green' });
       $tr.find('td.threads')
         .html("<a href='http://" + addr + "/threads'>" + json.threads + "</a>");
       $tr.find('td.processes')
         .html("<a href='http://" + addr + "/ps'>" + json.processes + "</a>");
       $tr.find('td.score')
-        .text(json.score.value)
+        .reset(json.score.value)
         .colorize({ '16': 'green', '4': 'orange', '0': 'red' });
       if (json.score.expired || json.score.strength < 8 || Date.parse(json.score.time) > new Date()) {
         $tr.find('td.score').addClass('cross');
@@ -243,10 +255,10 @@ function health_node(addr) {
         $tr.find('td.score').removeClass('cross');
       }
       $tr.find('td.wallets')
-        .text(json.wallets)
+        .reset(json.wallets)
         .colorize({ '256': 'gray', '257': 'inherit' });
       $tr.find('td.remotes')
-        .text(json.remotes)
+        .reset(json.remotes)
         .colorize({ '20': 'orange', '8': 'green', '0': 'red' });
       $tr.find('td.version').html(
         "<a href='https://github.com/" + json.repo + "'><i class='icon icon-github' style='margin-right:.3em;'/></a>" +
@@ -257,23 +269,23 @@ function health_node(addr) {
       $tr.find('td.nscore')
         .html("<a href='/health.html?start=" + addr + "'>" + json.nscore + "</a>");
       $tr.find('td.age')
-        .text(json.hours_alive.toFixed(1))
+        .reset(json.hours_alive.toFixed(1))
         .colorize({ '1': 'green', '0': 'red' });
       $tr.find('td.history')
-        .text(json.entrance.history_size)
+        .reset(json.entrance.history_size)
         .colorize({ '8': 'green', '0': 'red' });
       $tr.find('td.queue')
-        .text(json.entrance.queue)
+        .reset(json.entrance.queue)
         .colorize({ '32': 'red', '8': 'orange', '0': 'green' });
       $tr.find('td.speed')
-        .text(Math.round(json.entrance.speed))
+        .reset(Math.round(json.entrance.speed))
         .colorize({ '32': 'red', '16': 'orange', '0': 'green' });
       health_earnings(addr, json.score.invoice.split('@')[1]);
       health_update_lag();
       health_update_nscore();
       health_update_cost();
       health_discover(addr);
-      $('#total_nodes').text(seen_nodes.size);
+      $('#total_nodes').reset(seen_nodes.size);
       $tr.data('errors', 0);
     },
     error: function(jqXHR) {
