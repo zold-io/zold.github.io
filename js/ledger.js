@@ -113,7 +113,7 @@ function ledger_move(json, $span) {
       '<tr>' +
       '<td data-digest="' + json.digest + '"><code>' + json.digest.substring(0, 8) + '</code></td>' +
       '<td class="data score">' + json.score.value + '</td>' +
-      '<td class="data nodes">1</td>' +
+      '<td class="data nodes">0</td>' +
       '<td class="data">' + zold_amount(json.balance) + '</td>' +
       '<td class="data">' + json.txns + '</td>' +
       '<td class="data">' + json.size + '</td>' +
