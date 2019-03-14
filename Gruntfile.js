@@ -7,17 +7,17 @@ module.exports = function(grunt) {
         options: {
           patterns: [
             {
-              match: 'VERSION',
-              replacement: '<%= pkg.version %>'
-            },
-            {
               match: 'HEAD',
-              replacement: grunt.file.read(buildDir + '/_head.html')
+              replacement: grunt.file.read('html/_head.html')
             },
             {
               match: 'TAIL',
-              replacement: grunt.file.read(buildDir + '/_tail.html')
-            }
+              replacement: grunt.file.read('html/_tail.html')
+            },
+            {
+              match: 'VERSION',
+              replacement: '<%= pkg.version %>'
+            },
           ]
         },
         files: [
