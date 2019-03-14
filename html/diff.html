@@ -44,7 +44,9 @@ SOFTWARE.
       <p>
         <form method="get">
           <input name="wallet" id="wallet" size="20" placeholder="Enter Zold wallet ID" type="text" pattern="[a-f0-9]{16}"/>
+          L:
           <input name="left" id="left" size="25" placeholder="Left node" type="text" pattern="[a-zA-Z0-9.]+:[0-9]+"/>
+          R:
           <input name="right" id="right" size="25" placeholder="Right node" type="text" pattern="[a-zA-Z0-9.]+:[0-9]+"/>
           <input type="submit" value="Diff"/>
         </form>
@@ -71,15 +73,8 @@ SOFTWARE.
         <tbody>
         </tbody>
       </table>
-      <p class="footnotes">
-        @@VERSION
-      </p>
-      <p>
-        <a href="https://github.com/zold-io/zold.github.io/stargazers">
-          <img src="https://img.shields.io/github/stars/zold-io/zold.github.io.svg?style=flat-square" alt="stars"/>
-        </a>
-      </p>
+      <!-- build:section layout.footnotes --><!-- /build -->
     </section>
-    @@TAIL
+    <!-- build:section layout.tail --><!-- /build -->
   </body>
 </html>

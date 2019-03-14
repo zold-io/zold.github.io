@@ -11,7 +11,8 @@ module.exports = function(grunt) {
           sections: {
             layout: {
               head: 'html/_head.html',
-              tail: 'html/_tail.html'
+              tail: 'html/_tail.html',
+              footnotes: 'html/_footnotes.html'
             }
           },
           data: {

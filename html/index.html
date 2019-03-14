@@ -187,12 +187,14 @@ SOFTWARE.
               <a href="https://www.zerocracy.com">Zerocracy</a>
             </li>
             <li>
-              @@VERSION
+              <!-- build:process -->
+              <%= version %>
+              <!-- /build -->
             </li>
           </ul>
         </nav>
       </footer>
     </section>
-    @@TAIL
+    <!-- build:section layout.tail --><!-- /build -->
   </body>
 </html>
