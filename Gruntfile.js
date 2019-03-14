@@ -4,13 +4,10 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     htmlbuild: {
       dist: {
-        src: 'html/*.html',
-        dest: buildDir,
+        src: [ 'html/*.html' ],
+        dest: buildDir + '/',
         options: {
-          beautify: true,
-          // prefix: '//some-cdn',
           relative: true,
-          basePath: false,
           sections: {
             layout: {
               head: 'html/_head.html',
@@ -25,8 +22,7 @@ module.exports = function(grunt) {
     },
     jshint: {
       code: {
-        options: {
-        },
+        options: { },
         src: ['js/**/*.js'],
       },
     },
@@ -35,9 +31,7 @@ module.exports = function(grunt) {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       build: {
-        src: [
-          'js/**/*.js'
-        ],
+        src: [ 'js/**/*.js' ],
         dest: buildDir + '/<%= pkg.version %>/js/<%= pkg.name %>.min.js'
       }
     },
@@ -105,9 +99,7 @@ module.exports = function(grunt) {
           {
             expand: true,
             cwd: 'images',
-            src: [
-              '*'
-            ],
+            src: [ '*' ],
             dest: buildDir + '/images',
             filter: 'isFile'
           },
@@ -132,5 +124,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-sass-lint');
   grunt.loadNpmTasks('grunt-replace');
   grunt.registerTask('default', ['build']);
-  grunt.registerTask('build', ['copy', 'htmlbuild', 'uglify', 'jshint', 'jslint', 'sasslint', 'sass']);
+  grunt.registerTask('build', ['htmlbuild', 'copy', 'uglify', 'jshint', 'jslint', 'sasslint', 'sass']);
 };
