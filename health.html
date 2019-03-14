@@ -36,10 +36,10 @@ SOFTWARE.
 <script src="https://cdn.rawgit.com/yegor256/colorizejs/gh-pages/colorizejs.min.js"></script>
 
     
-    <link href="0.13.1/css/main.min.css" rel="stylesheet" />
-    <link href="0.13.1/css/health.min.css" rel="stylesheet"/>
-    <script src="0.13.1/js/main.js"></script>
-    <script src="0.13.1/js/health.js"></script>
+    <link href="0.13.2/css/main.min.css" rel="stylesheet" />
+    <link href="0.13.2/css/health.min.css" rel="stylesheet"/>
+    <script src="0.13.2/js/main.js"></script>
+    <script src="0.13.2/js/health.js"></script>
     
   </head>
   <body onload="health_init();">
@@ -145,15 +145,44 @@ SOFTWARE.
         "Age" is the amount of hours since recent reboot of the node;
         "Earnings" is how much the node owner's wallet contains at the moment.
       </p>
-      <p class="footnotes">
-        @@VERSION
-      </p>
-      <p>
-        <a href="https://github.com/zold-io/zold.github.io/stargazers">
-          <img src="https://img.shields.io/github/stars/zold-io/zold.github.io.svg?style=flat-square" alt="stars"/>
-        </a>
-      </p>
+<p class="footnotes">
+  <!-- build:process -->
+  0.0.0
+  <!-- <%= version %> -->
+  <!-- /build -->
+</p>
+<p>
+  <a href="https://github.com/zold-io/zold.github.io/stargazers">
+    <img src="https://img.shields.io/github/stars/zold-io/zold.github.io.svg?style=flat-square" alt="stars"/>
+  </a>
+</p>
+
     </section>
-    @@TAIL
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-1963507-54"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-1963507-54');
+</script>
+<script type="text/javascript" >
+  (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+  m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+  (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+  ym(52628953, "init", { id:52628953, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true });
+</script>
+<script language="javascript" type="text/javascript">
+  Cd=document;Cr="&"+Math.random();Cp="&s=1";
+  Cd.cookie="b=b";if(Cd.cookie)Cp+="&c=1";
+  Cp+="&t="+(new Date()).getTimezoneOffset();
+  if(self!=top)Cp+="&f=1";
+  if(navigator.javaEnabled())Cp+="&j=1";
+  if(typeof(screen)!='undefined')Cp+="&w="+screen.width+"&h="+
+  screen.height+"&d="+(screen.colorDepth?screen.colorDepth:screen.pixelDepth);
+  Cd.write("<img src='//c.hit.ua/hit?i=59293&g=0&x=2"+Cp+Cr+
+  "&r="+escape(Cd.referrer)+"&u="+escape(window.location.href)+
+  "' border='0' wi"+"dth='1' he"+"ight='1'/>");
+</script>
+
   </body>
 </html>
