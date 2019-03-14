@@ -25,20 +25,22 @@ SOFTWARE.
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8"/>
+    <title>/ledger</title>
+<meta charset="utf-8"/>
 <meta name="description" content="Zold wallet browser"/>
 <meta name="keywords" content="zold wallet browser"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link rel="shortcut icon" href="https://www.zold.io/logo.png"/>
-<link href="https://cdn.rawgit.com/yegor256/tacit/gh-pages/tacit-css-1.3.0.min.css" rel="stylesheet"/>
-<link href="@@VERSION/css/main.min.css" rel="stylesheet"/>
+<link href="https://cdn.rawgit.com/yegor256/tacit/gh-pages/tacit-css-1.4.2.min.css" rel="stylesheet"/>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdn.rawgit.com/yegor256/colorizejs/gh-pages/colorizejs.min.js"></script>
-<script src="@@VERSION/js/main.js"></script>
 
-    <title>/ledger</title>
-    <link href="0.13.0/css/ledger.min.css" rel="stylesheet"/>
-    <script src="0.13.0/js/ledger.js"></script>
+    
+    <link href="0.13.1/css/main.min.css" rel="stylesheet" />
+    <link href="0.13.1/css/ledger.min.css" rel="stylesheet"/>
+    <script src="0.13.1/js/main.js"></script>
+    <script src="0.13.1/js/ledger.js"></script>
+    
   </head>
   <body onload="ledger_init();">
     <section>
@@ -106,7 +108,7 @@ SOFTWARE.
         </tbody>
       </table>
       <p class="footnotes">
-        0.13.0
+        @@VERSION
       </p>
       <p>
         <a href="https://github.com/zold-io/zold.github.io/stargazers">
@@ -114,31 +116,6 @@ SOFTWARE.
         </a>
       </p>
     </section>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-1963507-54"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'UA-1963507-54');
-</script>
-<script type="text/javascript" >
-  (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-  m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-  (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-  ym(52628953, "init", { id:52628953, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true });
-</script>
-<script language="javascript" type="text/javascript">
-  Cd=document;Cr="&"+Math.random();Cp="&s=1";
-  Cd.cookie="b=b";if(Cd.cookie)Cp+="&c=1";
-  Cp+="&t="+(new Date()).getTimezoneOffset();
-  if(self!=top)Cp+="&f=1";
-  if(navigator.javaEnabled())Cp+="&j=1";
-  if(typeof(screen)!='undefined')Cp+="&w="+screen.width+"&h="+
-  screen.height+"&d="+(screen.colorDepth?screen.colorDepth:screen.pixelDepth);
-  Cd.write("<img src='//c.hit.ua/hit?i=59293&g=0&x=2"+Cp+Cr+
-  "&r="+escape(Cd.referrer)+"&u="+escape(window.location.href)+
-  "' border='0' wi"+"dth='1' he"+"ight='1'/>");
-</script>
-
+    @@TAIL
   </body>
 </html>

@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+/**
 (The MIT License)
 
 Copyright (c) 2018-2019 Zerocracy, Inc.
@@ -21,34 +20,34 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
--->
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>/map</title>
-<meta charset="utf-8"/>
-<meta name="description" content="Zold wallet browser"/>
-<meta name="keywords" content="zold wallet browser"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<link rel="shortcut icon" href="https://www.zold.io/logo.png"/>
-<link href="https://cdn.rawgit.com/yegor256/tacit/gh-pages/tacit-css-1.4.2.min.css" rel="stylesheet"/>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="https://cdn.rawgit.com/yegor256/colorizejs/gh-pages/colorizejs.min.js"></script>
+*/
 
-    
-    <link href="0.13.1/css/main.min.css" rel="stylesheet" />
-    <link href="0.13.1/css/map.min.css" rel="stylesheet"/>
-    <script src="0.13.1/js/main.js"></script>
-    <script src="0.13.1/js/map.js"></script>
-    
-  </head>
-  <body onload="map_init();">
-    <div id="container">
-      <div id="map">
-        <!-- Empty on start -->
-      </div>
-      <img id="logo" src="https://www.zold.io/logo.svg"/>
-    </div>
-    @@TAIL
-  </body>
-</html>
+var zold_timeout = 16 * 1000; // 16 seconds
+
+var master_nodes = [
+  'b2.zold.io:4096',
+  '159.203.63.90:4096',
+  '167.99.77.100:4096',
+  '159.203.19.189:4096',
+  '138.197.140.42:4096'
+];
+
+function random_default() {
+  'use strict';
+  return master_nodes[Math.floor(Math.random() * master_nodes.length)];
+}
+
+function zold_amount(am) {
+  'use strict';
+  return parseFloat(am / Math.pow(2, 32)).toFixed(2);
+}
+
+function zold_date(d) {
+  'use strict';
+  var date = new Date(Date.parse(d));
+  return (date.getMonth() + 1) + '/' +
+    date.getDate() + '/' +
+    date.getFullYear() + ' ' +
+    (date.getHours() < 10 ? '0' : '') + date.getHours() + ':' +
+    (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+}
