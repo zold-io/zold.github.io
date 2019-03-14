@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-/*global URLSearchParams, random_default, $, window, Set, master_nodes */
+/*global URLSearchParams, random_default, $, window, Set, master_nodes, zold_timeout */
 
 $.fn.reset = function(v) {
   'use strict';
@@ -136,7 +136,7 @@ function health_earnings(host, wallet) {
   var root = 'b2.zold.io:4096';
   $.ajax({
     url: 'http://' + root + '/wallet/' + wallet + '/balance',
-    timeout: 4000,
+    timeout: zold_timeout,
     success: function(data) {
       $td.html('<a href="/ledger.html?wallet=' + wallet + '">' + health_amount(data) + '</a>');
       $td.attr('title', data + ' zents in the wallet ' + wallet + ' (found in ' + root + ')');
@@ -152,7 +152,7 @@ function health_discover(root) {
   'use strict';
   $.ajax({
     url: 'http://' + root + '/remotes',
-    timeout: 4000,
+    timeout: zold_timeout,
     success: function(data) {
       if (data.all.length === 0) {
         $('#head').text('The list of remotes is empty!');

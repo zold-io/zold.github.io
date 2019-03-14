@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+var zold_timeout = 16 * 1000; // 16 seconds
+
 var master_nodes = [
   'b2.zold.io:4096',
   '159.203.63.90:4096',
@@ -33,4 +35,19 @@ var master_nodes = [
 function random_default() {
   'use strict';
   return master_nodes[Math.floor(Math.random() * master_nodes.length)];
+}
+
+function zold_amount(am) {
+  'use strict';
+  return parseFloat(am / Math.pow(2, 32)).toFixed(2);
+}
+
+function zold_date(d) {
+  'use strict';
+  var date = new Date(Date.parse(d));
+  return (date.getMonth() + 1) + '/' +
+    date.getDate() + '/' +
+    date.getFullYear() + ' ' +
+    (date.getHours() < 10 ? '0' : '') + date.getHours() + ':' +
+    (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
 }

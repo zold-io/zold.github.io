@@ -9,6 +9,14 @@ module.exports = function(grunt) {
             {
               match: 'VERSION',
               replacement: '<%= pkg.version %>'
+            },
+            {
+              match: 'HEAD',
+              replacement: grunt.file.read(buildDir + '/_head.html')
+            },
+            {
+              match: 'TAIL',
+              replacement: grunt.file.read(buildDir + '/_tail.html')
             }
           ]
         },

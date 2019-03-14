@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-/*global URLSearchParams, random_default, $, window, console, master_nodes */
+/*global URLSearchParams, random_default, $, window, console, master_nodes, zold_amount, zold_date, zold_timeout */
 
 function zold_amount(am) {
   'use strict';
@@ -47,7 +47,7 @@ function ledger_draw(host, wallet, digest) {
   }
   $.ajax({
     url: 'http://' + host + '/wallet/' + wallet + '/txns.json',
-    timeout: 4000,
+    timeout: zold_timeout,
     success: function(json) {
       $tbody.find('tr').remove();
       $tbody.append('<tr data-digest="' + digest + '"><td colspan="5">Found ' + json.length +
@@ -104,6 +104,21 @@ function ledger_reorder($tr) {
   }
 }
 
+function ledger_reset_diffs() {
+  'use strict';
+  var left = $('#copies tbody tr:first .host').attr('data-addr');
+  $('#copies tbody tr:first .diff').html('');
+  $('#copies tbody tr:not(:first)').each(function () {
+    var $tr = $(this);
+    $tr.find('.diff').html(
+      '<a href="/diff.html?wallet=' + $('#root').val() +
+      '&left=' + encodeURI(left) +
+      '&right=' + encodeURI($tr.find('.host').attr('data-addr')) +
+      '">&ne;</span>'
+    );
+  });
+}
+
 function ledger_move(json, $span) {
   'use strict';
   var $tbody = $('#copies tbody');
@@ -112,6 +127,7 @@ function ledger_move(json, $span) {
     $tr = $(
       '<tr>' +
       '<td data-digest="' + json.digest + '"><code>' + json.digest.substring(0, 8) + '</code></td>' +
+      '<td class="diff"/></td>' +
       '<td class="data score">' + json.score.value + '</td>' +
       '<td class="data nodes">0</td>' +
       '<td class="data">' + zold_amount(json.balance) + '</td>' +
@@ -130,6 +146,7 @@ function ledger_move(json, $span) {
   $span.removeClass('candidate');
   $td.append($span);
   ledger_reorder($tr);
+  ledger_reset_diffs();
   return $tr.index();
 }
 
@@ -148,7 +165,7 @@ function ledger_fetch(host, wallet) {
   var start = new Date().getTime();
   $.ajax({
     url: 'http://' + host + '/wallet/' + wallet,
-    timeout: 4000,
+    timeout: zold_timeout,
     complete: function() {
       $span.find('a').after('<span class="ms">/' + (new Date().getTime() - start) + 'ms</span>');
     },
@@ -161,7 +178,7 @@ function ledger_fetch(host, wallet) {
       if ($('#copies tbody td.hosts a').length < 15) {
         $.ajax({
           url: 'http://' + host + '/remotes',
-          timeout: 4000,
+          timeout: zold_timeout,
           success: function(data) {
             $.each(data.all, function (ignore, r) {
               var addr = r.host + ':' + r.port;
