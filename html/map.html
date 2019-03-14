@@ -25,10 +25,14 @@ SOFTWARE.
 <!DOCTYPE html>
 <html>
   <head>
-    @@HEAD
     <title>/map</title>
-    <link href="@@VERSION/css/map.min.css" rel="stylesheet"/>
-    <script src="@@VERSION/js/map.js"></script>
+    <!-- build:section layout.head --><!-- /build -->
+    <!-- build:process -->
+    <link href="<%= version %>/css/main.min.css" rel="stylesheet" />
+    <link href="<%= version %>/css/map.min.css" rel="stylesheet"/>
+    <script src="<%= version %>/js/main.js"></script>
+    <script src="<%= version %>/js/map.js"></script>
+    <!-- /build -->
   </head>
   <body onload="map_init();">
     <div id="container">

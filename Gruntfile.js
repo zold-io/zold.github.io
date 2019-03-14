@@ -2,35 +2,25 @@ module.exports = function(grunt) {
   var buildDir = grunt.option('buildDir') ? grunt.option('buildDir') : 'build';
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    replace: {
+    htmlbuild: {
       dist: {
+        src: 'html/*.html',
+        dest: buildDir,
         options: {
-          patterns: [
-            {
-              match: 'HEAD',
-              replacement: grunt.file.read('html/_head.html')
-            },
-            {
-              match: 'TAIL',
-              replacement: grunt.file.read('html/_tail.html')
-            },
-            {
-              match: 'VERSION',
-              replacement: '<%= pkg.version %>'
-            },
-          ]
-        },
-        files: [
-          {
-            expand: true,
-            cwd: 'html',
-            src: [
-              '**/*'
-            ],
-            dest: buildDir,
-            filter: 'isFile'
-          }
-        ]
+          beautify: true,
+          // prefix: '//some-cdn',
+          relative: true,
+          basePath: false,
+          sections: {
+            layout: {
+              head: 'html/_head.html',
+              tail: 'html/_tail.html'
+            }
+          },
+          data: {
+            version: '<%= pkg.version %>',
+          },
+        }
       }
     },
     jshint: {
@@ -132,6 +122,7 @@ module.exports = function(grunt) {
       }
     }
   });
+  grunt.loadNpmTasks('grunt-html-build');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
@@ -141,5 +132,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-sass-lint');
   grunt.loadNpmTasks('grunt-replace');
   grunt.registerTask('default', ['build']);
-  grunt.registerTask('build', ['copy', 'replace', 'uglify', 'jshint', 'jslint', 'sasslint', 'sass']);
+  grunt.registerTask('build', ['copy', 'htmlbuild', 'uglify', 'jshint', 'jslint', 'sasslint', 'sass']);
 };

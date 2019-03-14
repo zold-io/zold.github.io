@@ -25,10 +25,13 @@ SOFTWARE.
 <!DOCTYPE html>
 <html>
   <head>
-    @@HEAD
     <title>Zold</title>
+    <!-- build:section layout.head --><!-- /build -->
+    <!-- build:process -->
     <link rel="stylesheet" href="https://www.yegor256.com/css/icons.css"/>
-    <link href="@@VERSION/css/index.min.css" rel="stylesheet"/>
+    <link href="<%= version %>/css/main.min.css" rel="stylesheet" />
+    <link href="<%= version %>/css/index.min.css" rel="stylesheet"/>
+    <!-- /build -->
   </head>
   <body>
     <section>
