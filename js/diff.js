@@ -72,11 +72,12 @@ function diff_render() {
   var wallet = $('#wallet').val();
   var left = $('#left').val();
   var right = $('#right').val();
-  diff_error('Loading...');
+  diff_error('Loading the JSON of the wallet ' + wallet + ' from ' + left + '...');
   $.ajax({
     url: 'http://' + left + '/wallet/' + wallet + '/txns.json',
     timeout: zold_timeout,
     success: function(left_json) {
+      diff_error('Loading the JSON of the wallet ' + wallet + ' from ' + right + '...');
       $.ajax({
         url: 'http://' + right + '/wallet/' + wallet + '/txns.json',
         timeout: zold_timeout,
