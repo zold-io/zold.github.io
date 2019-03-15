@@ -30,9 +30,10 @@ function diff_add(txn, diff, host) {
   $('#ledger tbody').append(
     '<tr>' +
     '<td><a href="http://' + host + '/wallet/' + wallet + '.html">' + diff + '</a></td>' +
-    '<td>' + (txn.amount < 0 ? '#' + txn.id : '&mdash;') + '</td>' +
+    '<td style="color:' + (txn.amount < 0 ? 'darkred' : 'darkgreen') + '">#' + txn.id + '</td>' +
     '<td>' + zold_date(txn.date) + '</td>' +
-    '<td class="data" style="color:' + (txn.amount < 0 ? 'darkred' : 'darkgreen') + '">' +
+    '<td class="data" style="color:' + (txn.amount < 0 ? 'darkred' : 'darkgreen') + '" ' +
+      'title="' + txn.amount + '">' +
       zold_amount(txn.amount) + '</td>' +
     '<td><code><a href="/ledger.html?wallet=' + txn.bnf + '">' + txn.bnf + '</a></code></td>' +
     '<td>' + txn.details.replace(/([^\ ]{16})/g, '$1&shy;') + '</td>' +

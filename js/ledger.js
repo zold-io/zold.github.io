@@ -24,21 +24,6 @@ SOFTWARE.
 
 /*global URLSearchParams, random_default, $, window, console, master_nodes, zold_amount, zold_date, zold_timeout */
 
-function zold_amount(am) {
-  'use strict';
-  return parseFloat(am / Math.pow(2, 32)).toFixed(2);
-}
-
-function zold_date(d) {
-  'use strict';
-  var date = new Date(Date.parse(d));
-  return (date.getMonth() + 1) + '/' +
-    date.getDate() + '/' +
-    date.getFullYear() + ' ' +
-    (date.getHours() < 10 ? '0' : '') + date.getHours() + ':' +
-    (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
-}
-
 function ledger_draw(host, wallet, digest) {
   'use strict';
   var $tbody = $('#ledger tbody');
@@ -59,7 +44,7 @@ function ledger_draw(host, wallet, digest) {
         txn = json[i];
         $tbody.append(
           '<tr>' +
-          '<td>' + (txn.amount < 0 ? '#' + txn.id : '&mdash;') + '</td>' +
+          '<td style="color:' + (txn.amount < 0 ? 'darkred' : 'darkgreen') + '">#' + txn.id + '</td>' +
           '<td>' + zold_date(txn.date) + '</td>' +
           '<td class="data" style="color:' + (txn.amount < 0 ? 'darkred' : 'darkgreen') + '">' +
             zold_amount(txn.amount) + '</td>' +

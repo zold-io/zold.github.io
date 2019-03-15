@@ -45,9 +45,9 @@ function zold_amount(am) {
 function zold_date(d) {
   'use strict';
   var date = new Date(Date.parse(d));
-  return (date.getMonth() + 1) + '/' +
-    date.getDate() + '/' +
-    date.getFullYear() + ' ' +
+  return date.getFullYear() + '-' +
+    (date.getMonth() < 9 ? '0' : '') + (date.getMonth() + 1) + '-' +
+    (date.getDate() < 9 ? '0' : '') + date.getDate() + 'T' +
     (date.getHours() < 10 ? '0' : '') + date.getHours() + ':' +
-    (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+    (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + 'Z';
 }
