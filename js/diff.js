@@ -24,11 +24,12 @@ SOFTWARE.
 
 /*global URLSearchParams, random_default, $, window, console, master_nodes, zold_amount, zold_date, zold_timeout */
 
-function diff_add(txn, diff) {
+function diff_add(txn, diff, host) {
   'use strict';
+  var wallet = $('#wallet').val();
   $('#ledger tbody').append(
     '<tr>' +
-    '<td>' + diff + '</td>' +
+    '<td><a href="http://' + host + '/wallet/' + wallet + '.html">' + diff + '</a></td>' +
     '<td>' + (txn.amount < 0 ? '#' + txn.id : '&mdash;') + '</td>' +
     '<td>' + zold_date(txn.date) + '</td>' +
     '<td class="data" style="color:' + (txn.amount < 0 ? 'darkred' : 'darkgreen') + '">' +
@@ -39,7 +40,7 @@ function diff_add(txn, diff) {
   );
 }
 
-function diff_draw(left_json, right_json, diff) {
+function diff_draw(left_json, right_json, diff, left_host) {
   'use strict';
   var i, j, left, right, found;
   for (i = 0; i < left_json.length; i += 1) {
@@ -53,7 +54,7 @@ function diff_draw(left_json, right_json, diff) {
       }
     }
     if (!found) {
-      diff_add(left, diff);
+      diff_add(left, diff, left_host);
     }
   }
 }
@@ -81,8 +82,8 @@ function diff_render() {
         success: function(right_json) {
           var $tbody = $('#ledger tbody');
           $tbody.find('tr').remove();
-          diff_draw(left_json, right_json, 'L');
-          diff_draw(right_json, left_json, 'R');
+          diff_draw(left_json, right_json, 'L', left);
+          diff_draw(right_json, left_json, 'R', right);
           if ($tbody.find('tr').length === 0) {
             diff_error('No differences found');
           }
