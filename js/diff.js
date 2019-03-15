@@ -33,7 +33,7 @@ function diff_add(txn, diff) {
     '<td>' + zold_date(txn.date) + '</td>' +
     '<td class="data" style="color:' + (txn.amount < 0 ? 'darkred' : 'darkgreen') + '">' +
       zold_amount(txn.amount) + '</td>' +
-    '<td><code><a href="?wallet=' + txn.bnf + '">' + txn.bnf + '</a></code></td>' +
+    '<td><code><a href="/ledger.html?wallet=' + txn.bnf + '">' + txn.bnf + '</a></code></td>' +
     '<td>' + txn.details.replace(/([^\ ]{16})/g, '$1&shy;') + '</td>' +
     '</tr>'
   );
@@ -58,11 +58,19 @@ function diff_draw(left_json, right_json, diff) {
   }
 }
 
+function diff_error(msg) {
+  'use strict';
+  var $tbody = $('#ledger tbody');
+  $tbody.find('tr').remove();
+  $('#ledger tbody').append('<tr><td colspan="6">' + msg + '</td></tr>');
+}
+
 function diff_render() {
   'use strict';
   var wallet = $('#wallet').val();
   var left = $('#left').val();
   var right = $('#right').val();
+  diff_error('Loading...');
   $.ajax({
     url: 'http://' + left + '/wallet/' + wallet + '/txns.json',
     timeout: zold_timeout,
@@ -76,16 +84,16 @@ function diff_render() {
           diff_draw(left_json, right_json, 'L');
           diff_draw(right_json, left_json, 'R');
           if ($tbody.find('tr').length === 0) {
-            $('#ledger tbody').append('<tr><td colspan="6">No differences found</td></tr>');
+            diff_error('No differences found');
           }
         },
         error: function() {
-          console.log('Failed to find ' + wallet + ' at ' + right);
+          diff_error('Failed to find ' + wallet + ' at ' + right);
         }
       });
     },
     error: function() {
-      console.log('Failed to find ' + wallet + ' at ' + left);
+      diff_error('Failed to find ' + wallet + ' at ' + left);
     }
   });
 }
