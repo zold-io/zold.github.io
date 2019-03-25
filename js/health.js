@@ -22,7 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-/*global URLSearchParams, random_default, $, window, Set, master_nodes, zold_timeout */
+/*global URLSearchParams, random_default, $, window, Set */
+/*global master_nodes, zold_timeout */
 
 $.fn.reset = function(v) {
   'use strict';
@@ -31,7 +32,12 @@ $.fn.reset = function(v) {
   $this.text(v);
   if (before !== parseFloat(v)) {
     $this.css('background-color', before > v ? '#EECBCA' : '#E3EFCA');
-    setTimeout(function () { $this.css('background-color', 'inherit'); }, 800);
+    setTimeout(
+      function() {
+        $this.css('background-color', 'inherit');
+      },
+      800
+    );
   }
   return this;
 };
@@ -50,11 +56,22 @@ function health_flag(host) {
   var $td = $('#health td[data-ip="' + host + '"]');
   var ip = $td.data('ip');
   if (ip.match(/^[0-9\.]+$/)) {
-    $.getJSON('https://ssl.geoplugin.net/json.gp?k=af0ad95fd7caa623&ip=' + ip, function(json) {
-      var country = json.geoplugin_countryCode;
-      $td.html('<img src="https://flagpedia.net/data/flags/normal/' +
-        country.toLowerCase() + '.png" alt="' + country + '" style="width:1em;"/>');
-    }).fail(function() { $td.text('?'); });
+    $.ajax({
+      url: 'https://ssl.geoplugin.net/json.gp?k=af0ad95fd7caa623&ip=' + ip,
+      dataType: 'json',
+      timeout: zold_timeout,
+      success: function(json) {
+        var country = json.geoplugin_countryCode;
+        $td.html(
+          '<img src="https://flagpedia.net/data/flags/normal/' +
+          country.toLowerCase() + '.png" alt="' + country +
+          '" style="width:1em;"/>'
+        );
+      },
+      error: function() {
+        $td.text('?');
+      }
+    });
   }
 }
 
@@ -62,7 +79,7 @@ function health_update_nscore() {
   'use strict';
   var nscore = 0;
   var nodes = 0;
-  $('#health td.nscore').each(function () {
+  $('#health td.nscore').each(function() {
     var td = $(this).text();
     if (td.match(/^[0-9]+$/)) {
       var n = parseInt(td);
@@ -74,19 +91,22 @@ function health_update_nscore() {
   });
   nscore = Math.round(nscore / nodes);
   var score = 0;
-  $('#health td.score').each(function () {
+  $('#health td.score').each(function() {
     var td = $(this).text();
     if (td.match(/^[0-9]+$/)) {
       score += parseInt(td);
     }
   });
-  $('#nscore').html('<span title="average">' + nscore + '</span>/<span title="actual">' + score + '</span>');
+  $('#nscore').html(
+    '<span title="average">' + nscore +
+    '</span>/<span title="actual">' + score + '</span>'
+  );
 }
 
 function health_update_cost() {
   'use strict';
   var cpus = 0;
-  $('#health td.cpus').each(function () {
+  $('#health td.cpus').each(function() {
     var td = $(this).text();
     if (td.match(/^[0-9]+$/)) {
       cpus += parseInt(td);
@@ -101,8 +121,9 @@ function health_update_cost() {
 
 function avg(type) {
   'use strict';
-  var total = 0, count = 0;
-  $('#health td.' + type).each(function () {
+  var total = 0;
+  var count = 0;
+  $('#health td.' + type).each(function() {
     var td = $(this).text();
     if (td.match(/^[0-9\.]+$/)) {
       total += parseInt(td);
@@ -121,13 +142,16 @@ function health_update_lag() {
   var remotes = avg('remotes');
   $('#avg_remotes').text(Math.round(remotes));
   var speed = avg('speed');
-  $('#avg_speed').reset(Math.round(speed)).colorize({ '32': 'red', '16': 'orange', '0': 'green'});
+  $('#avg_speed').reset(Math.round(speed))
+    .colorize({'32': 'red', '16': 'orange', '0': 'green'});
   var queue = avg('queue');
-  $('#avg_queue').reset(queue.toFixed(1)).colorize({ '32': 'red', '8': 'orange', '0': 'green'});
+  $('#avg_queue').reset(queue.toFixed(1))
+    .colorize({'32': 'red', '8': 'orange', '0': 'green'});
   var hops = 1 + Math.log(Math.log(seen_nodes.size)) / Math.log(remotes);
   $('#hops').reset(hops.toFixed(2));
   var lag = hops * speed * (1 + queue);
-  $('#lag').reset(Math.round(lag)).colorize({ '32': 'red', '16': 'orange', '0': 'green'});
+  $('#lag').reset(Math.round(lag))
+    .colorize({'32': 'red', '16': 'orange', '0': 'green'});
 }
 
 function health_earnings(host, wallet) {
@@ -138,8 +162,14 @@ function health_earnings(host, wallet) {
     url: 'http://' + root + '/wallet/' + wallet + '/balance',
     timeout: zold_timeout,
     success: function(data) {
-      $td.html('<a href="/ledger.html?wallet=' + wallet + '">' + health_amount(data) + '</a>');
-      $td.attr('title', data + ' zents in the wallet ' + wallet + ' (found in ' + root + ')');
+      $td.html(
+        '<a href="/ledger.html?wallet=' + wallet +
+        '">' + health_amount(data) + '</a>'
+      );
+      $td.attr(
+        'title',
+        data + ' zents in the wallet ' + wallet + ' (found in ' + root + ')'
+      );
     },
     error: function() {
       $td.text('?');
@@ -159,15 +189,21 @@ function health_discover(root) {
         return;
       }
       $('#head').hide();
-      $.each(data.all.sort(function (r) { return r.host; }), function (ignore, r) {
-        var addr = r.host + ':' + r.port;
-        if (!seen_nodes.has(addr)) {
-          seen_nodes.add(addr);
-          $('#health tbody').append(
-            '<tr data-addr="' + addr + '" data-errors="0">' +
-              '<td class="host" style="' + (master_nodes.includes(addr) ? 'font-weight:bold;' : '') + '"' +
-                ' title="Found at ' + root + '"' +
-                '><a href="http://' + addr + '/" class="alias">' + r.host + '</a></td>' +
+      $.each(
+        data.all.sort(function(r) {
+          return r.host;
+        }),
+        function(ignore, r) {
+          var addr = r.host + ':' + r.port;
+          if (!seen_nodes.has(addr)) {
+            seen_nodes.add(addr);
+            $('#health tbody').append(
+              '<tr data-addr="' + addr + '" data-errors="0">' +
+              '<td class="host" style="' +
+              (master_nodes.includes(addr) ? 'font-weight:bold;' : '') + '"' +
+              ' title="Found at ' + root + '"' +
+              '><a href="http://' + addr + '/" class="alias">' +
+              r.host + '</a></td>' +
               '<td class="port">' + r.port + '</td>' +
               '<td class="ping data"></td>' +
               '<td class="flag" data-ip="' + r.host + '"></td>' +
@@ -189,11 +225,12 @@ function health_discover(root) {
               '<td class="earnings data"></td>' +
               '<td class="wallet data"></td>' +
               '</tr>'
-          );
-          setTimeout('health_node("' + addr + '");', 0); // to foll jslint
-          health_flag(r.host);
+            );
+            setTimeout('health_node("' + addr + '");', 0); // to foll jslint
+            health_flag(r.host);
+          }
         }
-      });
+      );
     },
     error: function() {
       $('#head').text('Failed to load the list of remotes from ' + root);
@@ -221,34 +258,36 @@ function health_node(addr) {
   $tr.find('td.ping').html('<div class="spinner">&nbsp;</div> ');
   $.ajax({
     url: 'http://' + addr + '/',
-    timeout: 16000,
+    timeout: zold_timeout,
     success: function(json) {
       var msec = new Date() - start;
       $tr.find('td.ping').css('color', 'inherit').removeClass('failure');
       var $ping = $tr.find('td.ping');
-      $ping.text(msec).colorize({ '1000': 'red', '500': 'orange', '0': 'green' });
+      $ping.text(msec)
+        .colorize({'1000': 'red', '500': 'orange', '0': 'green'});
       if (json.alias) {
         $tr.find('td.alias').text(json.alias);
       }
       $tr.find('td.platform').text(json.platform);
       $tr.find('td.cpus')
-        .html("<a href='http://" + addr + "/farm'>" + json.cpus + "</a>");
+        .html('<a href="http://' + addr + '/farm">' + json.cpus + '</a>');
       var mem = (json.memory / json.total_mem) * 100;
-      $tr.find('td.memory')
-        .attr('title', mb(json.memory) + 'Mb out of ' + mb(json.total_mem) + 'Mb')
+      $tr.find('td.memory').attr('title', mb(json.memory) +
+        'Mb out of ' + mb(json.total_mem) + 'Mb')
         .reset(mem.toFixed(0))
-        .colorize({ '75': 'red', '50': 'orange', '0': 'green' });
+        .colorize({'75': 'red', '50': 'orange', '0': 'green'});
       $tr.find('td.load')
         .reset(json.load.toFixed(2))
-        .colorize({ '8': 'red', '4': 'orange', '0': 'green' });
+        .colorize({'8': 'red', '4': 'orange', '0': 'green'});
       $tr.find('td.threads')
-        .html("<a href='http://" + addr + "/threads'>" + json.threads + "</a>");
+        .html('<a href="http://' + addr + '/threads">' + json.threads + '</a>');
       $tr.find('td.processes')
-        .html("<a href='http://" + addr + "/ps'>" + json.processes + "</a>");
+        .html('<a href="http://' + addr + '/ps">' + json.processes + '</a>');
       $tr.find('td.score')
         .reset(json.score.value)
-        .colorize({ '16': 'green', '4': 'orange', '0': 'red' });
-      if (json.score.expired || json.score.strength < 8 || Date.parse(json.score.time) > new Date()) {
+        .colorize({'16': 'green', '4': 'orange', '0': 'red'});
+      if (json.score.expired || json.score.strength < 8 ||
+        Date.parse(json.score.time) > new Date()) {
         $tr.find('td.score').addClass('cross');
         errors += 1;
       } else {
@@ -256,30 +295,34 @@ function health_node(addr) {
       }
       $tr.find('td.wallets')
         .reset(json.wallets)
-        .colorize({ '256': 'gray', '257': 'inherit' });
+        .colorize({'256': 'gray', '257': 'inherit'});
       $tr.find('td.remotes')
         .reset(json.remotes)
-        .colorize({ '20': 'orange', '8': 'green', '0': 'red' });
+        .colorize({'20': 'orange', '8': 'green', '0': 'red'});
       $tr.find('td.version').html(
-        "<a href='https://github.com/" + json.repo + "'><i class='icon icon-github' style='margin-right:.3em;'/></a>" +
-        "<span class='" + (json.version === $('#version').text() ? 'green' : 'red') + "'>" +
-        json.version + "</span>/<span class='" + (json.protocol.toString() === $('#protocol').text() ? 'green' : 'red') + "'>" +
-        json.protocol + "</span>"
+        '<a href="https://github.com/' + json.repo +
+        '"><i class="icon icon-github" style="margin-right:.3em;"/></a>' +
+        '<span class="' +
+        (json.version === $('#version').text() ? 'green' : 'red') + '">' +
+        json.version + '</span>/<span class="' +
+        (json.protocol.toString() === $('#protocol').text() ? 'green' : 'red') +
+        '">' + json.protocol + '</span>'
       );
-      $tr.find('td.nscore')
-        .html("<a href='/health.html?start=" + addr + "'>" + json.nscore + "</a>");
+      $tr.find('td.nscore').html(
+        '<a href="/health.html?start=' + addr + '">' + json.nscore + '</a>'
+      );
       $tr.find('td.age')
         .reset(json.hours_alive.toFixed(1))
-        .colorize({ '1': 'green', '0': 'red' });
+        .colorize({'1': 'green', '0': 'red'});
       $tr.find('td.history')
         .reset(json.entrance.history_size)
-        .colorize({ '8': 'green', '0': 'red' });
+        .colorize({'8': 'green', '0': 'red'});
       $tr.find('td.queue')
         .reset(json.entrance.queue)
-        .colorize({ '32': 'red', '8': 'orange', '0': 'green' });
+        .colorize({'32': 'red', '8': 'orange', '0': 'green'});
       $tr.find('td.speed')
         .reset(Math.round(json.entrance.speed))
-        .colorize({ '32': 'red', '16': 'orange', '0': 'green' });
+        .colorize({'32': 'red', '16': 'orange', '0': 'green'});
       health_earnings(addr, json.score.invoice.split('@')[1]);
       health_update_lag();
       health_update_nscore();
@@ -289,12 +332,19 @@ function health_node(addr) {
       $tr.data('errors', 0);
     },
     error: function(jqXHR) {
-      $tr.find('td.ping').text('#' + jqXHR.status + '/' + errors).addClass('failure');
+      $tr.find('td.ping')
+        .text('#' + jqXHR.status + '/' + errors)
+        .addClass('failure');
       errors += 1;
     },
     complete: function() {
       $tr.attr('data-errors', errors);
-      window.setTimeout(function () { health_node(addr); }, delay);
+      window.setTimeout(
+        function() {
+          health_node(addr);
+        },
+        delay
+      );
     }
   });
 }
@@ -302,18 +352,30 @@ function health_node(addr) {
 function health_check_wallet() {
   'use strict';
   var wallet = $('#wallet').val();
-  $('#ledger_link').html('<a href="/ledger.html?wallet=' + wallet + '">/ledger</a>');
-  $('#health tr[data-addr]').each(function () {
+  $('#ledger_link').html(
+    '<a href="/ledger.html?wallet=' + wallet + '">/ledger</a>'
+  );
+  $('#health tr[data-addr]').each(function() {
     var addr = $(this).data('addr');
     var $td = $(this).find('td.wallet');
     var url = 'http://' + addr + '/wallet/' + wallet + '/balance';
     $td.text('checking...').addClass('gray').removeClass('green');
     $td.attr('title', url);
-    $.getJSON(url, function(data) {
-      $td.html('<a href="http://' + addr + '/wallet/' + wallet + '.txt">' + health_amount(data) + '</a>');
-      $td.removeClass('gray red');
-    })
-    .fail(function(jqXHR) { $td.text(jqXHR.status).addClass('red'); });
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      timeout: zold_timeout,
+      success: function(data) {
+        $td.html(
+          '<a href="http://' + addr + '/wallet/' + wallet + '.txt">' +
+          health_amount(data) + '</a>'
+        );
+        $td.removeClass('gray red');
+      },
+      error: function(jqXHR) {
+        $td.text(jqXHR.status).addClass('red');
+      }
+    });
   });
 }
 
@@ -327,7 +389,9 @@ function health_init() {
   if (root === null) {
     root = random_default();
   }
-  $('#head').html('Wait a second, we are loading the list of nodes from ' + root + '...');
+  $('#head').html(
+    'Wait a second, we are loading the list of nodes from ' + root + '...'
+  );
   $.get('http://b2.zold.io:4096/version', function(data) {
     $('#version').text(data);
   });

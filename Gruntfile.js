@@ -21,6 +21,12 @@ module.exports = function(grunt) {
         }
       }
     },
+    eslint: {
+      options: {
+        configFile: '.eslintrc.json'
+      },
+      target: ['js/**/*.js']
+    },
     jshint: {
       code: {
         options: { },
@@ -121,9 +127,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-jslint');
+  grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-sass-lint');
   grunt.loadNpmTasks('grunt-replace');
   grunt.registerTask('default', ['build']);
-  grunt.registerTask('build', ['htmlbuild', 'copy', 'uglify', 'jshint', 'jslint', 'sasslint', 'sass']);
+  grunt.registerTask('build', ['htmlbuild', 'copy', 'uglify', 'jshint', 'eslint', 'jslint', 'sasslint', 'sass']);
 };

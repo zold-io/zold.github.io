@@ -22,20 +22,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-/*global URLSearchParams, random_default, $, window, console, master_nodes, zold_amount, zold_date, zold_timeout */
+/*global URLSearchParams, random_default, $, window, console  */
+/*global master_nodes, zold_amount, zold_date, zold_timeout */
 
 function diff_add(txn, diff, host) {
   'use strict';
   var wallet = $('#wallet').val();
   $('#ledger tbody').append(
     '<tr>' +
-    '<td><a href="http://' + host + '/wallet/' + wallet + '.html">' + diff + '</a></td>' +
-    '<td style="color:' + (txn.amount < 0 ? 'darkred' : 'darkgreen') + '">#' + txn.id + '</td>' +
+    '<td><a href="http://' + host + '/wallet/' + wallet +
+    '.html">' + diff + '</a></td>' +
+    '<td style="color:' + (txn.amount < 0 ? 'darkred' : 'darkgreen') +
+    '">#' + txn.id + '</td>' +
     '<td>' + zold_date(txn.date) + '</td>' +
-    '<td class="data" style="color:' + (txn.amount < 0 ? 'darkred' : 'darkgreen') + '" ' +
-      'title="' + txn.amount + '">' +
-      zold_amount(txn.amount) + '</td>' +
-    '<td><code><a href="/ledger.html?wallet=' + txn.bnf + '">' + txn.bnf + '</a></code></td>' +
+    '<td class="data" style="color:' +
+    (txn.amount < 0 ? 'darkred' : 'darkgreen') + '" ' +
+    'title="' + txn.amount + '">' +
+    zold_amount(txn.amount) + '</td>' +
+    '<td><code><a href="/ledger.html?wallet=' + txn.bnf + '">' +
+    txn.bnf + '</a></code></td>' +
     '<td>' + txn.details.replace(/([^\ ]{16})/g, '$1&shy;') + '</td>' +
     '</tr>'
   );
@@ -43,7 +48,11 @@ function diff_add(txn, diff, host) {
 
 function diff_draw(left_json, right_json, diff, left_host) {
   'use strict';
-  var i, j, left, right, found;
+  var i;
+  var j;
+  var left;
+  var right;
+  var found;
   for (i = 0; i < left_json.length; i += 1) {
     left = left_json[i];
     found = false;
@@ -72,12 +81,14 @@ function diff_render() {
   var wallet = $('#wallet').val();
   var left = $('#left').val();
   var right = $('#right').val();
-  diff_error('Loading the JSON of the wallet ' + wallet + ' from ' + left + '...');
+  diff_error('Loading the JSON of the wallet ' + wallet +
+    ' from ' + left + '...');
   $.ajax({
     url: 'http://' + left + '/wallet/' + wallet + '/txns.json',
     timeout: zold_timeout,
     success: function(left_json) {
-      diff_error('Loading the JSON of the wallet ' + wallet + ' from ' + right + '...');
+      diff_error('Loading the JSON of the wallet ' + wallet +
+        ' from ' + right + '...');
       $.ajax({
         url: 'http://' + right + '/wallet/' + wallet + '/txns.json',
         timeout: zold_timeout,

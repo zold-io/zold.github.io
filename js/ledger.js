@@ -22,7 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-/*global URLSearchParams, random_default, $, window, console, master_nodes, zold_amount, zold_date, zold_timeout */
+/*global zold_amount, zold_date, zold_timeout */
+/*global URLSearchParams, random_default, $, window, console, master_nodes */
 
 function ledger_draw(host, wallet, digest) {
   'use strict';
@@ -35,20 +36,26 @@ function ledger_draw(host, wallet, digest) {
     timeout: zold_timeout,
     success: function(json) {
       $tbody.find('tr').remove();
-      $tbody.append('<tr data-digest="' + digest + '"><td colspan="5">Found ' + json.length +
+      $tbody.append('<tr data-digest="' + digest +
+        '"><td colspan="5">Found ' + json.length +
         ' transactions at <a href="http://' +
         host + '/wallet/' + wallet + '.txt">' +
-        host + '/wallet/' + wallet + '.txt</a> / <code>' + digest.substring(0, 8) + '</code>:</td></tr>');
-      var i = 0, txn;
+        host + '/wallet/' + wallet + '.txt</a> / <code>' +
+        digest.substring(0, 8) + '</code>:</td></tr>');
+      var i = 0;
+      var txn;
       for (i = 0; i < json.length; i += 1) {
         txn = json[i];
         $tbody.append(
           '<tr>' +
-          '<td style="color:' + (txn.amount < 0 ? 'darkred' : 'darkgreen') + '">#' + txn.id + '</td>' +
+          '<td style="color:' + (txn.amount < 0 ? 'darkred' : 'darkgreen') +
+          '">#' + txn.id + '</td>' +
           '<td>' + zold_date(txn.date) + '</td>' +
-          '<td class="data" style="color:' + (txn.amount < 0 ? 'darkred' : 'darkgreen') + '">' +
+          '<td class="data" style="color:' +
+          (txn.amount < 0 ? 'darkred' : 'darkgreen') + '">' +
             zold_amount(txn.amount) + '</td>' +
-          '<td><code><a href="?wallet=' + txn.bnf + '">' + txn.bnf + '</a></code></td>' +
+          '<td><code><a href="?wallet=' + txn.bnf + '">' + txn.bnf +
+          '</a></code></td>' +
           '<td>' + txn.details.replace(/([^\ ]{16})/g, '$1&shy;') + '</td>' +
           '</tr>'
         );
@@ -63,7 +70,9 @@ function ledger_draw(host, wallet, digest) {
 function ledger_seen(host) {
   'use strict';
   return $('#copies a.host')
-    .map(function() { return $.trim($(this).text()); })
+    .map(function() {
+      return $.trim($(this).text());
+    })
     .get()
     .includes(host);
 }
@@ -93,7 +102,7 @@ function ledger_reset_diffs() {
   'use strict';
   var left = $('#copies tbody tr:first .host').attr('data-addr');
   $('#copies tbody tr:first .diff').html('');
-  $('#copies tbody tr:not(:first)').each(function () {
+  $('#copies tbody tr:not(:first)').each(function() {
     var $tr = $(this);
     $tr.find('.diff').html(
       '<a href="/diff.html?wallet=' + $('#root').val() +
@@ -111,7 +120,8 @@ function ledger_move(json, $span) {
   if ($tr.length === 0) {
     $tr = $(
       '<tr>' +
-      '<td data-digest="' + json.digest + '"><code>' + json.digest.substring(0, 8) + '</code></td>' +
+      '<td data-digest="' + json.digest + '"><code>' +
+      json.digest.substring(0, 8) + '</code></td>' +
       '<td class="diff"/></td>' +
       '<td class="data score">' + json.score.value + '</td>' +
       '<td class="data nodes">0</td>' +
@@ -123,7 +133,9 @@ function ledger_move(json, $span) {
     );
     $tbody.append($tr);
   }
-  $tr.find('td.score').text(parseInt($tr.find('td.score').text()) + json.score.value);
+  $tr.find('td.score').text(
+    parseInt($tr.find('td.score').text()) + json.score.value
+  );
   $tr.find('td.nodes').text(parseInt($tr.find('td.nodes').text()) + 1);
   var $td = $tr.find('td.hosts');
   $td.append($td.text() === '' ? '' : '; ');
@@ -141,7 +153,8 @@ function ledger_fetch(host, wallet) {
     return;
   }
   var $span = $(
-    '<span class="candidate"><a class="host" href="http://' + host + '/wallet/' + wallet +
+    '<span class="candidate"><a class="host" href="http://' + host +
+    '/wallet/' + wallet +
     '.txt" data-addr="' + host + '" style="' +
     (master_nodes.includes(host) ? 'font-weight:bold' : '') +
     '">' + host + '</a></span>'
@@ -152,7 +165,9 @@ function ledger_fetch(host, wallet) {
     url: 'http://' + host + '/wallet/' + wallet,
     timeout: zold_timeout,
     complete: function() {
-      $span.find('a').after('<span class="ms">/' + (new Date().getTime() - start) + 'ms</span>');
+      $span.find('a').after(
+        '<span class="ms">/' + (new Date().getTime() - start) + 'ms</span>'
+      );
     },
     error: function(request, error, thrown) {
       $span.attr('title', request + '; ' + error + '; ' + thrown);
@@ -165,9 +180,11 @@ function ledger_fetch(host, wallet) {
           url: 'http://' + host + '/remotes',
           timeout: zold_timeout,
           success: function(data) {
-            $.each(data.all, function (ignore, r) {
+            $.each(data.all, function(ignore, r) {
               var addr = r.host + ':' + r.port;
-              if (!ledger_seen(addr) && ($('#copies a.host').length < 16 || master_nodes.includes(addr))) {
+              if (!ledger_seen(addr) &&
+                ($('#copies a.host').length < 16 ||
+                master_nodes.includes(addr))) {
                 ledger_fetch(addr, wallet);
               }
             });
@@ -191,7 +208,7 @@ function ledger_init() {
     root = '0000000000000000';
   }
   $('#root').val(root);
-  master_nodes.forEach(function (host) {
+  master_nodes.forEach(function(host) {
     ledger_fetch(host, root);
   });
 }
