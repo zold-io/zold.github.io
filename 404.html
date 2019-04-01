@@ -25,7 +25,7 @@ SOFTWARE.
 <!DOCTYPE html>
 <html>
   <head>
-    <title>/ledger</title>
+    <title>Page not found</title>
 <meta charset="utf-8"/>
 <meta name="description" content="Zold wallet browser"/>
 <meta name="keywords" content="zold wallet browser"/>
@@ -37,76 +37,23 @@ SOFTWARE.
 
     
     <link href="0.13.5/css/main.min.css" rel="stylesheet" />
-    <link href="0.13.5/css/ledger.min.css" rel="stylesheet"/>
     <script src="0.13.5/js/main.js"></script>
-    <script src="0.13.5/js/ledger.js"></script>
     
   </head>
-  <body onload="ledger_init();">
+  <body>
     <section>
       <p>
-        <a href="ledger.html">
+        <a href="/">
           <img class="logo" src="https://www.zold.io/logo.svg"/>
         </a>
       </p>
       <p>
-        <form method="get">
-          <input name="wallet" id="root" size="25" placeholder="Enter Zold wallet ID" type="text" pattern="[a-f0-9]{16}"/>
-          <input type="submit" value="Search"/>
-        </form>
+        The page your are looking for is not here.
       </p>
-      <table id="copies">
-        <colgroup>
-          <col style="width:8em"/> <!-- Digest -->
-          <col style=""/> <!-- Diff -->
-          <col style="width:4em"/> <!-- Score -->
-          <col style="width:4em"/> <!-- Nodes -->
-          <col style="width:7em"/> <!-- Balance -->
-          <col style="width:4em"/> <!-- Txns -->
-          <col style="width:6em"/> <!-- Size -->
-          <col style="width:40em"/> <!-- Hosts -->
-        </colgroup>
-        <thead>
-          <tr>
-            <th>Digest</th>
-            <th>&nbsp;</th>
-            <th>Score</th>
-            <th>Nodes</th>
-            <th>Balance</th>
-            <th>Txns</th>
-            <th>Size</th>
-            <th>Hosts</th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="7" style="text-align:right">Candidates:</th>
-            <td id="candidates"></td>
-          </tr>
-        </thead>
-      </table>
-      <table id="ledger">
-        <colgroup>
-          <col style="width:2em"/> <!-- No. -->
-          <col style="width:13em"/> <!-- Time -->
-          <col style="width:4em"/> <!-- Amount -->
-          <col style="width:10em"/> <!-- Beneficiary -->
-          <col style=""/> <!-- Details -->
-        </colgroup>
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>Time</th>
-            <th>Amount</th>
-            <th>Beneficiary</th>
-            <th>Details</th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
+      <p>
+        Try to start from the
+        <a href="/">index</a>.
+      </p>
 <p class="footnotes">
   <!-- build:process -->
   0.0.0
