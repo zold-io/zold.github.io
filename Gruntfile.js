@@ -87,8 +87,8 @@ module.exports = function(grunt) {
         },
         options: {
           edition: 'latest',
-          log: 'build/jslint.log',
-          jslintXml: 'build/jslint.xml',
+          log: 'temp/jslint.log',
+          jslintXml: 'temp/jslint.xml',
           errorsOnly: false,
           failOnError: true
         }
@@ -99,6 +99,11 @@ module.exports = function(grunt) {
         configFile: '.sass-lint.yml'
       },
       target: ['sass/**/*.scss']
+    },
+    robotstxt: {
+      dist: {
+        dest: 'build/'
+      }
     },
     copy: {
       dist: {
@@ -121,6 +126,7 @@ module.exports = function(grunt) {
       }
     }
   });
+  grunt.loadNpmTasks('grunt-robots-txt');
   grunt.loadNpmTasks('grunt-html-build');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -132,5 +138,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-sass-lint');
   grunt.loadNpmTasks('grunt-replace');
   grunt.registerTask('default', ['build']);
-  grunt.registerTask('build', ['htmlbuild', 'copy', 'uglify', 'jshint', 'eslint', 'jslint', 'sasslint', 'sass']);
+  grunt.registerTask('build', ['htmlbuild', 'robotstxt', 'copy', 'uglify', 'jshint', 'eslint', 'jslint', 'sasslint', 'sass']);
 };
