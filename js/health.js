@@ -221,6 +221,7 @@ function health_discover(root) {
               '<td class="history data"></td>' +
               '<td class="queue data"></td>' +
               '<td class="speed data"></td>' +
+              '<td class="journal data"></td>' +
               '<td class="age data"></td>' +
               '<td class="earnings data"></td>' +
               '<td class="wallet data"></td>' +
@@ -323,6 +324,7 @@ function health_node(addr) {
       $tr.find('td.speed')
         .reset(Math.round(json.entrance.speed))
         .colorize({'32': 'red', '16': 'orange', '0': 'green'});
+      $tr.find('td.journal').reset(Math.round(json.journal));
       health_earnings(addr, json.score.invoice.split('@')[1]);
       health_update_lag();
       health_update_nscore();
