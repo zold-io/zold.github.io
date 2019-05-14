@@ -1,6 +1,7 @@
 <img src="http://www.zold.io/logo.svg" width="92px" height="92px"/>
 
 [![Build Status](https://travis-ci.org/zold-io/zold.github.io.svg?branch=master)](https://travis-ci.org/zold-io/zold.github.io)
+[![Hits-of-Code](https://hitsofcode.com/github/zold-io/zold.github.io)](https://hitsofcode.com/github/zold-io/zold.github.io)
 
 Here is the [White Paper](https://papers.zold.io/wp.pdf).
 
