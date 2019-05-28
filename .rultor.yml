@@ -1,8 +1,8 @@
 docker:
   image: yegor256/blog
 assets:
-  id_rsa: "zerocracy/home#assets/blog/id_rsa"
-  id_rsa.pub: "zerocracy/home#assets/blog/id_rsa.pub"
+  id_rsa: "yegor256/home#assets/blog/id_rsa"
+  id_rsa.pub: "yegor256/home#assets/blog/id_rsa.pub"
 install: |
   sudo gem install pdd
   npm --no-color install
