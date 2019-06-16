@@ -4,7 +4,7 @@ assets:
   id_rsa: "yegor256/home#assets/blog/id_rsa"
   id_rsa.pub: "yegor256/home#assets/blog/id_rsa.pub"
 install: |
-  sudo gem install pdd
+  sudo gem install pdd -v 0.20.5
   npm --no-color install
 merge:
   script: |
