@@ -1,5 +1,7 @@
 <img src="http://www.zold.io/logo.svg" width="92px" height="92px"/>
 
+[![Donate via Zerocracy](https://www.0crat.com/contrib-badge/CAZPZR9FS.svg)](https://www.0crat.com/contrib/CAZPZR9FS)
+
 [![Build Status](https://travis-ci.org/zold-io/zold.github.io.svg?branch=master)](https://travis-ci.org/zold-io/zold.github.io)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/yegor256/takes/blob/master/LICENSE.txt)
 [![Hits-of-Code](https://hitsofcode.com/github/zold-io/zold.github.io)](https://hitsofcode.com/github/zold-io/zold.github.io)
