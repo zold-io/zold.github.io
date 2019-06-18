@@ -1,14 +1,13 @@
 <img src="http://www.zold.io/logo.svg" width="92px" height="92px"/>
 
 [![Build Status](https://travis-ci.org/zold-io/zold.github.io.svg?branch=master)](https://travis-ci.org/zold-io/zold.github.io)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/yegor256/takes/blob/master/LICENSE.txt)
 [![Hits-of-Code](https://hitsofcode.com/github/zold-io/zold.github.io)](https://hitsofcode.com/github/zold-io/zold.github.io)
 [![Availability at SixNines](https://www.sixnines.io/b/4b53)](https://www.sixnines.io/h/4b53)
 
 Here is the [White Paper](https://papers.zold.io/wp.pdf).
 
 Join our [Telegram group](https://t.me/zold_io) to discuss it all live.
-
-The license is [MIT](https://github.com/yegor256/zold/blob/master/LICENSE.txt).
 
 The website is here: [www.zold.io](https://www.zold.io)
 
