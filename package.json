@@ -31,7 +31,7 @@
     "grunt-open": "^0.2.4",
     "grunt-replace": "^1.0.1",
     "grunt-sass": "2.1.0",
-    "grunt-sass-lint": "0.2.2"
+    "grunt-sass-lint": "0.2.4"
   },
   "dependencies": {
     "grunt-html-build": "^0.7.1",
