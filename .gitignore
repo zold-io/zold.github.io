@@ -7,3 +7,4 @@ build/
 *.sh
 .idea/
 temp/
+npm-shrinkwrap.json
