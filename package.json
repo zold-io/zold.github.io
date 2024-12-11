@@ -37,7 +37,7 @@
     "grunt-html-build": "^0.7.1",
     "grunt-jslint": "^1.1.15",
     "grunt-robots-txt": "^1.0.1",
-    "npm": "9.6.7",
+    "npm": "9.9.4",
     "node-gyp": "9.4.0",
     "node-sass": "9.0.0"
   }
