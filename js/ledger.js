@@ -212,4 +212,3 @@ function ledger_init() {
     ledger_fetch(host, root);
   });
 }
-

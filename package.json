@@ -1,13 +1,14 @@
 {
-  "name": "zold",
-  "version": "0.0.0",
-  "description": "Zold web site html and js",
-  "main": "index.js",
-  "scripts": {
-    "build": "./node_modules/grunt/bin/grunt --buildDir=build"
-  },
   "author": "Yegor Bugayenko",
-  "license": "MIT",
+  "dependencies": {
+    "grunt-html-build": "^0.7.1",
+    "grunt-jslint": "^1.1.15",
+    "grunt-robots-txt": "^1.0.1",
+    "node-gyp": "9.4.0",
+    "node-sass": "9.0.0",
+    "npm": "9.6.7"
+  },
+  "description": "Zold web site html and js",
   "devDependencies": {
     "browser-sync": "^2.26.3",
     "eslint": "^5.15.3",
@@ -33,12 +34,11 @@
     "grunt-sass": "^2.1.0",
     "grunt-sass-lint": "^0.2.2"
   },
-  "dependencies": {
-    "grunt-html-build": "^0.7.1",
-    "grunt-jslint": "^1.1.15",
-    "grunt-robots-txt": "^1.0.1",
-    "npm": "9.6.7",
-    "node-gyp": "9.4.0",
-    "node-sass": "9.0.0"
-  }
+  "license": "MIT",
+  "main": "index.js",
+  "name": "zold",
+  "scripts": {
+    "build": "./node_modules/grunt/bin/grunt --buildDir=build"
+  },
+  "version": "0.0.0"
 }

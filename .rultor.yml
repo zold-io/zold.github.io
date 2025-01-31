@@ -11,6 +11,7 @@ merge:
     pdd -f /dev/null -v
     ./node_modules/grunt/bin/grunt --no-color
 release:
+  pre: false
   script: |
     [[ "${tag}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit -1
     sed -i "s/0\.0\.0/${tag}/g" package.json
@@ -30,4 +31,3 @@ release:
     git add .
     git commit -am "New web front, version ${tag}"
     git push origin gh-pages
-

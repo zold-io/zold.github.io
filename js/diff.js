@@ -132,4 +132,3 @@ function diff_init() {
   $('#right').val(right);
   diff_render();
 }
-
