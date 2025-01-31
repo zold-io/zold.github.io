@@ -6,7 +6,7 @@
     "grunt-robots-txt": "^1.0.1",
     "node-gyp": "9.4.0",
     "node-sass": "9.0.0",
-    "npm": "9.6.7"
+    "npm": "9.9.4"
   },
   "description": "Zold web site html and js",
   "devDependencies": {
