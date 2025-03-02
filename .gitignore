@@ -1,10 +1,10 @@
-.DS_Store
-rdoc/
-.sass-cache/
-target/
-node_modules/
-build/
 *.sh
+.DS_Store
 .idea/
-temp/
+.sass-cache/
+build/
+node_modules/
 npm-shrinkwrap.json
+rdoc/
+target/
+temp/
