@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024-2025 Yegor Bugayenko
+// SPDX-License-Identifier: MIT
+
 module.exports = function(grunt) {
   var buildDir = grunt.option('buildDir') ? grunt.option('buildDir') : 'build';
   grunt.initConfig({
