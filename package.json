@@ -41,5 +41,5 @@
   "scripts": {
     "build": "./node_modules/grunt/bin/grunt --buildDir=build"
   },
-  "version": "0.0.0"
+  "version": "0.16.0"
 }
