@@ -98,11 +98,13 @@ module.exports = function(grunt) {
         }
       }
     },
-    sasslint: {
+    stylelint: {
       options: {
-        configFile: '.sass-lint.yml'
+        configFile: '.stylelintrc.json',
+        formatter: 'string',
+        failOnError: true
       },
-      target: ['sass/**/*.scss']
+      src: ['sass/**/*.scss']
     },
     robotstxt: {
       dist: {
@@ -139,8 +141,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-jslint');
   grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-sass');
-  grunt.loadNpmTasks('grunt-sass-lint');
+  grunt.loadNpmTasks('grunt-stylelint');
   grunt.loadNpmTasks('grunt-replace');
   grunt.registerTask('default', ['build']);
-  grunt.registerTask('build', ['htmlbuild', 'robotstxt', 'copy', 'uglify', 'jshint', 'eslint', 'jslint', 'sasslint', 'sass']);
+  grunt.registerTask('build', ['htmlbuild', 'robotstxt', 'copy', 'uglify', 'jshint', 'eslint', 'jslint', 'stylelint', 'sass']);
 };
