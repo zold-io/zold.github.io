@@ -1,9 +1,9 @@
-//
 // SPDX-FileCopyrightText: Copyright (c) 2018-2025 Zerocracy, Inc.
 // SPDX-License-Identifier: MIT
 
 #ledger {
   font-size: 85%;
+  width: 100%;
 
   tr {
     td,
@@ -16,8 +16,4 @@
       }
     }
   }
-}
-
-#ledger {
-  width: 100%;
 }

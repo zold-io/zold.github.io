@@ -1,17 +1,18 @@
-//
 // SPDX-FileCopyrightText: Copyright (c) 2018-2025 Zerocracy, Inc.
 // SPDX-License-Identifier: MIT
+
+@use "sass:color";
 
 #health {
   font-size: 75%;
   width: 100%;
 
-  @media all and (max-width: 1024px) {
+  @media all and (width <= 1024px) {
     display: none;
   }
 
   thead {
-    @media all and (max-width: 1024px) {
+    @media all and (width <= 1024px) {
       display: none;
     }
   }
@@ -31,24 +32,26 @@
       padding: 0.1em .4em;
 
       &.failure {
-        background-color: lighten(#BB342F, 40);
+        background-color: color.adjust(#bb342f, $lightness: 40%);
       }
 
       &.data {
         text-align: right;
       }
 
-      @media all and (max-width: 1024px) {
+      @media all and (width <= 1024px) {
         display: inline-block;
         border: 0;
       }
     }
-    @media all and (max-width: 1024px) {
+
+    @media all and (width <= 1024px) {
       display: inline-block;
       margin: .6em 0;
     }
   }
-  @media all and (max-width: 1024px) {
+
+  @media all and (width <= 1024px) {
     display: inline-block;
   }
 }
