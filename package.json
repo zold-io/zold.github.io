@@ -9,7 +9,7 @@
   },
   "description": "Zold web site html and js",
   "devDependencies": {
-    "browser-sync": "^2.26.3",
+    "browser-sync": "^3.0.4",
     "eslint": "^5.15.3",
     "eslint-config-google": "^0.12.0",
     "eslint-config-standard": "^12.0.0",
