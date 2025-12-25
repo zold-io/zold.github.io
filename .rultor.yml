@@ -3,12 +3,12 @@
 ---
 # yamllint disable rule:line-length
 docker:
-  image: yegor256/blog
+  image: yegor256/ruby
 assets:
   id_rsa: "yegor256/home#assets/blog/id_rsa"
   id_rsa.pub: "yegor256/home#assets/blog/id_rsa.pub"
 install: |
-  sudo gem install pdd -v 0.20.5
+  sudo /usr/bin/install-node.sh
   npm --no-color install
 merge:
   script: |
