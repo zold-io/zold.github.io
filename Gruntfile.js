@@ -62,7 +62,7 @@ module.exports = function(grunt) {
         options: {
           sourceMap: true,
           outputStyle: 'compressed',
-          implementation: require('node-sass')
+          implementation: require('sass')
         },
         files: [
           {

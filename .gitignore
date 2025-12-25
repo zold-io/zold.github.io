@@ -1,7 +1,8 @@
+*.sh
+.claude/
 .DS_Store
 .idea/
 .sass-cache/
-*.sh
 build/
 node_modules/
 npm-shrinkwrap.json
