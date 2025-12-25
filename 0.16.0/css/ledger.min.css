@@ -1,0 +1,3 @@
+#ledger,#copies{font-size:85%}#ledger tr td,#ledger tr th,#copies tr td,#copies tr th{overflow:hidden;padding:.1em .4em}#ledger tr td.data,#ledger tr th.data,#copies tr td.data,#copies tr th.data{text-align:right}#ledger tr .candidate a,#copies tr .candidate a{color:gray}#ledger tr .failed-candidate a,#copies tr .failed-candidate a{color:red}#ledger tr .ms,#copies tr .ms{color:gray;font-size:.8em}#ledger{width:100%}
+
+/*# sourceMappingURL=ledger.min.css.map */
