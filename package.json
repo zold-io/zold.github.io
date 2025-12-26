@@ -29,7 +29,7 @@
     "grunt-contrib-watch": "^1.1.0",
     "grunt-eslint": "^21.0.0",
     "grunt-open": "^0.2.4",
-    "grunt-replace": "^1.0.1",
+    "grunt-replace": "^2.0.0",
     "grunt-sass": "^4.0.0",
     "grunt-stylelint": "^0.20.1",
     "stylelint": "^16.26.1",
