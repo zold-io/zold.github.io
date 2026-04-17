@@ -31,7 +31,7 @@
     "grunt-open": "^0.2.4",
     "grunt-replace": "^2.0.0",
     "grunt-sass": "^4.0.0",
-    "grunt-stylelint": "^0.20.1",
+    "grunt-stylelint": "^0.21.0",
     "stylelint": "^16.26.1",
     "stylelint-config-standard-scss": "^16.0.0"
   },
