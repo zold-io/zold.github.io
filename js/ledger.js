@@ -74,7 +74,7 @@ function ledger_seen(host) {
   'use strict';
   return $('#copies a.host')
     .map(function() {
-      return $.trim($(this).text());
+      return $(this).text().trim();
     })
     .get()
     .includes(host);
